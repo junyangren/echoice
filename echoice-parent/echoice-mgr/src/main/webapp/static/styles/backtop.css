@@ -1,0 +1,43 @@
+/*returnTop*/
+p#back-to-top{
+    position:fixed;
+    display:none;
+    bottom:10px;
+    right: 0px;
+}
+
+p#back-to-top{
+    position:fixed;
+    display:none;
+    bottom:10px;
+    right: 0px;
+}
+
+p#back-to-top a{
+    text-align:center;
+    text-decoration:none;
+    color:#d1d1d1;
+    display:block;
+    width:64px;
+    -moz-transition:color 1s;
+    -webkit-transition:color 1s;
+    -o-transition:color 1s;
+}
+p#back-to-top a:hover{
+    color:#979797;
+}
+p#back-to-top a span{
+    background:transparent url(../images/Actions-arrow-up-top-icon-s.png) no-repeat;
+    border-radius:6px;
+    display:block;
+    height:41px;
+    width:39px;
+    margin-bottom:5px;
+    -moz-transition:background 1s;
+    -webkit-transition:background 1s;
+    -o-transition:background 1s;
+    margin-left: 12px;
+}
+#back-to-top a:hover span{
+    background:transparent url(../images/Actions-arrow-up-top-icon-s.png);
+}

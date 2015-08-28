@@ -1,0 +1,337 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.echoice</groupId>
+    <artifactId>echoice-parent</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <groupId>org.echoice.ums</groupId>
+  <artifactId>echoice-ums-core</artifactId>
+  <version>3.0.0</version>
+  <packaging>jar</packaging>
+  <name>echoice-ums Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+	<dependency>
+	  <groupId>org.echoice</groupId>
+	  <artifactId>echoice-core</artifactId>
+	  <version>3.0.0</version>
+	</dependency>  
+	<!-- spring-->
+	<!-- PERSISTENCE begin -->
+	<!-- hibernate -->
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-core</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-entitymanager</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-ehcache</artifactId>
+	</dependency>
+	
+	<!-- spring data jpa -->
+	<dependency>
+		<groupId>org.springframework.data</groupId>
+		<artifactId>spring-data-jpa</artifactId>
+	</dependency>
+	
+	<!-- aop -->
+	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjrt</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjweaver</artifactId>
+	</dependency>
+	
+	<!-- connection pool -->
+	<dependency>
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>tomcat-jdbc</artifactId>
+		<scope>provided</scope>
+	</dependency>
+	
+	<!-- db driver -->
+	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-jdbc</artifactId>
+	</dependency>
+		
+	<!-- PERSISTENCE end -->
+	
+	<!-- WEB begin -->
+	<!-- spring -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-webmvc</artifactId>
+	</dependency>	
+	
+	<!-- j2ee web spec -->
+	<!-- update to servlet 3.0 for spring 4.0 MockHttpServletRequest  -->
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>javax.servlet-api</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>jstl</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>jsp-api</artifactId>
+		<exclusions>
+			<exclusion>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+	<!-- WEB end -->
+	
+	<!-- SECURITY begin -->
+
+	<!-- SECURITY end -->
+	
+	<!-- SOAP begin -->
+
+	<!-- SOAP end -->
+	
+	<!-- JAX-RS begin -->
+
+	<!-- JAX-RS end -->
+	
+	<!-- JMS begin -->
+	
+	<!-- JMS end -->
+	
+	<!-- TIMER -->
+	<dependency>
+		<groupId>org.quartz</groupId>
+		<artifactId>quartz</artifactId>
+		<version>1.6.1</version>
+	</dependency>
+
+	<dependency>
+		<groupId>net.sourceforge.pinyin4j</groupId>
+		<artifactId>pinyin4j</artifactId>
+		<version>2.5.0</version>
+	</dependency>
+	
+	<!-- NOSQL begin -->
+	
+	<!-- NOSQL end -->
+	
+	<!-- CACHE begin -->
+	
+	<!-- CACHE end -->
+	
+	<!-- JSR303 Bean Validator -->
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-validator</artifactId>
+	</dependency>
+	
+	<!-- JSON begin -->
+	<dependency>	
+		<groupId>com.alibaba</groupId>
+		<artifactId>fastjson</artifactId>
+	</dependency>
+
+	<dependency>
+	  <groupId>net.sf.json-lib</groupId>
+	  <artifactId>json-lib</artifactId>
+	  <classifier>jdk15</classifier>
+	</dependency>
+	
+	<!-- JSON end -->
+	
+	<!-- XML begin -->
+	<dependency>
+		<groupId>dom4j</groupId>
+		<artifactId>dom4j</artifactId>
+		<exclusions>
+			<exclusion>
+				<groupId>xml-apis</groupId>
+				<artifactId>xml-apis</artifactId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+	
+	<!-- 重新定义Java XPath Engine到最新版，避免旧版那些不必要的依赖 -->
+	<dependency>
+		<groupId>jaxen</groupId>
+		<artifactId>jaxen</artifactId>
+	</dependency>
+	<!-- XML end -->
+	
+	<!-- LOGGING begin -->
+	<!-- slf4j -->
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+	</dependency>
+	
+	<!-- logback -->
+	<dependency>
+		<groupId>ch.qos.logback</groupId>
+		<artifactId>logback-classic</artifactId>
+	</dependency>
+	
+	<!-- 代码直接调用log4j会被桥接到slf4j -->
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>log4j-over-slf4j</artifactId>
+	</dependency>
+	
+	<!-- 代码直接调用commons-logging会被桥接到slf4j -->
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>jcl-over-slf4j</artifactId>
+	</dependency>
+	
+	<!-- 代码直接调用java.util.logging会被桥接到slf4j -->
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>jul-to-slf4j</artifactId>
+	</dependency>
+	
+	<!-- log4jdbc -->
+	<dependency>
+		<groupId>com.googlecode.log4jdbc</groupId>
+		<artifactId>log4jdbc</artifactId>
+	</dependency>
+	<!-- LOGGING end -->
+	
+	<!-- GENERAL UTILS begin -->
+	<dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>commons-io</groupId>
+		<artifactId>commons-io</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>commons-codec</groupId>
+		<artifactId>commons-codec</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>commons-beanutils</groupId>
+		<artifactId>commons-beanutils</artifactId>
+	</dependency>
+	<dependency>
+	  <groupId>commons-lang</groupId>
+	  <artifactId>commons-lang</artifactId>
+	</dependency>
+	
+	<dependency>
+	  <groupId>commons-fileupload</groupId>
+	  <artifactId>commons-fileupload</artifactId>
+	</dependency>
+	<!-- google java library -->
+	<dependency>
+		<groupId>com.google.guava</groupId>
+		<artifactId>guava</artifactId>
+	</dependency>
+	
+	<!-- joda -->
+	<dependency>
+		<groupId>joda-time</groupId>
+		<artifactId>joda-time</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>joda-time</groupId>
+		<artifactId>joda-time-jsptags</artifactId>
+	</dependency>
+	<!-- GENERAL UTILS end -->
+	
+	<!-- OTHER TOOLS begin -->
+	<!-- pojo copy -->
+	<dependency>
+		<groupId>net.sf.dozer</groupId>
+		<artifactId>dozer</artifactId>
+		<exclusions>
+			<exclusion>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+	
+	<!-- httpclient -->
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>fluent-hc</artifactId>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpcore</artifactId>
+	</dependency>
+	
+	<!-- template engine -->
+	<dependency>
+		<groupId>org.freemarker</groupId>
+		<artifactId>freemarker</artifactId>
+	</dependency>
+	
+	<!-- commons-pool -->
+	<!-- email -->
+	<dependency>
+		<groupId>javax.mail</groupId>
+		<artifactId>mail</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>javax.activation</groupId>
+		<artifactId>activation</artifactId>
+	</dependency>
+	<!-- OTHER TOOLS end -->
+
+	<dependency>
+		<groupId>org.jasig.cas.client</groupId>
+		<artifactId>cas-client-core</artifactId>
+	</dependency>		
+	
+	<!-- TEST begin -->
+	<!-- junit -->
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+	</dependency>
+	
+	<!-- assertj -->
+	<dependency>
+		<groupId>org.assertj</groupId>
+		<artifactId>assertj-core</artifactId>
+		<scope>test</scope>
+	</dependency>
+	
+	<!-- spring -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-test</artifactId>
+	</dependency>
+	
+	<!-- TEST end -->									
+  </dependencies>
+  <build>
+    <finalName>echoice-mgr</finalName>
+  </build>
+</project>
