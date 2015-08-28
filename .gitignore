@@ -8,6 +8,9 @@
 .classpath
 .project
 .settings/
+.metadata/
+.recommenders
+Servers
 
 # Intellij project files
 *.iml
