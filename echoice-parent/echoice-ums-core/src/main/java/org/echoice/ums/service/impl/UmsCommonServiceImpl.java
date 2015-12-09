@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.service.impl;
+package org.echoice.ums.service.impl;
 
 import java.util.Date;
 

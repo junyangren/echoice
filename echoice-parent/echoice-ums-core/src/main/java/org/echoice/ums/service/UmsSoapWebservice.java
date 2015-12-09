@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.service;
+package org.echoice.ums.service;
 
 import org.echoice.ums.service.bean.AccssModeSoapResp;
 import org.echoice.ums.service.bean.ObjectsSoapResp;

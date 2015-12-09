@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.dao;
+package org.echoice.ums.dao;
 
 import org.echoice.modules.web.paper.PageBean;
 import org.echoice.ums.domain.EcAccssMode;

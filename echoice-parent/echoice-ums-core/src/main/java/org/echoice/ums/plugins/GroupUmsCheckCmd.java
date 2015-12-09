@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.plugins;
+package org.echoice.ums.plugins;
 
 import java.util.List;
 

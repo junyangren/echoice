@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.service;
+package org.echoice.ums.service;
 
 import org.echoice.modules.spring.SpringContextHolder;
 import org.echoice.ums.dao.AppPluginDao;

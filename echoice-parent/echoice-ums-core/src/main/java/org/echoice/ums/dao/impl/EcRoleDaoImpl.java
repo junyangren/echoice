@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.dao.impl;
+package org.echoice.ums.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.plugins.bean;
+package org.echoice.ums.plugins.bean;
 
 public class ResultMsg {
 	private boolean result=false;

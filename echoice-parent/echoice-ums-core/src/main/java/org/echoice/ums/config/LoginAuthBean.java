@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.config;
+package org.echoice.ums.config;
 
 public class LoginAuthBean {
 	private boolean auth;

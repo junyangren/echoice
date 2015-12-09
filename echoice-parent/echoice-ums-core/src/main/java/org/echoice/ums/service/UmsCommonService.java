@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.service;
+package org.echoice.ums.service;
 
 import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcUser;

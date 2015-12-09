@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.util;
+package org.echoice.ums.util;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;

@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.web.view;
+package org.echoice.ums.web.view;
 
 public class OperatorView {
 	public final static String[] JDBC_FIELDS=new String[]{"objId","objAlias","objName","accessId","accessAlias","accessName",};

@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.dao.impl;
+package org.echoice.ums.dao.impl;
 
 import java.util.Date;
 import java.util.List;

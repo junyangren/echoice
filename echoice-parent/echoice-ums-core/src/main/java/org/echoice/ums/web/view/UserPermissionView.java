@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.web.view;
+package org.echoice.ums.web.view;
 
 public class UserPermissionView extends PermissionView{
 	private Long userId;

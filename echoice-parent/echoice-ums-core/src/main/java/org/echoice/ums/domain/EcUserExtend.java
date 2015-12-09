@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.domain;
+package org.echoice.ums.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

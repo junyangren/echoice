@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.config;
+package org.echoice.ums.config;
 
 public class ConfigConstants {
 	public final static String OBJECT_TREE="ec.object.tree.";

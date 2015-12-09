@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.quartz;
+package org.echoice.ums.quartz;
 
 import java.util.Calendar;
 import java.util.Date;

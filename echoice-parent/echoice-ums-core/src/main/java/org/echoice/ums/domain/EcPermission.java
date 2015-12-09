@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.domain;
+package org.echoice.ums.domain;
 
 import java.util.Date;
 import javax.persistence.Column;

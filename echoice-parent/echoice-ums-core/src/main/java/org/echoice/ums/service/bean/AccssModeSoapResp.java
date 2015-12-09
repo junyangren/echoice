@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.service.bean;
+package org.echoice.ums.service.bean;
 
 public class AccssModeSoapResp {
 	private int result;

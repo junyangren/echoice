@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.web.filter;
+package org.echoice.ums.web.filter;
 
 import java.io.IOException;
 

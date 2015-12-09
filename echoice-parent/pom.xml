@@ -786,9 +786,25 @@
 	<profiles>
 	</profiles>
 	<modules>
+		<!--
 		<module>echoice-core</module>
 		<module>echoice-ums-core</module>
 		<module>echoice-ums-web</module>
 		<module>echoice-mgr</module>
+		-->
 	</modules>
+	
+   <distributionManagement>
+		<repository>
+			<id>nexus-releases</id>
+			<name>Nexus Release Repository</name>
+			<url>http://117.27.135.201:9001/nexus/content/repositories/releases/</url>
+		</repository>
+	 
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>http://117.27.135.201:9001/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>	
 </project>

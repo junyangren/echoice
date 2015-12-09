@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.dao.mapper;
+package org.echoice.ums.dao.mapper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;

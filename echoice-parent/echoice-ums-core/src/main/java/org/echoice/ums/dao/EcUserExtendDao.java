@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.dao;
+package org.echoice.ums.dao;
 
 import org.echoice.ums.domain.EcUserExtend;
 import org.springframework.data.jpa.repository.JpaRepository;

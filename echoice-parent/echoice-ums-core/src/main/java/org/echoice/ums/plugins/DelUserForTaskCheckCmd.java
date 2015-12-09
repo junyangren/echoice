@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.plugins;
+package org.echoice.ums.plugins;
 
 import org.echoice.ums.dao.AppPluginDao;
 import org.echoice.ums.plugins.bean.ResultMsg;

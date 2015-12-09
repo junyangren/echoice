@@ -11,7 +11,7 @@
   <artifactId>echoice-ums-core</artifactId>
   <version>3.0.0</version>
   <packaging>jar</packaging>
-  <name>echoice-ums Maven Webapp</name>
+  <name>echoice-ums-core</name>
   <url>http://maven.apache.org</url>
   <dependencies>
 	<dependency>
@@ -331,7 +331,18 @@
 	
 	<!-- TEST end -->									
   </dependencies>
-  <build>
-    <finalName>echoice-mgr</finalName>
-  </build>
+  <!--
+   <distributionManagement>
+		<repository>
+			<id>nexus-releases</id>
+			<name>Nexus Release Repository</name>
+			<url>http://117.27.135.201:9001/nexus/content/repositories/releases/</url>
+		</repository>
+	 
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>http://117.27.135.201:9001/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>  --> 
 </project>

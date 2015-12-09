@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.dao.impl;
+package org.echoice.ums.dao.impl;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;

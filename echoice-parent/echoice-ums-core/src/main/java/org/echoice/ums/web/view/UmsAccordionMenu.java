@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.web.view;
+package org.echoice.ums.web.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;

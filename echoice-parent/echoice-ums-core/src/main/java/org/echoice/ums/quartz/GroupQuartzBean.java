@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.quartz;
+package org.echoice.ums.quartz;
 
 import org.echoice.ums.service.UmsServiceFactory;
 import org.quartz.Job;

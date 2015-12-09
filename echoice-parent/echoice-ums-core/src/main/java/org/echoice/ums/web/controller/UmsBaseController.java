@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.web.controller;
+package org.echoice.ums.web.controller;
 
 import java.io.IOException;
 import java.util.Date;

@@ -1,4 +1,4 @@
-﻿package org.echoice.ums.web.controller;
+package org.echoice.ums.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
