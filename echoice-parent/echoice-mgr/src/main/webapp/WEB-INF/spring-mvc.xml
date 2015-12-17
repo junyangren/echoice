@@ -81,7 +81,9 @@
     </bean>
 	
 	<bean id="umsAppController" class="org.echoice.ums.web.controller.UmsAppController"></bean>	
-
+	<!--对静态资源文件的访问
+	<mvc:resources mapping="/static/**" location="/static/" />
+	-->
 	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL-->	
 	<mvc:default-servlet-handler/>
 		

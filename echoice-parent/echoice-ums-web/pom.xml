@@ -43,6 +43,6 @@
 	</dependency>									
   </dependencies>
   <build>
-    <finalName>echoice-mgr</finalName>
+    <finalName>echoice-ums-web</finalName>
   </build>
 </project>
