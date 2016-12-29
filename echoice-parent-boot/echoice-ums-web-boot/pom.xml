@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.echoice</groupId>
+    <artifactId>echoice-parent-boot</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <groupId>org.echoice.ums</groupId>
+  <artifactId>echoice-ums-web-boot</artifactId>
+  <version>1.0.0</version>
+  <packaging>war</packaging>
+  <name>echoice-ums-web</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+	<dependency>
+	  <groupId>org.echoice.ums</groupId>
+	  <artifactId>echoice-ums-core-boot</artifactId>
+	  <version>1.0.0</version>
+	</dependency>
+
+	<dependency>
+	  <groupId>commons-fileupload</groupId>
+	  <artifactId>commons-fileupload</artifactId>
+	  <version>1.2.1</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>jstl</artifactId>
+	</dependency>
+	
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>jsp-api</artifactId>
+		<version>2.0</version>
+		<scope>provided</scope>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-tomcat</artifactId>
+		<scope>provided</scope>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.apache.tomcat.embed</groupId>
+		<artifactId>tomcat-embed-jasper</artifactId>
+		<scope>provided</scope>
+	</dependency>							
+  </dependencies>
+</project>

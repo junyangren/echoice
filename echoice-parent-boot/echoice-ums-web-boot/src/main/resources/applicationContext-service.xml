@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd" default-autowire="byName">
+	
+	<bean id="loginAuthBean" class="org.echoice.ums.config.LoginAuthBean">
+    	<property name="auth" value="${ecums.isAuth}"></property>
+    	<property name="authObject" value="${ecums.authObject}"></property>
+    	<property name="authAccessMode" value="${ecums.authAccessMode}"></property>
+    	<property name="authSysMgrRole" value="${ecums.authSysMgrRole}"></property>
+    	<property name="groupModeType" value="${ecums.groupModeType}"></property>
+    	<property name="groupRoleParentAlias" value="${ecums.groupRoleParentAlias}"></property>
+    	<property name="levelRoleShow" value="${ecums.levelRoleShow}"></property>
+    	<property name="groupAliasCreate" value="${ecums.groupAliasCreate}"></property>
+    	<property name="syncGroupPath" value="${ecums.syncGroupPath}"></property>
+	</bean>
+	
+	<bean id="validPermissionForUmsService" class="org.echoice.ums.service.impl.ValidPermissionForUmsServiceImpl">
+	</bean>	
+	
+	<!--  
+	<bean id="umsCommonService" class="org.echoice.ums.service.impl.UmsCommonServiceImpl"></bean>
+	-->
+	
+	<bean id="dialect" class="java.lang.String">
+		<constructor-arg value="${app.hibernate.dialect}"/>
+	</bean>
+	
+	<bean id="appPluginDao" class="org.echoice.ums.dao.impl.AppPluginDaoImpl"></bean>
+	
+	<bean id="delUserForTaskCheckCmd" class="org.echoice.ums.plugins.DelUserForTaskCheckCmd"></bean>
+	
+	<bean id="groupUmsCheckCmd" class="org.echoice.ums.plugins.GroupUmsCheckCmd"></bean>
+	
+	<bean id="groupStorageCheckCmd" class="org.echoice.ums.plugins.GroupStorageCheckCmd"></bean>
+
+	<bean id="appPluginService" class="org.echoice.ums.service.AppPluginService">
+		<property name="userFilterList">
+			<list>
+				<!--<ref bean="delUserForTaskCheckCmd" />-->
+			</list>
+		</property>
+		<property name="groupFilterList">
+			<list>
+				<ref bean="groupUmsCheckCmd" />
+				<!-- <ref bean="groupStorageCheckCmd"/> -->
+			</list>		
+		</property>
+	</bean>
+		
+	<bean id="springContextHolder" class="org.echoice.modules.spring.SpringContextHolder"></bean>
+</beans>
