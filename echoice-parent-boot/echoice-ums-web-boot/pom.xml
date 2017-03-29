@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.echoice</groupId>
     <artifactId>echoice-parent-boot</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
   <groupId>org.echoice.ums</groupId>
   <artifactId>echoice-ums-web-boot</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <packaging>war</packaging>
   <name>echoice-ums-web</name>
   <url>http://maven.apache.org</url>
@@ -17,7 +17,7 @@
 	<dependency>
 	  <groupId>org.echoice.ums</groupId>
 	  <artifactId>echoice-ums-core-boot</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.0.1</version>
 	</dependency>
 
 	<dependency>

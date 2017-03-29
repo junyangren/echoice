@@ -119,6 +119,9 @@ Ecums.comFun={
 					Ecums.comFun.failure();
 				}
 				return true;
+			}else if(respJson.code&&respJson.code!=0){
+				Ext.Msg.alert('信息提示', respJson.errorsMap.msg);
+				return true;
 			}else{
 				return true;
 			}
@@ -291,6 +294,7 @@ Ecums.comFun={
 					Ext.Ajax.request({
 			   			url: actionUrl,
 			   			success: function(){
+			   				alert("aa");
 	                		Ext.Msg.alert('信息提示', sucessMsg);
 	                		reloadData.call();
 					    },

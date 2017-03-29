@@ -51,12 +51,13 @@
     </script>
   </head>
   <body style="text-align: center;">
-  	<form action="login.do?action=selGroup" method="post">
+  	<!-- login.do?action=selGroup -->
+  	<form action="index.jsp" method="post">
   	<div class="groupPanel">
   		<div class="groupTitle">登入用户组选择</div>
   		<div class="groupContent">
   			<div class="groupColPanel">
-  			用户组：<select name="groupId" dataType="Require" msg="*">
+  			用户组：<select name="_ums_con_groupId" dataType="Require" msg="*">
   					<option value="">---请选择---</option>
   					<c:forEach var="listone" items="${groupList}">
   					<option value="${listone.groupId }">${listone.name }</option>

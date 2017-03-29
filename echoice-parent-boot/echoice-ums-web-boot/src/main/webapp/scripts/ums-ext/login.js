@@ -28,11 +28,11 @@ Ext.onReady(function(){
 		     	method:'post',
 		     	success:function(form,action){
 		     		if(action.result.errorsMap.msg){
-		      		Ext.Msg.alert('信息提示', action.result.errorsMap.msg);
-		      	}else{
-		    				objForm.getEl().dom.action = 'index.jsp';
-		    				objForm.getEl().dom.submit();
-		      	}
+		     			Ext.Msg.alert('信息提示', action.result.errorsMap.msg);
+			      	}else{
+	    				objForm.getEl().dom.action = 'index.jsp';
+	    				objForm.getEl().dom.submit();
+			      	}
 		     	},
 		     	failure : Ecums.comFun.failure
 		     });                    	

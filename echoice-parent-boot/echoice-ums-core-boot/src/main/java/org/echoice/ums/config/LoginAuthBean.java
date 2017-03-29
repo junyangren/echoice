@@ -1,5 +1,7 @@
 package org.echoice.ums.config;
 
+import java.util.Map;
+
 public class LoginAuthBean {
 	private boolean auth;
 	private String authObject;
@@ -10,6 +12,10 @@ public class LoginAuthBean {
 	private boolean levelRoleShow=false;
 	private int groupAliasCreate;
 	private boolean syncGroupPath;
+		
+	private Map<String,String> urlToObjMap;
+	private Map<String,String> objAccessModeMap;
+	
 	public boolean isAuth() {
 		return auth;
 	}
@@ -64,6 +70,17 @@ public class LoginAuthBean {
 	public void setSyncGroupPath(boolean syncGroupPath) {
 		this.syncGroupPath = syncGroupPath;
 	}
-	
+	public Map<String, String> getUrlToObjMap() {
+		return urlToObjMap;
+	}
+	public void setUrlToObjMap(Map<String, String> urlToObjMap) {
+		this.urlToObjMap = urlToObjMap;
+	}
+	public Map<String, String> getObjAccessModeMap() {
+		return objAccessModeMap;
+	}
+	public void setObjAccessModeMap(Map<String, String> objAccessModeMap) {
+		this.objAccessModeMap = objAccessModeMap;
+	}
 	
 }

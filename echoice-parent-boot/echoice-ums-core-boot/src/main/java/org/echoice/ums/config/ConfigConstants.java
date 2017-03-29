@@ -12,6 +12,8 @@ public class ConfigConstants {
 	
 	public final static String IS_SUPER_ADMIN="ISADMIN";
 	
+	public final static String ACCORDION_SESSION_TAG="accordion";
+	
 	public final static String UMS_GROUP_SESSION="umsGroupSession";
 	public final static String UMS_SPLIT_CHART="|";
 	

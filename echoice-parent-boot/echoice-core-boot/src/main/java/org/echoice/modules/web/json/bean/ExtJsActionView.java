@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class ExtJsActionView {
+	private int code=0;
 	private boolean success=true;
 	private Map<String, String> errorsMap=new HashMap();
 	private Map<String, String> dataMap=new HashMap();
@@ -30,9 +31,15 @@ public class ExtJsActionView {
 	
 	public void addErrorCodeMsg(String code,String msg){
 		errorsMap.put(code, msg);
-	};
+	}
 	
 	public void addDataCodeMsg(String code,String msg){
 		dataMap.put(code, msg);
-	};
+	}
+	public int getCode() {
+		return code;
+	}
+	public void setCode(int code) {
+		this.code = code;
+	}
 }

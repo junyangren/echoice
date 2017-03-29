@@ -20,8 +20,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 @Transactional(propagation=Propagation.NOT_SUPPORTED,readOnly=true)
 public class UmsClientDaoImpl implements UmsClientDao{
 	private JdbcTemplate jdbcTemplate;

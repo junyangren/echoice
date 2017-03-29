@@ -3,7 +3,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-  	<title><fmt:message key="ums.title"/></title>
+  	<title>统一权限管理系统-用户登入</title>
     <link href="styles/login.css" type="text/css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="scripts/ext-2.2/resources/css/ext-all.css" />
     <link rel="stylesheet" id="extjs-skin-style-Id" type="text/css" href="scripts/ext-2.2/resources/css/ext-all.css" />

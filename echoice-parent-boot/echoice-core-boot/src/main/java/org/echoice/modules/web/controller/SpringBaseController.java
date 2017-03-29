@@ -118,7 +118,7 @@ public abstract class SpringBaseController extends MultiActionController{
      */
     protected void rendJson(HttpServletResponse response, String content) throws IOException {
         response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/javascript;charset=UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         Writer writer=response.getWriter();
         writer.write(content);
     }

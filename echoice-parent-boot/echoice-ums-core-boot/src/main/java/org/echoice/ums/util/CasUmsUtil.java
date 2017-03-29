@@ -2,7 +2,6 @@ package org.echoice.ums.util;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.echoice.modules.spring.SpringContextHolder;
 import org.echoice.ums.config.ConfigConstants;
 import org.echoice.ums.dao.UmsClientDao;
 import org.echoice.ums.domain.EcGroup;
@@ -15,6 +14,14 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class CasUmsUtil {
 	public static final String USER_SESSION_KEY=EcUser.class.getName();
+	
+	public static boolean isAuthCas(HttpServletRequest request){
+		Object obj=request.getSession().getAttribute(AuthenticationFilter.CONST_CAS_ASSERTION);
+    	if (obj instanceof Assertion) {
+			return true;
+		}
+    	return false;
+	}
 	
     public static String getUser(HttpServletRequest request){
     	Object obj=request.getSession().getAttribute(AuthenticationFilter.CONST_CAS_ASSERTION);

@@ -15,10 +15,41 @@
     	<property name="levelRoleShow" value="${ecums.levelRoleShow}"></property>
     	<property name="groupAliasCreate" value="${ecums.groupAliasCreate}"></property>
     	<property name="syncGroupPath" value="${ecums.syncGroupPath}"></property>
+    	<property name="urlToObjMap">
+    		<map>
+    			<entry key="opAccssMode.do" value="${ecums.console.menu.accssMode}"></entry>
+    			<entry key="opObjects.do" value="${ecums.console.menu.objects}"></entry>
+    			<entry key="opOperator.do" value="${ecums.console.menu.objects}"></entry>
+    			<entry key="opGroup.do" value="${ecums.console.menu.group}"></entry>
+    			<entry key="opGroupAssignmen.do" value="${ecums.console.menu.group}"></entry>
+    			<entry key="opUser.do" value="${ecums.console.menu.user}"></entry>
+    			<entry key="opUsersAssignmen.do" value="${ecums.console.menu.user}"></entry>
+    			<entry key="opRole.do" value="${ecums.console.menu.role}"></entry>
+    			<entry key="opPermission.do" value="${ecums.console.menu.role}"></entry>
+    		</map>
+    	</property>
+    	<property name="objAccessModeMap">
+    		<map>
+    			<entry key="save" value="1"></entry>
+    			<entry key="del" value="1"></entry>
+    			<entry key="assignRole" value="1"></entry>
+    			<entry key="removeRole" value="1"></entry>
+    			<entry key="drag" value="1"></entry>
+    			<entry key="assignPermission" value="1"></entry>
+    			<entry key="removePermission" value="1"></entry>
+    			<entry key="assignObj" value="1"></entry>
+    			<entry key="removeObj" value="1"></entry>
+    			<entry key="assignGroup" value="1"></entry>
+    			<entry key="removeAssignGroup" value="1"></entry>
+    			<entry key="removeRoleAssignUser" value="1"></entry>
+    			<entry key="removePermissionByPaId" value="1"></entry>
+    		</map>
+    	</property>
 	</bean>
 	
-	<bean id="validPermissionForUmsService" class="org.echoice.ums.service.impl.ValidPermissionForUmsServiceImpl">
-	</bean>	
+	<bean id="umsClientDao" class="org.echoice.ums.dao.impl.UmsClientDaoImpl"></bean>
+	
+	<bean id="validPermissionForUmsService" class="org.echoice.ums.service.impl.ValidPermissionForUmsServiceImpl"></bean>	
 	
 	<!--  
 	<bean id="umsCommonService" class="org.echoice.ums.service.impl.UmsCommonServiceImpl"></bean>
