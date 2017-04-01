@@ -7,7 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.web.json.bean.ExtJsActionView;
@@ -91,15 +90,19 @@ public class RoleController extends UmsBaseController{
 		ecRole.setName(ecRole.getName().trim());
 		ExtJsActionView actionView=new ExtJsActionView(); 
 		actionView.setSuccess(true);
-		if(ecRole.getRoleId()==null){
-			List list=ecRoleDao.findByAlias(ecRole.getAlias());
-			if(list!=null&&list.size()>0){
+		
+		List<EcRole> list=ecRoleDao.findByAlias(ecRole.getAlias());
+		if(list!=null&&list.size()>0){
+			EcRole dbRole=list.get(0);
+			if(ecRole.getRoleId()==null||(dbRole.getRoleId().compareTo(ecRole.getRoleId())!=0)){
 				actionView.addErrorCodeMsg("msg", "对不起，角色标识"+ecRole.getAlias()+"已经存在，请换一个");
-				renderExtjsActionView(response, actionView);
+				renderExtjsActionView(response, actionView,true);
 				return null;
-			}else{
-				actionView.addDataCodeMsg("leaf", "true");
 			}
+		}
+		
+		if(ecRole.getRoleId()==null){
+			actionView.addDataCodeMsg("leaf", "true");
 		}
 		ecRole.setOpTime(new Date());
 		ecRoleDao.save(ecRole);

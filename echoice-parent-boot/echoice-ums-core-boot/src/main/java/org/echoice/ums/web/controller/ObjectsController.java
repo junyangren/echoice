@@ -121,8 +121,22 @@ public class ObjectsController extends UmsBaseController{
 		bindObject(request, ecObjects);
 		ecObjects.setAlias(ecObjects.getAlias().trim());
 		ecObjects.setName(ecObjects.getName().trim());
+		List<EcObjects> list=ecObjectsDao.findByAlias(ecObjects.getAlias());
+		if(list!=null&&list.size()>0){
+			EcObjects dbObject=list.get(0);
+			if(ecObjects.getObjId()==null||(dbObject.getObjId().compareTo(ecObjects.getObjId())!=0)){
+				actionView.addErrorCodeMsg("msg", "对不起，对象标识"+ecObjects.getAlias()+"已经存在，请换一个");
+				renderExtjsActionView(response, actionView,true);
+				return null;
+			}
+		}
+		
 		if(ecObjects.getObjId()==null){
-			List list=ecObjectsDao.findByAlias(ecObjects.getAlias());
+			actionView.addDataCodeMsg("leaf", "true");
+		}
+		
+		if(ecObjects.getObjId()==null){
+			//List list=ecObjectsDao.findByAlias(ecObjects.getAlias());
 			if(list!=null&&list.size()>0){
 				actionView.addErrorCodeMsg("msg", "对不起，对象标识"+ecObjects.getAlias()+"已经存在，请换一个");
 				renderExtjsActionView(response, actionView,true);
@@ -130,6 +144,7 @@ public class ObjectsController extends UmsBaseController{
 			}else{
 				actionView.addDataCodeMsg("leaf", "true");
 			}
+		}else{
 			
 		}
 		String serverPath=getServletContext().getRealPath("/");

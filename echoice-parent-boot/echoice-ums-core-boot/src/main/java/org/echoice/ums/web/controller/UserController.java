@@ -92,17 +92,23 @@ public class UserController extends UmsBaseController {
 		bindObject(request, ecUserExtend);
 		ecUser.setAlias(ecUser.getAlias().trim());
 		ecUser.setName(ecUser.getName().trim());
+		
+		List<EcUser> list=ecUserDao.findByAlias(ecUser.getAlias());
+		if(list!=null&&list.size()>0){
+			EcUser dbUser=list.get(0);
+			if(ecUser.getUserId()==null||(dbUser.getUserId().compareTo(ecUser.getUserId())!=0)){
+				actionView.addErrorCodeMsg("msg", "对不起，用户登入名"+ecUser.getAlias()+"已经存在，请换一个");
+				renderExtjsActionView(response, actionView,true);
+				return null;
+			}
+		}
+		
 		//密码加密
 		String password=ecUser.getAlias()+ecUser.getPassword();
 		MD5 md5=new MD5();
 		String md5Password=md5.getMD5ofStr(password);
+		
 		if(ecUser.getUserId()==null){
-			List list=ecUserDao.findByAlias(ecUser.getAlias());
-			if(list!=null&&list.size()>0){
-				actionView.addErrorCodeMsg("msg", "对不起，用户登入名"+ecUser.getAlias()+"已经存在，请换一个");
-				renderExtjsActionView(response, actionView);
-				return null;
-			}
 			ecUser.setPassword(md5Password);
 			logger.info(CasUmsUtil.getUser(request)+" 新增用户："+ecUser.getAlias()+"，"+ecUser.getName());
 		}else{
@@ -111,9 +117,7 @@ public class UserController extends UmsBaseController {
 			if(!(ecUser2.getPassword().equals(ecUser.getPassword()))){
 				ecUser.setPassword(md5Password);
 			}
-			//Log4jMsgBean bean=new Log4jMsgBean();
 			logger.info(CasUmsUtil.getUser(request)+" 修改用户："+ecUser.getAlias()+"，"+ecUser.getName());
-			//logger.info(bean);
 		}
 		ecUser.setOpTime(new Date());
 		umsCommonService.saveUserData(ecUser, ecUserExtend, groupIdsArr);		
