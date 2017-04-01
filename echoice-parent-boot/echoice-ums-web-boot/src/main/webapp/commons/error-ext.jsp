@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@page import="org.echoice.modules.web.json.bean.ExtJsActionView"%>
-<%@page import="net.sf.json.JSONObject"%>
 <%
 	response.setContentType("text/html; charset=UTF-8");
 	//ExtJsActionView actionView=new ExtJsActionView();

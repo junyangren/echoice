@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.persistence.BaseCommonDao;
 import org.echoice.modules.web.paper.PageBean;
 import org.echoice.ums.domain.EcGroup;

@@ -5,9 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.web.paper.PageBean;
 import org.echoice.ums.dao.EcAccssModeDao;
 import org.echoice.ums.domain.EcAccssMode;
@@ -17,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.fastjson.JSON;
 @Controller
 @RequestMapping("/opAccssMode.do")
 public class AccssModeController extends UmsBaseController {
@@ -53,8 +53,9 @@ public class AccssModeController extends UmsBaseController {
 			HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		String accessMode=request.getParameter("accesModes");
-		JSONArray jsonArray=JSONArray.fromObject(accessMode);
-		List<EcAccssMode> collection= JSONArray.toList(jsonArray,EcAccssMode.class);
+		//JSONArray jsonArray=JSONArray.fromObject(accessMode);
+		//List<EcAccssMode> collection= JSONArray.toList(jsonArray,EcAccssMode.class);
+		List<EcAccssMode> collection=JSON.parseArray(accessMode).toJavaList(EcAccssMode.class);
 		for (EcAccssMode ecAccssMode : collection) {
 			ecAccssMode.setAlias(ecAccssMode.getAlias().trim());
 			ecAccssMode.setName(ecAccssMode.getName().trim());
@@ -82,8 +83,9 @@ public class AccssModeController extends UmsBaseController {
 			HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		String ids=request.getParameter("ids");
-		JSONArray jsonArray=JSONArray.fromObject(ids);
-		Object idsArr[]=jsonArray.toArray();
+		//JSONArray jsonArray=JSONArray.fromObject(ids);
+		//Object idsArr[]=jsonArray.toArray();
+		Object idsArr[]=JSON.parseArray(ids).toArray();
 		for (int i = 0; i < idsArr.length; i++) {
 			Long id=new Long((Integer)idsArr[i]);
 			getEcAccssModeDao().delete(id);

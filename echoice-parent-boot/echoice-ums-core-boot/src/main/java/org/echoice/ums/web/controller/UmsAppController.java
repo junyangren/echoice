@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.cas.CasUtil;
 import org.echoice.modules.web.controller.SpringBaseController;
 import org.echoice.modules.web.json.JSONUtil;
@@ -17,8 +17,6 @@ import org.echoice.ums.dao.UmsClientDao;
 import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcObjects;
 import org.echoice.ums.domain.EcUser;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;

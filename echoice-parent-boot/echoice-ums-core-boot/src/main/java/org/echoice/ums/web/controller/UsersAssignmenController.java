@@ -6,9 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.web.json.ExtJsUtil;
 import org.echoice.modules.web.json.bean.JSONCheckTreeNode;
 import org.echoice.ums.config.ConfigConstants;
@@ -26,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.fastjson.JSON;
 @Controller
 @RequestMapping("/opUsersAssignmen.do")
 public class UsersAssignmenController extends UmsBaseController {
@@ -205,8 +205,10 @@ public class UsersAssignmenController extends UmsBaseController {
 		}else{
 			listTree=checkRoleByUser(childList,strParentTree,checkTreeStr,userId,groupId,isAdmin,CasUmsUtil.getUser(request));
 		}
-		JSONArray jsonarr=JSONArray.fromObject(listTree);
-		rendTextExtjs(response, jsonarr.toString());
+		//JSONArray jsonarr=JSONArray.fromObject(listTree);
+		//rendTextExtjs(response, jsonarr.toString());
+		String data=JSON.toJSONString(listTree);
+		rendTextExtjs(response, data);
 		return null;
 	}
 	@RequestMapping(params={"action=checkRoleByUser"})

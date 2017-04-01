@@ -2,7 +2,7 @@ package org.echoice.ums.plugins;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.ums.dao.EcGroupDao;
 import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcObjects;

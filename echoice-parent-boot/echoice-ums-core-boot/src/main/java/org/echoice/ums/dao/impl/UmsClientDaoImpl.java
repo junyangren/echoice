@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.encrypt.MD5;
 import org.echoice.ums.dao.UmsClientDao;
 import org.echoice.ums.dao.mapper.RowMapperForGroup;

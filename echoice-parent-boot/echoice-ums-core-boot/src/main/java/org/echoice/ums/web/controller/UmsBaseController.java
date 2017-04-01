@@ -1,26 +1,28 @@
 package org.echoice.ums.web.controller;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.web.controller.SpringBaseController;
-import org.echoice.modules.web.json.DateJsonValueProcessor;
 import org.echoice.modules.web.json.bean.ExtJsActionView;
 import org.echoice.modules.web.paper.PageBean;
+import org.echoice.ums.config.AppPropertyPreFilter;
 import org.echoice.ums.util.CasUmsUtil;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.serializer.SerializeFilter;
+
+
+
 public class UmsBaseController extends SpringBaseController {
 
+	public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
 	public ModelAndView index(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
@@ -37,13 +39,21 @@ public class UmsBaseController extends SpringBaseController {
 		bf.append("success: true,");
 		bf.append("data:");
 		if(obj!=null){
+			/**
 			JsonConfig jsonConfig=new JsonConfig();
 			jsonConfig.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			if(excudeField!=null){
 				jsonConfig.setExcludes(excudeField);
 			}
 			JSONObject jsObject=JSONObject.fromObject(obj,jsonConfig);
-			bf.append(jsObject.toString());
+			bf.append(jsObject.toString());**/
+			
+			//toJSONString(object, SerializeConfig.globalInstance, null, dateFormat, DEFAULT_GENERATE_FEATURE, features)
+			
+			String dataJson=JSON.toJSONString(obj,SerializeConfig.globalInstance,new SerializeFilter[]{new AppPropertyPreFilter(excudeField)},DEFAULT_DATE_PATTERN,JSON.DEFAULT_GENERATE_FEATURE);
+			
+			//String dataJson=JSON.toJSONString(obj,new AppPropertyPreFilter(excudeField));
+			bf.append(dataJson);
 		}else{
 			bf.append("{}");
 		}
@@ -62,13 +72,16 @@ public class UmsBaseController extends SpringBaseController {
 		bf.append("totalCount:"+total);
 		bf.append(",data:");
 		if(total!=0){
+			/**
 			JsonConfig jsonConfig=new JsonConfig();
 			jsonConfig.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			if(excudeField!=null){
 				jsonConfig.setExcludes(excudeField);
 			}
 			JSONArray jSONArray=JSONArray.fromObject(list,jsonConfig);
-			bf.append(jSONArray.toString());
+			bf.append(jSONArray.toString());**/
+			String dataJson=JSON.toJSONString(list,SerializeConfig.globalInstance,new SerializeFilter[]{new AppPropertyPreFilter(excudeField)},DEFAULT_DATE_PATTERN,JSON.DEFAULT_GENERATE_FEATURE);
+			bf.append(dataJson);
 		}else{
 			bf.append("[]");
 		}
@@ -84,15 +97,18 @@ public class UmsBaseController extends SpringBaseController {
 	 * @throws IOException
 	 */
 	protected void renderExtjsActionView(HttpServletResponse response,ExtJsActionView extjsActionView) throws IOException{
-		JSONObject jsObject=JSONObject.fromObject(extjsActionView);
-		String str=jsObject.toString();
+		//JSONObject jsObject=JSONObject.fromObject(extjsActionView);
+		//String str=jsObject.toString();
+		
+		String str=JSON.toJSONString(extjsActionView);
 		logger.debug(str);
 		rendTextExtjs(response, str);
 	}
 	
 	protected void renderExtjsActionView(HttpServletResponse response,ExtJsActionView extjsActionView,boolean isText) throws IOException{
-		JSONObject jsObject=JSONObject.fromObject(extjsActionView);
-		String str=jsObject.toString();
+		//JSONObject jsObject=JSONObject.fromObject(extjsActionView);
+		//String str=jsObject.toString();
+		String str=JSON.toJSONString(extjsActionView);
 		logger.debug(str);
 		if(isText){
 			rendText(response, str);
@@ -156,8 +172,7 @@ public class UmsBaseController extends SpringBaseController {
 	public static void main(String[] args) {
 		ExtJsActionView actionView=new ExtJsActionView();
 		actionView.addErrorCodeMsg("aa", "bb");
-		JSONObject aSONObject=JSONObject.fromObject(actionView);
-		System.out.println(aSONObject.toString());
+		
 		
 	}
 }

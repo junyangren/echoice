@@ -3,7 +3,7 @@ package org.echoice.ums.web.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.web.json.ExtJsUtil;
 import org.echoice.ums.dao.EcGroupAssignmentDao;
 import org.echoice.ums.util.CasUmsUtil;

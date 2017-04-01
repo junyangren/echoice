@@ -23,7 +23,7 @@ public class DES3Helper {
 	public final static IvParameterSpec IVSPEC=new IvParameterSpec(DEFAULTIV);
 	static{
 		Security.addProvider(new com.sun.crypto.provider.SunJCE());
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		//Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 	}
 	/**
 	 * 加密

@@ -72,7 +72,7 @@ public class ConsolePermissionFilter implements Filter{
 		}
 		
 		boolean isAdmin=CasUmsUtil.isAdmin(request);
-		isAdmin=false;
+		//isAdmin=false;
 		if(!isAdmin){
 			//对用户资源操作权限判断
 			String uri=request.getRequestURI();

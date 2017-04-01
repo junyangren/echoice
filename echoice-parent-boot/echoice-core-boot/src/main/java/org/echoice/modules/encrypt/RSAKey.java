@@ -17,7 +17,7 @@ public class RSAKey {
 	private PublicKey publicKey = null;
 	
 	static{
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		//Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 	}
 	public RSAKey() {
 		try {

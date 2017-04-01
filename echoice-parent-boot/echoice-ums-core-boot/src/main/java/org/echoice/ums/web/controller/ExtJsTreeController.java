@@ -6,7 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
+//import net.sf.json.JSONArray;
 
 import org.echoice.modules.web.controller.SpringBaseController;
 import org.echoice.modules.web.json.bean.JSONTreeNode;
@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.fastjson.JSON;
 
 @Controller
 @RequestMapping("/opExtJsTree.do")
@@ -52,8 +54,9 @@ public class ExtJsTreeController extends SpringBaseController {
 			}
 			listTree.add(treeNode);
 		}
-		JSONArray jsonarr=JSONArray.fromObject(listTree);
-		rendText(response, jsonarr.toString());
+		//JSONArray jsonarr=JSONArray.fromObject(listTree);
+		String data=JSON.toJSONString(listTree);
+		rendText(response,data);
 		return null;
 	}
 	@RequestMapping(params={"action=groupAsyncTree"})

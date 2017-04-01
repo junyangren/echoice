@@ -10,7 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.ums.service.ValidPermissionForUmsService;
 import org.echoice.ums.util.CasUmsUtil;
 import org.springframework.web.context.WebApplicationContext;
@@ -18,11 +18,12 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 
 /**
- * 用户是否登入，及权限过滤
+ * 用户是否登入，及权限过滤(无用)
  * @author junyang
  *
  * 2007-3-16
  */
+@Deprecated
 public class UserPermissionFilter implements Filter {
 	private String allowedFiles;
 	private String fileArr[];

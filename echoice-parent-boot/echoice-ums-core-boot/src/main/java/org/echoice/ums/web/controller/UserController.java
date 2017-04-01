@@ -3,11 +3,10 @@ package org.echoice.ums.web.controller;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.encrypt.MD5;
 import org.echoice.modules.web.json.bean.ExtJsActionView;
 import org.echoice.modules.web.paper.PageBean;
@@ -23,12 +22,11 @@ import org.echoice.ums.util.CasUmsUtil;
 import org.echoice.ums.web.view.EcUserInfoView;
 import org.echoice.ums.web.view.EcUserView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import net.sf.json.JSONArray;
+import com.alibaba.fastjson.JSON;
 @Controller
 @RequestMapping("/opUser.do")
 public class UserController extends UmsBaseController {
@@ -143,8 +141,9 @@ public class UserController extends UmsBaseController {
 	public ModelAndView del(HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 		String ids=request.getParameter("ids");
-		JSONArray jsonArray=JSONArray.fromObject(ids);
-		Object idsArr[]=jsonArray.toArray();
+		//JSONArray jsonArray=JSONArray.fromObject(ids);
+		//Object idsArr[]=jsonArray.toArray();
+		Object idsArr[]=JSON.parseArray(ids).toArray();
 		String idsStr=StringUtils.join(idsArr, ",");
 		List<EcUser> list=getEcUserDao().findUserListByIds(idsStr);
 		//

@@ -15,7 +15,7 @@ public class RSAHelper {
 	public static final String DEFAULT_ALGORITHM="RSA";
 	public static final String DEFAULT_PROVIDER="BC";
 	static{
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		//Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 	}
 	/**
 	 * 根据16进制公钥字符串生成PublicKey对象

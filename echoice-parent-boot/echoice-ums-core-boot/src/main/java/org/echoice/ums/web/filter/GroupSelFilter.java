@@ -11,11 +11,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.service.UmsServiceFactory;
 import org.echoice.ums.util.CasUmsUtil;
-
+@Deprecated
 public class GroupSelFilter implements Filter {
 	private String allowedFiles;
 	private String fileArr[];

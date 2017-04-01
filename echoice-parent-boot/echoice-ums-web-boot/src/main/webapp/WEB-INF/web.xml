@@ -71,7 +71,7 @@
 		<filter-class>org.jasig.cas.client.util.AssertionThreadLocalFilter</filter-class>
 	</filter>
 	
-	<!--
+	
 	<filter-mapping>
 		<filter-name>CasSingleSignOutFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
@@ -116,7 +116,22 @@
 		<filter-name>CAS Assertion Thread Local Filter</filter-name>
 		<url-pattern>*.jsp</url-pattern>
 	</filter-mapping>
-	-->
+
+    <filter>
+        <filter-name>consolePermissionFilter</filter-name>
+        <filter-class>org.echoice.ums.web.filter.ConsolePermissionFilter</filter-class>
+    </filter>
+       
+    <filter-mapping>
+        <filter-name>consolePermissionFilter</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
+    
+    <filter-mapping>
+        <filter-name>consolePermissionFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+	
 	<!--  	
     <filter>
         <filter-name>userPermissionFilter</filter-name>
@@ -137,21 +152,6 @@
         <url-pattern>*.jsp</url-pattern>
     </filter-mapping>
     -->
-
-    <filter>
-        <filter-name>userPermissionFilter</filter-name>
-        <filter-class>org.echoice.ums.web.filter.ConsolePermissionFilter</filter-class>
-    </filter>
-       
-    <filter-mapping>
-        <filter-name>userPermissionFilter</filter-name>
-        <url-pattern>*.do</url-pattern>
-    </filter-mapping>
-    
-    <filter-mapping>
-        <filter-name>userPermissionFilter</filter-name>
-        <url-pattern>*.jsp</url-pattern>
-    </filter-mapping>    
     
 	<!-- user group select 
     <filter>

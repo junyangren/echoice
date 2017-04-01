@@ -8,15 +8,18 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.echoice.modules.web.json.bean.ExtJsActionView;
 import org.echoice.modules.web.json.bean.JSONTreeNode;
 
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.serializer.SerializeFilter;
+
 public class ExtJsUtil {
+	public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
 	public String createExtJsTree(List treeAllParentNodeList,List treeChildNodeList,String fieldNameTag,String fieldIdTag,String idStartFlag) throws Exception{		
 		StringBuffer bf=new StringBuffer();
 		bf.append("|");
@@ -42,8 +45,9 @@ public class ExtJsUtil {
 			}
 			listTree.add(treeNode);
 		}
-		JSONArray jsonarr=JSONArray.fromObject(listTree);
-		return jsonarr.toString();
+		//JSONArray jsonarr=JSONArray.fromObject(listTree);
+		String data=JSON.toJSONString(listTree);
+		return data;
 	}
 	/**
 	 * 将前面封装的JSON ID数组转换JAVA LONG数组
@@ -51,10 +55,12 @@ public class ExtJsUtil {
 	 * @return
 	 */
 	public static Long[] transJsonIDArrayToLong(HttpServletRequest request,String idTag){
-		JSONArray jsonArray=null;
+		//JSONArray jsonArray=null;
 		String ids=request.getParameter(idTag);
-		jsonArray=JSONArray.fromObject(ids);
-		Object obj[]=jsonArray.toArray();
+		//jsonArray=JSONArray.fromObject(ids);
+		//Object obj[]=jsonArray.toArray();
+
+		Object obj[]=JSON.parseArray(ids).toArray();
 		Long[] destArr=new Long[obj.length];
 		for (int i = 0; i < obj.length; i++) {
 			destArr[i]=new Long((Integer)obj[i]);
@@ -79,13 +85,17 @@ public class ExtJsUtil {
 		bf.append("success: true,");
 		bf.append("data:");
 		if(obj!=null){
+			/**
 			JsonConfig jsonConfig=new JsonConfig();
 			jsonConfig.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			if(excudeField!=null){
 				jsonConfig.setExcludes(excudeField);
 			}
 			JSONObject jsObject=JSONObject.fromObject(obj,jsonConfig);
-			bf.append(jsObject.toString());
+			bf.append(jsObject.toString());**/
+			
+			String dataJson=JSON.toJSONString(obj,SerializeConfig.globalInstance,new SerializeFilter[]{new AppPropertyPreFilter(excudeField)},DEFAULT_DATE_PATTERN,JSON.DEFAULT_GENERATE_FEATURE);
+			bf.append(dataJson);
 		}else{
 			bf.append("{}");
 		}
@@ -104,13 +114,17 @@ public class ExtJsUtil {
 		bf.append("totalCount:"+total);
 		bf.append(",data:");
 		if(total!=0){
+			/**
 			JsonConfig jsonConfig=new JsonConfig();
 			jsonConfig.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			if(excudeField!=null){
 				jsonConfig.setExcludes(excudeField);
 			}
 			JSONArray jSONArray=JSONArray.fromObject(list,jsonConfig);
-			bf.append(jSONArray.toString());
+			bf.append(jSONArray.toString());**/
+			
+			String dataJson=JSON.toJSONString(list,SerializeConfig.globalInstance,new SerializeFilter[]{new AppPropertyPreFilter(excudeField)},DEFAULT_DATE_PATTERN,JSON.DEFAULT_GENERATE_FEATURE);
+			bf.append(dataJson);
 		}else{
 			bf.append("[]");
 		}
@@ -125,16 +139,16 @@ public class ExtJsUtil {
 	 * @throws IOException
 	 */
 	public static void renderExtjsActionView(HttpServletResponse response,ExtJsActionView extjsActionView) throws IOException{
-		JSONObject jsObject=JSONObject.fromObject(extjsActionView);
-		String str=jsObject.toString();
+		//JSONObject jsObject=JSONObject.fromObject(extjsActionView);
+		String str=JSON.toJSONString(extjsActionView);
 		rendTextExtjs(response, str);
 	}
 	
 	public static void main(String[] args) {
 		ExtJsActionView actionView=new ExtJsActionView();
 		actionView.addErrorCodeMsg("aa", "bb");
-		JSONObject aSONObject=JSONObject.fromObject(actionView);
-		System.out.println(aSONObject.toString());
+		//JSONObject aSONObject=JSONObject.fromObject(actionView);
+		//System.out.println(aSONObject.toString());
 		
 	}
 }

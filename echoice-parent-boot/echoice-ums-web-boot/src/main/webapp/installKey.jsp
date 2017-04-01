@@ -2,7 +2,7 @@
 <%@page import="java.io.BufferedReader"%>
 <%@page import="java.io.FileReader"%>
 <%@page import="java.io.File"%>
-<%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="org.apache.commons.lang3.StringUtils"%>
 <%
 	String pkcs7ca = "sPKCS7ca=\"\"\r\n"; 
 	//读取

@@ -18,8 +18,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.Validate;
+import org.echoice.modules.encrypt.BASE64Encoder;
 
 import com.google.common.base.Charsets;
 import com.google.common.net.HttpHeaders;
@@ -206,6 +206,6 @@ public class Servlets {
 	 */
 	public static String encodeHttpBasic(String userName, String password) {
 		String encode = userName + ":" + password;
-		return "Basic " + Base64.encodeBase64String(encode.getBytes());
+		return "Basic " + BASE64Encoder.encode(encode.getBytes());
 	}
 }

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.utils.DateUtil;
 import org.echoice.modules.web.json.bean.ExtJsActionView;
 import org.echoice.modules.web.json.bean.JSONTreeNode;
@@ -29,7 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import net.sf.json.JSONArray;
+import com.alibaba.fastjson.JSON;
+
 
 @Controller
 @RequestMapping("/opObjects.do")
@@ -74,8 +75,10 @@ public class ObjectsController extends UmsBaseController{
 			HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		String ids=request.getParameter("ids");
-		JSONArray jsonArray=JSONArray.fromObject(ids);
-		Object idsArr[]=jsonArray.toArray();
+		//JSONArray jsonArray=JSONArray.fromObject(ids);
+		//Object idsArr[]=jsonArray.toArray();
+		
+		Object idsArr[]=JSON.parseArray(ids).toArray();
 		for (int i = 0; i < idsArr.length; i++) {
 			Long id=new Long((Integer)idsArr[i]);
 			List list=getEcObjectsDao().findChildObjects(id);
@@ -202,8 +205,11 @@ public class ObjectsController extends UmsBaseController{
 			}
 			listTree.add(treeNode);
 		}
-		JSONArray jsonarr=JSONArray.fromObject(listTree);
-		rendTextExtjs(response, jsonarr.toString());
+		//JSONArray jsonarr=JSONArray.fromObject(listTree);
+		//rendTextExtjs(response, jsonarr.toString());
+		
+		String data=JSON.toJSONString(listTree);
+		rendTextExtjs(response, data);
 		return null;
 	}
 	

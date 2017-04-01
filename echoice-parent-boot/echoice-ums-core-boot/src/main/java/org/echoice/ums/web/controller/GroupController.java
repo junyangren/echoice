@@ -3,11 +3,10 @@ package org.echoice.ums.web.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.web.json.bean.ExtJsActionView;
 import org.echoice.modules.web.json.bean.JSONCheckTreeNode;
 import org.echoice.modules.web.json.bean.JSONTreeNode;
@@ -30,7 +29,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import net.sf.json.JSONArray;
+import com.alibaba.fastjson.JSON;
+
+//import net.sf.json.JSONArray;
 
 @Controller
 @RequestMapping("/opGroup.do")
@@ -131,8 +132,9 @@ public class GroupController extends UmsBaseController {
 			}
 			listTree.add(treeNode);
 		}
-		JSONArray jsonarr=JSONArray.fromObject(listTree);
-		rendTextExtjs(response, jsonarr.toString());
+		//JSONArray jsonarr=JSONArray.fromObject(listTree);
+		String data=JSON.toJSONString(listTree);
+		rendTextExtjs(response, data);
 		return null;
 	}
 	
@@ -194,8 +196,11 @@ public class GroupController extends UmsBaseController {
 			listTree.add(treeNode);
 		}
 		
-		JSONArray jsonarr=JSONArray.fromObject(listTree);
-		rendTextExtjs(response, jsonarr.toString());
+		//JSONArray jsonarr=JSONArray.fromObject(listTree);
+		//rendTextExtjs(response, jsonarr.toString());
+		
+		String data=JSON.toJSONString(listTree);
+		rendTextExtjs(response, data);
 		return null;
 	}
 	/**
@@ -311,8 +316,9 @@ public class GroupController extends UmsBaseController {
 		throws Exception {
 		String ids=request.getParameter("ids");
 		//判断是不否存在子节点
-		JSONArray jsonArray=JSONArray.fromObject(ids);
-		Object idsArr[]=jsonArray.toArray();
+		//JSONArray jsonArray=JSONArray.fromObject(ids);
+		//Object idsArr[]=jsonArray.toArray();
+		Object idsArr[]=JSON.parseArray(ids).toArray();
 		//过滤器判断
 		String idsStr=StringUtils.join(idsArr,",");
 		ResultMsg resultMsg=null;
