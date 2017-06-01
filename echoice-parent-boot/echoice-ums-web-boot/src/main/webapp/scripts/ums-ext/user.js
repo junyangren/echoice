@@ -122,7 +122,7 @@ Ecums.UserFormPanel=function(){
 				                maxLength:30
 				            },{
 				                fieldLabel: '地址',
-				                name: 'textarea',
+				                name: 'address',
 				                anchor:'95%',
 				                maxLength:128
 				            },{
