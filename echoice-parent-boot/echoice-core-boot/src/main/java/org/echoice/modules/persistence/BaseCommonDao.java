@@ -104,24 +104,13 @@ public class BaseCommonDao {
 	}
 	
 	public <T> Page<T> findPageHQLData(String hql, int pageNo, int pageSize, Object... values) {
-		Assert.hasText(hql);
-		//Count查询
-		String countHql = "select count(1) " + removeSelect(removeOrders(hql));
-		Number totalCountN = findUnique(countHql, values);
-		int totalCount=0;
-		totalCount=totalCountN.intValue();
-		
-		PageRequest pageRequest=new PageRequest(pageNo, pageSize);
+		PageBean pageBean=findPageHQL(hql,pageNo,pageSize,values);
+		PageRequest pageRequest=new PageRequest(pageNo-1, pageSize);
 		Page<T> page=null;
-		//PageBean  page=new PageBean(pageNo,pageSize,totalCount);
-		if (totalCount < 1){
+		if(pageBean.getTotalSize()<=0){
 			page=new PageImpl<T>(new ArrayList<T>(), pageRequest, 0);
 		}else{
-			//实际查询返回分页对象
-			int startIndex = pageRequest.getPageNumber()-1;
-			Query query = createQuery(hql,false, values);
-			List<T> list = query.setFirstResult(startIndex).setMaxResults(pageSize).getResultList();
-			page=new PageImpl<T>(list, pageRequest, 0);
+			page=new PageImpl<T>(pageBean.getDataList(), pageRequest, pageBean.getTotalSize());
 		}
 		return page;
 	}
@@ -138,7 +127,7 @@ public class BaseCommonDao {
 	 */
 	public <T> Page<T> findPageSQLData(String sql,RowMapper<T> rowMapper,int pageNo, int pageSize, Object... values){
 		String countSql = "select count(1) " + removeSelect(removeOrders(sql));
-		return findPageSQLData(countSql,sql,rowMapper,pageNo,pageSize);
+		return findPageSQLData(countSql,sql,rowMapper,pageNo,pageSize,values);
 	}
 	/**
 	 * 基于jdbcTemplate SQL查询，需要传入总记录数Sql,取记录sql
@@ -151,37 +140,13 @@ public class BaseCommonDao {
 	 * @return
 	 */
 	public <T> Page<T> findPageSQLData(String countSql,String listSql,RowMapper<T> rowMapper,int pageNo, int pageSize, Object... values){
-		Assert.hasText(countSql, "countSql不能为空");
-		Assert.hasText(listSql, "listSql不能为空");
-		int totalCount=getJdbcTemplate().queryForObject(countSql,values,Integer.class);
-		PageRequest pageRequest=new PageRequest(pageNo, pageSize);
+		PageBean pageBean=findPageSQL(countSql,listSql,rowMapper,pageNo,pageSize,values);
+		PageRequest pageRequest=new PageRequest(pageNo-1, pageSize);
 		Page<T> page=null;
-		if (totalCount < 1){
+		if(pageBean.getTotalSize()<=0){
 			page=new PageImpl<T>(new ArrayList<T>(), pageRequest, 0);
 		}else{
-			int startIndex=pageRequest.getOffset()-pageRequest.getPageSize();
-			String limitSql=getDialectObj().getLimitString(listSql,startIndex, pageRequest.getPageSize());
-			List paramList=new ArrayList();
-			if(values!=null&&values.length>0){
-				for (Object oneParam : values) {
-					paramList.add(oneParam);
-				}	
-			}
-			if(checkMySql()){
-				if(startIndex>0){
-					paramList.add(startIndex);
-				}
-				paramList.add(pageRequest.getPageSize());
-			}else{
-				paramList.add(pageRequest.getOffset());
-				if(startIndex>0){
-					paramList.add(startIndex);
-				}
-			}
-			
-			logger.debug(limitSql);
-			List<T> list=getJdbcTemplate().query(limitSql, paramList.toArray(), rowMapper);
-			page=new PageImpl<T>(list, pageRequest, 0);
+			page=new PageImpl<T>(pageBean.getDataList(), pageRequest, pageBean.getTotalSize());
 		}
 		return page;
 	}
