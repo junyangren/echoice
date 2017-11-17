@@ -63,7 +63,9 @@ public class AccssModeController extends UmsBaseController {
 			//对数据进行xss filter
 			ecAccssMode.setAlias(Jsoup.clean(ecAccssMode.getAlias(), Whitelist.simpleText()));
 			ecAccssMode.setName(Jsoup.clean(ecAccssMode.getName(), Whitelist.simpleText()));
-			ecAccssMode.setNote(Jsoup.clean(ecAccssMode.getNote(), Whitelist.simpleText()));
+			if(StringUtils.isNotBlank(ecAccssMode.getNote())){
+				ecAccssMode.setNote(Jsoup.clean(ecAccssMode.getNote(), Whitelist.simpleText()));
+			}
 			ecAccssMode.setStatus(Jsoup.clean(ecAccssMode.getStatus(), Whitelist.simpleText()));
 			getEcAccssModeDao().save(ecAccssMode);
 		}

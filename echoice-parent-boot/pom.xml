@@ -27,19 +27,27 @@
 		<module>echoice-ums-core-boot</module>
 		<!--
 		<module>echoice-ums-web-boot</module>
+		
 		<module>echoice-mgr</module>
 		-->
 	</modules>
    <distributionManagement>
 		<repository>
+			<id>echoice-local</id>
+			<name>airobothub Repository</name>
+			<url>file://D://java//maven-repo//maven-releases</url>
+		</repository>   
+        <!--
+		<repository>
 			<id>airobothub</id>
 			<name>airobothub Repository</name>
-			<url>http://maven.airobothub.cn/nexus/repository/maven-releases/</url>
+			<url>http://122.228.31.41:8080/nexus/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>airobothub-snapshots</id>
 			<name>airobothub-snapshots Repository</name>
-			<url>http://maven.airobothub.cn/nexus/repository/maven-snapshots/</url>
+			<url>http://122.228.31.41:8080/nexus/repository/maven-snapshots/</url>
 		</snapshotRepository>
+        --> 
 	</distributionManagement>	
 </project>
