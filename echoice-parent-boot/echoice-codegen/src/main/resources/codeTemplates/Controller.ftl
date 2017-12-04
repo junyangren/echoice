@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import ${package_name}.domain.${table_name};
 import ${package_name}.mgr.service.${table_name}Service;
+import com.zzxipd.smartwear.mgr.web.controller.bean.MsgTipExt;
 /**
 * 描述：${table_annotation} 控制层
 * @author ${author}
@@ -79,17 +80,17 @@ public class ${table_name}Controller{
 	@RequestMapping(value = "update",method = RequestMethod.POST)
 	@ResponseBody
 	public String update(@Valid ${table_name} ${table_name?uncap_first},ServletRequest request) {
-		MsgTip msgTip=new MsgTip();
+		MsgTipExt msgTip=new MsgTipExt();
 		try{
 			Date now=new Date();
 			${table_name} ${table_name?uncap_first}db=null;
-			if(${table_name?uncap_first}.getId()!=null){
-				${table_name?uncap_first}db=${table_name?uncap_first}Service.get${table_name}Dao().findOne(${table_name?uncap_first}.getId());
+			if(${table_name?uncap_first}.get${pkColumn.changeColumnName}()!=null){
+				${table_name?uncap_first}db=${table_name?uncap_first}Service.get${table_name}Dao().findOne(${table_name?uncap_first}.get${pkColumn.changeColumnName}());
 			}
 			
 			if(${table_name?uncap_first}db!=null){
-				${table_name?uncap_first}.setCreateUser(deviceInfodb.getCreateUser());
-				${table_name?uncap_first}.setCreateTime(deviceInfodb.getCreateTime());
+				${table_name?uncap_first}.setCreateUser(${table_name?uncap_first}db.getCreateUser());
+				${table_name?uncap_first}.setCreateTime(${table_name?uncap_first}db.getCreateTime());
 			}else{
 				${table_name?uncap_first}.setCreateUser(CasUtil.getUserName());
 				${table_name?uncap_first}.setCreateTime(now);
@@ -97,6 +98,7 @@ public class ${table_name}Controller{
 			${table_name?uncap_first}.setOpUser(CasUtil.getUserName());
 			${table_name?uncap_first}.setOpTime(now);		
 			${table_name?uncap_first}Service.get${table_name}Dao().save(${table_name?uncap_first});
+			msgTip.setData(${table_name?uncap_first}.get${pkColumn.changeColumnName}());
 		}catch (Exception e) {
 			// TODO: handle exception
 			logger.error("异常：",e);

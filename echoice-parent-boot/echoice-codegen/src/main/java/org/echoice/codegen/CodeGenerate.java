@@ -25,10 +25,10 @@ import freemarker.template.Template;
 public class CodeGenerate {
 	private String author = "echoice";
     private String currentDate = "2017/11/20";
-    private String tablePrefix = "sm_";
-    private String tableName = "sm_device_info";
+    private String tablePrefix = "ec_";
+    private String tableName = "ec_result_code_cfg";//sm_device_info
     private String packageName = "com.zzxipd.smartwear";
-    private String tableAnnotation = "设备管理";
+    private String tableAnnotation = "结果码配置";//设备管理
     private String url = "jdbc:mysql://192.168.21.44/smartwear_db?useUnicode=true&characterEncoding=utf-8";
     private String user = "smartwearadmin";
     private String password = "smartwearadmin123";

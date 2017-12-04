@@ -5,9 +5,11 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -37,8 +39,15 @@ public class ${table_name} extends BaseEntity implements java.io.Serializable {
     *${model.columnType}
     */
     <#if (model.pk) >
+    @TableGenerator(name="ID_${table_name}",
+            table="ec_common_seq",
+            pkColumnName="pk_key",
+            valueColumnName="pk_value",
+            pkColumnValue="${table_name_small}",
+            allocationSize=1,
+            initialValue=1)
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="ID_${table_name}")    
     @Id
-    @GeneratedValue
     </#if>
     <#if (model.javaType = 'Date') >
 	@Temporal(TemporalType.TIMESTAMP)

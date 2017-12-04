@@ -6,17 +6,7 @@
   <%@ include file="/commons/meta-app.jsp" %>
   <%@ include file="/commons/easyui-css.jsp" %>
   <%@ include file="/commons/layui-css.jsp" %>
-  <style type="text/css">
-    .layui-input{
-        height:30px;
-    }
-    .layui-form-label{
-        padding: 5px 15px;
-    }
-    .layui-form-select dl{
-        top:32px;
-    }
-  </style>  
+  <link rel="stylesheet" type="text/css" href="${r"${ctx }"}/static/styles/app.css" /> 
   </head>
   <body>
   	<div class="header-navbar">当前位置：首页->${table_annotation}</div>
@@ -78,7 +68,7 @@
 						fit:true,
 						fitColumns:false,
 						idField:'${pkColumn.changeColumnName?uncap_first}',
-						singleSelect: true,
+						singleSelect: false,
 						selectOnCheck:true,
 						collapsible: false,
 						rownumbers: false,
@@ -138,7 +128,7 @@
 
         $.ecApp.showAppInfo=function(id){
             var url=$.ecApp.appBaseUrl+'/update/'+id+'?_parentFrameTabId='+$.ecApp.frameTabId;
-            parent.addFrameTab({title:'${table_annotation}修改',href:url,reload:true,frameId:'${table_name?uncap_first}-modify-FrameID'});
+            parent.addFrameTab({title:'修改${table_annotation}',href:url,reload:true,frameId:'${table_name?uncap_first}-modify-FrameID'});
         }
         
         $.ecApp.initRctoolbar=function(umsHasEditPMS){
@@ -149,7 +139,7 @@
                     handler:function(){
                         var url=$.ecApp.appBaseUrl+'/create?_parentFrameTabId='+$.ecApp.frameTabId;
                         if(parent.addFrameTab){
-                            parent.addFrameTab({title:'${table_annotation}新增',href:url,reload:true,frameId:'${table_name?uncap_first}-add-FrameID'});
+                            parent.addFrameTab({title:'新增${table_annotation}',href:url,reload:true,frameId:'${table_name?uncap_first}-add-FrameID'});
                         }else{
                             window.open(url);
                         }

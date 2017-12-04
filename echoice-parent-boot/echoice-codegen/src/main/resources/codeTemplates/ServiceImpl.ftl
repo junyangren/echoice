@@ -12,7 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ${package_name}.dao.${table_name}Dao;
@@ -25,18 +24,16 @@ import ${package_name}.mgr.service.${table_name}Service;
 * @date ${date}
 */
 @Service
-@Transactional(readOnly=true)
 public class ${table_name}ServiceImpl implements ${table_name}Service{
 	@Autowired
 	private ${table_name}Dao ${table_name?uncap_first}Dao;
-	@Transactional(propagation=Propagation.NOT_SUPPORTED,readOnly=true)
 	public Page<${table_name}> findPageList(Map<String, Object> searchParams,int pageNumber, int pageSize){
 		PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, "auto");
 		Specification<${table_name}> spec = buildSpecification(searchParams);
 		return ${table_name?uncap_first}Dao.findAll(spec, pageRequest);
 	}
 	/**
-	 * 批理删除错误码配置
+	 * 批理删除${table_annotation}
 	 * @param idList
 	 */
 	@Transactional

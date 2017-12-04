@@ -16,7 +16,18 @@ public class ${table_name}DaoImpl extends BaseCommonDao{
 		
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer sb = new StringBuffer();
-		sb.append("select * from ${table_name_small} t where 1=1");
+		sb.append("select ");
+		<#if model_column?exists>
+            <#list model_column as model>
+                <#if model_index=0>
+        sb.append("t.${model.columnName}");
+                <#else>
+        sb.append(",t.${model.columnName}");
+                </#if>
+            </#list>
+        </#if>
+		
+		sb.append(" from ${table_name_small} t where 1=1");
 		
 		<#if model_column?exists>
         	<#list model_column as model>

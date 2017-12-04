@@ -3,26 +3,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-	<meta charset="utf-8">
+    <%@ include file="/commons/meta-app.jsp" %>
 	<title>${table_annotation}</title>
-	<meta name="renderer" content="webkit">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black"> 
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="format-detection" content="telephone=no">    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">
 	<%@ include file="/commons/layui-css.jsp" %>
-	<link rel="stylesheet" type="text/css" href="${r"${ctx }"}/static/styles/quickLayout/quick-layout-min.css" />
 	<link rel="stylesheet" type="text/css" href="${r"${ctx }"}/static/styles/app.css" />
   </head>
   <body>
   	<div class="header-navbar ec-fix-top">当前位置：首页->${table_annotation}</div>
-  	<div class="ec-form auto bdc p10 ec-form-mtb">
+  	<div class="ec-form ec-auto ec-bdc ec-p10 ec-form-mtb">
 		<blockquote class="ec-elem-quote">${table_annotation}</blockquote>
-		<form class="layui-form" action="">
+		<form class="layui-form" action="" method="post" name="ec-edit-form" id="ec-edit-form">
 		<#if model_column?exists>
         	<#list model_column as model>
         	<#if (!(model.changeColumnName = 'CreateTime' ||model.changeColumnName = 'CreateUser' || model.changeColumnName = 'OpTime' || model.changeColumnName = 'OpUser')) >		  
@@ -64,12 +54,14 @@
 		  	</#if>  
         	</#list>
     	</#if>
+    	  <c:if test="${r"${_umsHasEditPMS}"}">
 		  <div class="layui-form-item">
 		    <div class="layui-input-block">
-		      <button class="layui-btn" lay-submit lay-filter="ec-from">提交</button>
+		      <button type="button" class="layui-btn" lay-submit lay-filter="ec-from">提交</button>
 		      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 		    </div>
-		  </div>		  		  		  
+		  </div>
+		  </c:if>		  		  		  
 		</form>  	
   	</div>
   	<script type="text/javascript" src="${r"${ctx}"}/static/component/My97DatePicker/4.8/WdatePicker.js"></script>
@@ -83,18 +75,45 @@
 	  ,$ = layui.jquery;
 	  
 	  var vframeId = '${r"${param._parentFrameTabId }'"};
-
+      var jsContext='${r"${ctx}"}';  
 	  //监听提交
 	  form.on('submit(ec-from)', function(data){
 	    var sfJson=data.field;
 	    var rnd=parseInt(Math.random()*1000000);
 		sfJson.rnd=rnd;
 		$.post("${r"${ctx}"}/console/${table_name?uncap_first}/update",sfJson,function(data){
+		      
 			layer.alert(data.msg);
 			if(data.code==0&&vframeId!=''){
 				parent.reloadFrame({frameId:vframeId});
 			}
 		},"json");
+		
+        $.post(jsContext+"/console/resultCodeCfg/update",sfJson,function(resp){
+            if(resp){
+                $('input[name="${pkColumn.changeColumnName?uncap_first}"]').val(resp.data);
+                if(resp.code==0){
+                    layer.confirm(resp.msg, {
+                          btn: ['继续编辑','关闭'] //按钮
+                        },function(index){
+                          layer.close(index);
+                        }, function(index){
+                          //window.location.href=jsContext+'/console/resultCodeCfg/create?_parentFrameTabId='+vframeId;
+                          parent.closeFrameTab();
+                        });
+                    
+                    if(vframeId!=''){
+                        parent.reloadFrame({frameId:vframeId});
+                    }                
+                }else{
+                    layer.alert(resp.msg);
+                }
+            }else{
+                layer.alert('操作失败');
+            }
+            
+        },"json");
+        		
 	    return false;
 	  });
 	});
