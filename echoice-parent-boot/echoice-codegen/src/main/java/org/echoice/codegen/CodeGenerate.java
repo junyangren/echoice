@@ -56,11 +56,13 @@ public class CodeGenerate {
     	this.author=codeGenBean.getAuthor();
     	this.tablePrefix=codeGenBean.getDbTablePrefix();
     	this.tableName=codeGenBean.getDbTable();
+		this.changeTableName = replaceUnderLineAndUpperCase(this.tableName.substring(this.tablePrefix.length()));
     	this.tableAnnotation=codeGenBean.getDbTableNameCn();
     	this.packageName=codeGenBean.getAppPackageName();
     	this.url="jdbc:mysql://"+codeGenBean.getDbIp()+"/"+codeGenBean.getDbName()+"?useUnicode=true&characterEncoding=utf-8";
     	this.user=codeGenBean.getDbUser();
     	this.password=codeGenBean.getDbPasswd();
+		this.currentDate=DateFormatUtils.format(new Date(), "yyyy/MM/dd");
     }
 
     public void generate() throws Exception{
