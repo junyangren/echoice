@@ -33,7 +33,7 @@ public class CodeGenerate {
     private String user = "smartwearadmin";
     private String password = "smartwearadmin123";
     private final String DRIVER = "com.mysql.jdbc.Driver";
-    private String diskPath = "D://codeGenerate//";
+    private String diskPath = "c://codeGenerate//";
     private String changeTableName = replaceUnderLineAndUpperCase(tableName.substring(tablePrefix.length()));
 
     private final Pattern commonChinese = Pattern.compile("^[\u4e00-\u9fa5_a-zA-Z0-9]+");

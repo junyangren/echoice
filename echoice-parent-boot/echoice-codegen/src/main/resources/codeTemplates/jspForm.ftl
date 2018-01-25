@@ -80,16 +80,8 @@
 	  form.on('submit(ec-from)', function(data){
 	    var sfJson=data.field;
 	    var rnd=parseInt(Math.random()*1000000);
-		sfJson.rnd=rnd;
-		$.post("${r"${ctx}"}/console/${table_name?uncap_first}/update",sfJson,function(data){
-		      
-			layer.alert(data.msg);
-			if(data.code==0&&vframeId!=''){
-				parent.reloadFrame({frameId:vframeId});
-			}
-		},"json");
-		
-        $.post(jsContext+"/console/resultCodeCfg/update",sfJson,function(resp){
+		sfJson.rnd=rnd;		
+        $.post(jsContext+"/console/${table_name?uncap_first}/update",sfJson,function(resp){
             if(resp){
                 $('input[name="${pkColumn.changeColumnName?uncap_first}"]').val(resp.data);
                 if(resp.code==0){
@@ -98,7 +90,7 @@
                         },function(index){
                           layer.close(index);
                         }, function(index){
-                          //window.location.href=jsContext+'/console/resultCodeCfg/create?_parentFrameTabId='+vframeId;
+                          //window.location.href=jsContext+'/console/${table_name?uncap_first}/create?_parentFrameTabId='+vframeId;
                           parent.closeFrameTab();
                         });
                     
