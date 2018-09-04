@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import ${package_name}.domain.${table_name};
 import ${package_name}.mgr.service.${table_name}Service;
-import com.zzxipd.smartwear.mgr.web.controller.bean.MsgTipExt;
+import ${package_name}.mgr.web.controller.bean.MsgTipExt;
 /**
 * 描述：${table_annotation} 控制层
 * @author ${author}

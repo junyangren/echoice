@@ -40,7 +40,7 @@
 		      <input type="text" name="${model.changeColumnName?uncap_first}" value="${r"$"}{listone.${model.changeColumnName?uncap_first}}" lay-verify="<#if (model.required) >required|number</#if>" placeholder="请输入${model.columnShortComment!}" maxlength="${model.columnSize}" autocomplete="off" class="layui-input" />	
 		    </div>		    
 			<#else>
-				<#if (model.columnSize<=64) >
+				<#if (model.columnSize<=128) >
 		    <div class="layui-input-block">
 		      <input type="text" name="${model.changeColumnName?uncap_first}" value="${r"$"}{listone.${model.changeColumnName?uncap_first}}" lay-verify="<#if (model.required) >required</#if>" placeholder="请输入${model.columnShortComment!}" maxlength="${model.columnSize}" autocomplete="off" class="layui-input" />	
 		    </div>
@@ -85,6 +85,9 @@
             if(resp){
                 $('input[name="${pkColumn.changeColumnName?uncap_first}"]').val(resp.data);
                 if(resp.code==0){
+                    if(vframeId!=''){
+                        parent.reloadFrame({frameId:vframeId});
+                    }				
                     layer.confirm(resp.msg, {
                           btn: ['继续编辑','关闭'] //按钮
                         },function(index){
@@ -92,11 +95,9 @@
                         }, function(index){
                           //window.location.href=jsContext+'/console/${table_name?uncap_first}/create?_parentFrameTabId='+vframeId;
                           parent.closeFrameTab();
-                        });
-                    
-                    if(vframeId!=''){
-                        parent.reloadFrame({frameId:vframeId});
-                    }                
+                        }
+					);
+                
                 }else{
                     layer.alert(resp.msg);
                 }

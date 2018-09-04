@@ -22,15 +22,15 @@
                        <div class="layui-input-inline">
                        <#if (model.javaType = 'Date') >
                             <input type="text" name="${model.changeColumnName?uncap_first}" placeholder="请输入${model.columnShortComment!}" autocomplete="off" class="layui-input" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
-                       <#elseif (model.javaType = 'Integer'||model.javaType = 'Long'||model.javaType = 'Double') >
-                            <input type="number" name="${model.changeColumnName?uncap_first}" placeholder="请输入${model.columnShortComment!}" autocomplete="off" class="layui-input" />
                        <#elseif (model.options ?exists) >
                             <select name="${model.changeColumnName?uncap_first}">
                               <option value="">请选择</option>
                               <#list model.options as oneOption>
                               <option value="${oneOption.value}">${oneOption.name}</option>
                               </#list>
-                            </select>                            
+                            </select>
+                       <#elseif (model.javaType = 'Integer'||model.javaType = 'Long'||model.javaType = 'Double') >
+                            <input type="number" name="${model.changeColumnName?uncap_first}" placeholder="请输入${model.columnShortComment!}" autocomplete="off" class="layui-input" />                                                        
                        <#else>
                             <input type="text" name="${model.changeColumnName?uncap_first}" placeholder="请输入${model.columnShortComment!}" autocomplete="off" class="layui-input" />
                        </#if>
