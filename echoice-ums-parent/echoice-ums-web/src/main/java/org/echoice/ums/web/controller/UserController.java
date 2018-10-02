@@ -244,6 +244,7 @@ public class UserController {
 		String filePath = request.getParameter("filePath");// 获取已上传的文件路径
 		String startNum = request.getParameter("startNum");// 从第几行开始导入
 		Integer count=Integer.valueOf(startNum)-1;
+		String opType=request.getParameter("opType");
 		
 		if(!"".equals(startNum) || null != startNum) {
 			count=Integer.valueOf(startNum);
@@ -321,6 +322,16 @@ public class UserController {
 					if(cell!=null&&StringUtils.isNotBlank(cell.toString())) {
 						tmp.setAlias(cell.toString().trim());
 					}else {
+						msgTip.setMsg("第"+i+"行帐号不能为空");
+						break;
+					}
+				}
+				
+				if(StringUtils.isNotBlank(colInfo.getIdcard())) {
+					cell = row.getCell(Integer.valueOf(colInfo.getIdcard()));
+					if(cell!=null&&StringUtils.isNotBlank(cell.toString())) {
+						tmp.setIdcard(cell.toString().trim());
+					}else {
 						msgTip.setMsg("第"+i+"行身份证不能为空");
 						break;
 					}
@@ -339,15 +350,15 @@ public class UserController {
 					if(cell!=null&&StringUtils.isNotBlank(cell.toString())) {
 						tmp.setGroupName(cell.toString().trim());
 					}else {
-						msgTip.setMsg("第"+i+"行科室名称不能为空");
+						msgTip.setMsg("第"+i+"行用户部门不能为空");
 						break;
 					}
 				}
 				
-				if(StringUtils.isNotBlank(colInfo.getCaKeySn())) {
-					cell = row.getCell(Integer.valueOf(colInfo.getCaKeySn()));
+				if(StringUtils.isNotBlank(colInfo.getHardwareSn())) {
+					cell = row.getCell(Integer.valueOf(colInfo.getHardwareSn()));
 					if(cell!=null&&StringUtils.isNotBlank(cell.toString())) {
-						tmp.setCaKeySn(cell.toString().trim());
+						tmp.setHardwareSn(cell.toString().trim());
 					}else {
 						msgTip.setMsg("第"+i+"硬件介质不能为空");
 						break;
@@ -420,10 +431,10 @@ public class UserController {
 					}
 				}
 				
-				if(StringUtils.isNotBlank(colInfo.getCaKeySn())) {
-					cell = row.getCell(Integer.valueOf(colInfo.getCaKeySn()));
+				if(StringUtils.isNotBlank(colInfo.getHardwareSn())) {
+					cell = row.getCell(Integer.valueOf(colInfo.getHardwareSn()));
 					if(cell!=null&&StringUtils.isNotBlank(cell.toString())) {
-						tmp.setCaKeySn(cell.toString().trim());
+						tmp.setHardwareSn(cell.toString().trim());
 					}else {
 						msgTip.setMsg("第"+i+"硬件介质不能为空");
 						break;

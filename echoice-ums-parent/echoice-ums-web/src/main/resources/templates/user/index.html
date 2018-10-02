@@ -115,7 +115,8 @@
             ,{field: 'userId',title: 'ID',width: 80,align:'center',sort: false}
             ,{field: 'alias',title: '帐号',width: 150}
             ,{field: 'name',title: '姓名',width: 150,sort: false}
-            ,{field: 'email',title: '邮件',width: 150,sort: false}
+            ,{field: 'idcard',title: '身份证号',width: 150,sort: false}
+            ,{field: 'mobile',title: '手机',width: 120,sort: false}
             ,{field: 'status',title: '状态',width: 60,align:'center',templet: '#statusTpl'}
             ,{field: 'opTime',title: '操作时间',width: 120,align:'center'},
             ,{field: 'taxis',title: '排序',width: 80,align:'center',sort: false}
@@ -436,12 +437,22 @@
         var sfJson=data.field;
         var rnd=parseInt(Math.random()*1000000);
         sfJson.rnd=rnd;
-        alert(sfJson.filePath);
-        layer.load();
-        $.post("./impFileData",sfJson,function(resp){
-            layer.closeAll('loading'); //关闭loading
-            layer.alert(resp.msg);
-        },"json");
+        var curLayerIndex=layer.load();
+        $.ajax({
+		   type:"POST",
+		   url:"./impFileData",
+		   data:sfJson,
+		   dataType:'json',
+		   success:function(resp){
+			   layer.alert(resp.msg);
+		   },
+		   complete:function(){
+			   layer.close(curLayerIndex);
+		   },
+		   error:function(){
+			   layer.alert("操作失败，请重试！");
+		   }
+		});
         return false;
      });    
     
@@ -768,7 +779,12 @@
     <div style="padding: 12px 12px;">
     <form id="ec-import-form" class="layui-form" lay-filter="ec-import-form" action="">
       <div class="layui-form-item">
-          <div style="text-align: center;color: red;font-weight: bold;">步骤：1.点“上传文件” 2.选择导入字段对应的excel列</div>
+        <label class="layui-form-label">步骤</label>
+        <div class="layui-input-block" style="color: red;font-weight: bold;">
+            <p>1.点“上传文件”</p>
+            <p>2.选择导入字段对应的excel列</p>
+            <p>3.点“导入”</p>
+        </div>
       </div>      
       <div class="layui-form-item">
         <label class="layui-form-label">Excel文件</label>
@@ -789,35 +805,45 @@
       <div class="layui-form-item">
         <label class="layui-form-label">姓名</label>
         <div class="layui-input-inline">
-           <select name="name" required lay-verify="required"></select>
+           <select name="name" required lay-verify="required">
+              <option value="">选择列</option>
+           </select>
         </div>
       </div>
       
       <div class="layui-form-item">
+        <label class="layui-form-label">帐号</label>
+        <div class="layui-input-inline">
+           <select name="alias" required lay-verify="required">
+              <option value="">选择列</option>
+           </select>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
         <label class="layui-form-label">身份证号</label>
         <div class="layui-input-inline">
-           <select name="alias" required lay-verify="required"></select>
+           <select name="idcard" required lay-verify="required">
+              <option value="">选择列</option>
+           </select>
         </div>
       </div>
 
       <div class="layui-form-item">
         <label class="layui-form-label">手机号</label>
         <div class="layui-input-inline">
-           <select name="mobile" required lay-verify="required"></select>
+           <select name="mobile" required lay-verify="required">
+              <option value="">选择列</option>
+           </select>
         </div>
       </div>      
 
       <div class="layui-form-item">
-        <label class="layui-form-label">科室名称</label>
+        <label class="layui-form-label">用户部门</label>
         <div class="layui-input-inline">
-           <select name="groupName" required lay-verify="required"></select>
-        </div>
-      </div>
-
-      <div class="layui-form-item">
-        <label class="layui-form-label">硬件介质号</label>
-        <div class="layui-input-inline">
-           <select name="caKeySn" required lay-verify="required"></select>
+           <select name="groupName" required lay-verify="required">
+              <option value="">选择列</option>
+           </select>
         </div>
       </div>
 
@@ -825,10 +851,17 @@
         <div class="layui-input-block">
           <button class="layui-btn" lay-submit lay-filter="fileImportBtn">导入</button>
           <input type="hidden" id="filePath" name="filePath" value="" />
+          <input type="hidden" name="opType" value="impUser" />
         </div>
       </div>
     </form>
         
     </div>       
- </div>  
+ </div>
+ 
+ <div id="showCaKeyTp" style="display:none;">
+    <div style="padding: 0 12px;">
+        <table id="ecShowCaKeyTable" lay-filter="ecShowCaKeyTable"></table>
+    </div>       
+ </div>   
 </html>

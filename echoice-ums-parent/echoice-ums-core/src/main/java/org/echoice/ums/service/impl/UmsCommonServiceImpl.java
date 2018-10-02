@@ -9,17 +9,21 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.echoice.modules.encrypt.MD5;
 import org.echoice.ums.config.ConfigConstants;
 import org.echoice.ums.config.LoginAuthBean;
 import org.echoice.ums.dao.EcGroupDao;
 import org.echoice.ums.dao.EcObjectsDao;
 import org.echoice.ums.dao.EcUserDao;
+import org.echoice.ums.dao.UserCakeyDao;
 import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcObjects;
 import org.echoice.ums.domain.EcUser;
 import org.echoice.ums.domain.EcUserExtend;
 import org.echoice.ums.domain.EcUserGroup;
+import org.echoice.ums.domain.UserCakey;
 import org.echoice.ums.service.UmsCommonService;
+import org.echoice.ums.web.UmsHolder;
 import org.echoice.ums.web.view.EcUserInfoView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +39,10 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 	private EcGroupDao ecGroupDao;
 	@Autowired
 	private EcObjectsDao ecObjectsDao;
+	
+	@Autowired
+	private UserCakeyDao userCakeyDao;
+	
 	@Autowired
 	private LoginAuthBean loginAuthBean;
 	public void saveUserData(EcUser ecUser, EcUserExtend ecUserExtend,Long groupId) {
@@ -78,6 +86,12 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 		List<EcUser> ecUsers=null;
 		EcUserGroup ecUserGroup=null;
 		EcUser ecUser=null;
+		long keyCount=0;
+		UserCakey userCakey=null;
+		Date now=new Date();
+		MD5 md5=null;
+		String password=null;
+		String md5Password=null;
 		for (EcUserInfoView ecUserInfoView : list) {
 			//查看用戶是否存在
 			ecUsers=ecUserDao.findByAlias(ecUserInfoView.getAlias());
@@ -90,6 +104,18 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 					e.printStackTrace();
 				}
 				ecUser.setStatus("y");
+				if(StringUtils.isNoneBlank(ecUserInfoView.getIdcard())) {
+					ecUser.setIdcard(ecUserInfoView.getAlias());
+				}
+				
+				ecUser.setOpTime(now);
+				ecUser.setTaxis(9999L);
+				
+				md5=new MD5();
+				password=ecUser.getAlias()+"1qaz2wsx";
+				md5Password=md5.getMD5ofStr(password);
+				ecUser.setPassword(md5Password);
+				
 				ecUserDao.save(ecUser);
 				ecUserGroup=new EcUserGroup();
 				EcGroup ecGroup=groupMap.get(ecUserInfoView.getGroupName());
@@ -98,6 +124,25 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 				ecUserGroup.setEcUser(ecUser);
 				
 				ecUserDao.saveUserGroup(ecUserGroup);
+				
+				//保存Key信息
+			}else {
+				ecUser=ecUsers.get(0);
+			}
+			
+			if(StringUtils.isNotBlank(ecUserInfoView.getIdcard())) {
+				keyCount=userCakeyDao.countByIdcardAndHardwareSn(ecUserInfoView.getAlias(), ecUserInfoView.getHardwareSn());
+				if(keyCount==0) {
+					userCakey=new UserCakey();
+					userCakey.setIdcard(ecUserInfoView.getAlias());
+					userCakey.setHardwareSn(ecUserInfoView.getHardwareSn());
+					userCakey.setStatus("01");
+					userCakey.setCreateTime(now);
+					userCakey.setOpTime(now);
+					userCakey.setCreateUser(UmsHolder.getUserAlias());
+					userCakey.setOpUser(UmsHolder.getUserAlias());
+					userCakeyDao.persist(userCakey);
+				}
 			}
 		}
 	}
@@ -203,5 +248,15 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 
 	public void setLoginAuthBean(LoginAuthBean loginAuthBean) {
 		this.loginAuthBean = loginAuthBean;
-	}	
+	}
+
+	public UserCakeyDao getUserCakeyDao() {
+		return userCakeyDao;
+	}
+
+	public void setUserCakeyDao(UserCakeyDao userCakeyDao) {
+		this.userCakeyDao = userCakeyDao;
+	}
+	
+
 }

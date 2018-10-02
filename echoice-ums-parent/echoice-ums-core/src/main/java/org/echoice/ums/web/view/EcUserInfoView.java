@@ -8,7 +8,7 @@ public class EcUserInfoView extends EcUser{
 	private String groupIds;
 	private String groupNames;
 	private String confirmPassword;
-	private String caKeySn;
+	private String hardwareSn;//
 	public String getGroupName() {
 		return groupName;
 	}
@@ -40,10 +40,11 @@ public class EcUserInfoView extends EcUser{
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
 	}
-	public String getCaKeySn() {
-		return caKeySn;
+	public String getHardwareSn() {
+		return hardwareSn;
 	}
-	public void setCaKeySn(String caKeySn) {
-		this.caKeySn = caKeySn;
+	public void setHardwareSn(String hardwareSn) {
+		this.hardwareSn = hardwareSn;
 	}
+
 }

@@ -169,7 +169,17 @@ layui.define(mods, function(exports) {
                component: 'role/index',
                name: '角色管理',
                iframe:true
-            }]
+            },{
+                path: '/userCakey/index',
+                component: 'userCakey/index',
+                name: 'CA-KEY管理',
+                iframe:true
+             },{
+                 path: '/cakeyOrder/index',
+                 component: 'cakeyOrder/index',
+                 name: 'CA-KEY操作工单',
+                 iframe:true
+              }]
       };
       
       if (config.loadType === 'TABS') {

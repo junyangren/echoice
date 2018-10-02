@@ -20,7 +20,7 @@ public class EcGroupDaoImpl extends BaseCommonDao {
 
 	public List<EcGroup> findGroupTreeChild(Long parentId) {
 		// TODO Auto-generated method stub
-		String hql="select t from EcGroup t where t.parentId=? order by t.taxis asc,t.groupId asc";
+		String hql="select t from EcGroup t where t.parentId=? order by t.taxis asc,t.groupId desc";
 		List<EcGroup> list=createQuery(hql,parentId).getResultList();
 		return list;
 	}

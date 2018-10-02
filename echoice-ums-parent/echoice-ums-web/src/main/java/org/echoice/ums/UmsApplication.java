@@ -7,8 +7,6 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ImportResource;
 
-import net.unicon.cas.client.configuration.EnableCasClient;
-
 @SpringBootApplication
 @ImportResource(value = {"classpath:applicationContext-service.xml"})
 //@EnableCasClient

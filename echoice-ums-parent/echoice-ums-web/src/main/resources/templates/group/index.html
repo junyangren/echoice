@@ -310,6 +310,7 @@
             parentId:parentNode.id,
             parentName:parentNode.name,
             status:'y',
+            type:'01',
             taxis:9999}); 
     }
     
@@ -373,7 +374,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">标识</label>
         <div class="layui-input-block">
-          <input type="text" name="alias" maxlength="64" required lay-verify="required" placeholder="请输入标识" autocomplete="off" class="layui-input">
+          <input type="text" name="alias" readonly="true" placeholder="系統生成" autocomplete="off" class="layui-input">
         </div>
       </div>
       <div class="layui-form-item">
@@ -402,7 +403,8 @@
         <div class="layui-input-block">
           <textarea name="note" placeholder="请输入备注" class="layui-textarea"></textarea>
         </div>
-      </div>      
+      </div>
+      <!--        
       <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">备注2</label>
         <div class="layui-input-block">
@@ -415,6 +417,7 @@
           <textarea name="note3" placeholder="请输入备注" class="layui-textarea"></textarea>
         </div>
       </div>
+      -->
       <div class="layui-form-item" id="btnGroup">
         <div class="layui-input-block">
           <button class="layui-btn" lay-submit lay-filter="subFormBtn">提交</button>

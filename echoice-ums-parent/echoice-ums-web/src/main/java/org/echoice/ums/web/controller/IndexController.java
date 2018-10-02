@@ -5,13 +5,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.echoice.ums.config.ConfigConstants;
 import org.echoice.ums.dao.UmsClientDao;
-import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcObjects;
-import org.echoice.ums.util.CasUmsUtil;
 import org.echoice.ums.web.view.LaykitMenu;
-import org.jasig.cas.client.authentication.AuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -32,10 +28,10 @@ public class IndexController {
 	@GetMapping("/")
 	public String index(HttpServletRequest request) {
 		//测试
-		request.getSession().setAttribute(ConfigConstants.IS_SUPER_ADMIN, true);
-		request.getSession().setAttribute(AuthenticationFilter.CONST_CAS_ASSERTION,"test");
-		List<EcGroup> groupList=umsClientDao.findGroupsByUserAlias("test");
-		CasUmsUtil.setUserGroup(request, groupList.get(0));
+		//request.getSession().setAttribute(ConfigConstants.IS_SUPER_ADMIN, true);
+		//request.getSession().setAttribute(AuthenticationFilter.CONST_CAS_ASSERTION,"test");
+		//List<EcGroup> groupList=umsClientDao.findGroupsByUserAlias("test");
+		//CasUmsUtil.setUserGroup(request, groupList.get(0));
 		//end
 		return "index";
 	}

@@ -53,6 +53,7 @@ public class EcUser implements java.io.Serializable {
 	private String wechat;
 	private String duty;
 	private Long leaderId;
+	private String idcard;
 	
 	private List<EcGroup> groupList=new ArrayList<EcGroup>();  
 	private Set<EcUserGroup> ecUserGroups = new HashSet<EcUserGroup>(0);
@@ -264,5 +265,16 @@ public class EcUser implements java.io.Serializable {
 	public void setLeaderId(Long leaderId) {
 		this.leaderId = leaderId;
 	}
+
+	@Column(name = "idcard")
+	public String getIdcard() {
+		return idcard;
+	}
+
+	public void setIdcard(String idcard) {
+		this.idcard = idcard;
+	}
+	
+	
 
 }
