@@ -9,14 +9,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.cas.CasUtil;
 import org.echoice.modules.encrypt.MD5;
 import org.echoice.modules.web.json.bean.ExtJsActionView;
+import org.echoice.ums.config.ConfigBean;
 import org.echoice.ums.config.ConfigConstants;
-import org.echoice.ums.config.LoginAuthBean;
 import org.echoice.ums.dao.EcGroupDao;
 import org.echoice.ums.dao.EcPermissionDao;
 import org.echoice.ums.dao.EcUserDao;
 import org.echoice.ums.dao.EcUsersAssignmenDao;
 import org.echoice.ums.dao.UmsClientDao;
-import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcObjects;
 import org.echoice.ums.domain.EcUser;
 import org.echoice.ums.service.ValidPermissionForUmsService;
@@ -27,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 public class ValidPermissionForUmsServiceImpl implements ValidPermissionForUmsService {
 	private Logger logger=LoggerFactory.getLogger(ValidPermissionForUmsService.class);
-	private LoginAuthBean loginAuthBean; 
+	private ConfigBean configBean; 
 	private EcPermissionDao ecPermissionDao;
 	private EcUsersAssignmenDao ecUsersAssignmenDao;	
 	private EcUserDao ecUserDao;
@@ -38,7 +37,7 @@ public class ValidPermissionForUmsServiceImpl implements ValidPermissionForUmsSe
 		// TODO Auto-generated method stub
 		ExtJsActionView actionView=new ExtJsActionView(); 
 		String userAlias=request.getParameter("alias");
-		if(loginAuthBean.isAuth()){
+		if(configBean.isAuth()){
 			String password=request.getParameter("password");
 			String authPassword=request.getParameter("authPassword");
 			if(StringUtils.isBlank(userAlias)||StringUtils.isBlank(password)||StringUtils.isBlank(authPassword)){
@@ -92,7 +91,7 @@ public class ValidPermissionForUmsServiceImpl implements ValidPermissionForUmsSe
 			String userAlias=CasUmsUtil.getUser(request);
 			logger.info("{},setUserPermission start",userAlias);
 			//得到ums系统菜单列表start
-			List<EcObjects> topAccordionMenu=ecPermissionDao.findAssignPermissionObjectList(userAlias, loginAuthBean.getAuthAccessMode(),loginAuthBean.getAuthObject());
+			List<EcObjects> topAccordionMenu=ecPermissionDao.findAssignPermissionObjectList(userAlias, configBean.getAuthAccessMode(),configBean.getAuthObject());
 			List<UmsAccordionMenu> parentMenuList=new ArrayList<UmsAccordionMenu>();
 			if(topAccordionMenu!=null&&topAccordionMenu.size()>0){
 				Long level3ParenIdArr[]=new Long[topAccordionMenu.size()];
@@ -105,7 +104,7 @@ public class ValidPermissionForUmsServiceImpl implements ValidPermissionForUmsSe
 					level3ParenIdArr[i]=ecObjects.getObjId();
 					i++;
 				}
-				List<EcObjects> level3MenuList=ecPermissionDao.findAssignPermissionObjectList(userAlias, loginAuthBean.getAuthAccessMode(), level3ParenIdArr);
+				List<EcObjects> level3MenuList=ecPermissionDao.findAssignPermissionObjectList(userAlias, configBean.getAuthAccessMode(), level3ParenIdArr);
 				if(level3MenuList!=null&&level3MenuList.size()>0){
 					Long parentId=null;
 					Long parentIdTmp=null;
@@ -126,21 +125,13 @@ public class ValidPermissionForUmsServiceImpl implements ValidPermissionForUmsSe
 			//得到ums系统菜单列表end
 			
 			//判断用户是否为超级管理员
-			boolean isAdmin=ecUsersAssignmenDao.checkIsAssignByAlias(userAlias, loginAuthBean.getAuthSysMgrRole());
+			boolean isAdmin=ecUsersAssignmenDao.checkIsAssignByAlias(userAlias, configBean.getAuthSysMgrRole());
 			if(isAdmin){
 				request.getSession().setAttribute(ConfigConstants.IS_SUPER_ADMIN, "YES");
 			}
 		}
 	}
 	
-	
-	
-	public LoginAuthBean getLoginAuthBean() {
-		return loginAuthBean;
-	}
-	public void setLoginAuthBean(LoginAuthBean loginAuthBean) {
-		this.loginAuthBean = loginAuthBean;
-	}
 	public EcPermissionDao getEcPermissionDao() {
 		return ecPermissionDao;
 	}
@@ -178,6 +169,14 @@ public class ValidPermissionForUmsServiceImpl implements ValidPermissionForUmsSe
 
 	public void setEcGroupDao(EcGroupDao ecGroupDao) {
 		this.ecGroupDao = ecGroupDao;
+	}
+
+	public ConfigBean getConfigBean() {
+		return configBean;
+	}
+
+	public void setConfigBean(ConfigBean configBean) {
+		this.configBean = configBean;
 	}
 	
 	

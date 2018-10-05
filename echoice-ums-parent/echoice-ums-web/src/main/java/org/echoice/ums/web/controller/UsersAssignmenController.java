@@ -8,9 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.web.MsgTip;
-import org.echoice.modules.web.json.ExtJsUtil;
 import org.echoice.modules.web.ztree.ZTreeView;
-import org.echoice.ums.config.LoginAuthBean;
+import org.echoice.ums.config.ConfigBean;
 import org.echoice.ums.dao.EcGroupAssignmentDao;
 import org.echoice.ums.dao.EcRoleDao;
 import org.echoice.ums.dao.EcUserDao;
@@ -38,7 +37,7 @@ public class UsersAssignmenController extends UmsBaseController {
 	@Autowired
 	private EcUserDao ecUserDao;
 	@Autowired
-	private LoginAuthBean loginAuthBean;
+	private ConfigBean configBean;
 	/**
 	 * 给用户分配角色
 	 * @param request
@@ -53,10 +52,16 @@ public class UsersAssignmenController extends UmsBaseController {
 		// TODO Auto-generated method stub
 		MsgTip msgTip=new MsgTip();
 		logger.debug("用户分配角色start:");
-		Long userIdArr[]=ExtJsUtil.transJsonIDArrayToLong(request, "userIds");
-		Long roleIdsArr[]=ExtJsUtil.transJsonIDArrayToLong(request, "roleIds");
+		String userIds=request.getParameter("userIds");
+		String roleIds=request.getParameter("roleIds");
+		List<Long> userIdsList= JSON.parseArray(userIds, Long.class);
+		List<Long> roleIdsList= JSON.parseArray(roleIds, Long.class);
+		
+		Long[] userIdArr=userIdsList.toArray(new Long[userIdsList.size()]);
+		Long[] roleIdsArr=roleIdsList.toArray(new Long[roleIdsList.size()]);
+		
 		ecUsersAssignmenDao.saveBatch(userIdArr,roleIdsArr);
-		logger.info(CasUmsUtil.getUser(request)+"操作分配角色  userIdArr:【"+StringUtils.join(userIdArr,",")+"】"+"roleArr:【"+StringUtils.join(roleIdsArr,",")+"】");
+		logger.info(CasUmsUtil.getUser(request)+"操作分配角色  userIdArr:"+userIds+"roleArr:"+roleIds);
 		String respStr=JSONUtil.toJSONString(msgTip);
 		return respStr;
 	}
@@ -74,10 +79,17 @@ public class UsersAssignmenController extends UmsBaseController {
 		// TODO Auto-generated method stub
 		MsgTip msgTip=new MsgTip();
 		logger.debug("用户组分配start:");
-		Long userIds[]=ExtJsUtil.transJsonIDArrayToLong(request, "userIds");
-		Long groupIds[]=ExtJsUtil.transJsonIDArrayToLong(request, "groupIds");
-		ecUsersAssignmenDao.saveAssignGroups(userIds,groupIds);
-		logger.info(CasUmsUtil.getUser(request)+"操作用户组分配  userIdArr:【"+StringUtils.join(userIds,",")+"】"+"groupArr:【"+StringUtils.join(groupIds,",")+"】");
+
+		String userIds=request.getParameter("userIds");
+		String groupIds=request.getParameter("groupIds");
+		List<Long> userIdsList= JSON.parseArray(userIds, Long.class);
+		List<Long> groupIdsList= JSON.parseArray(groupIds, Long.class);
+		
+		Long[] userIdArr=userIdsList.toArray(new Long[userIdsList.size()]);
+		Long[] groupIdsArr=groupIdsList.toArray(new Long[groupIdsList.size()]);
+		
+		ecUsersAssignmenDao.saveAssignGroups(userIdArr,groupIdsArr);
+		logger.info(CasUmsUtil.getUser(request)+"操作用户组分配  userIdArr:"+userIds+""+"groupArr:"+groupIds);
 		logger.debug("用户组分配end:");
 		String respStr=JSONUtil.toJSONString(msgTip);
 		return respStr;
@@ -97,10 +109,16 @@ public class UsersAssignmenController extends UmsBaseController {
 		// TODO Auto-generated method stub
 		MsgTip msgTip=new MsgTip();
 		logger.debug("用户移除角色start:");
-		Long userIds[]=ExtJsUtil.transJsonIDArrayToLong(request, "userIds");
-		Long roleIds[]=ExtJsUtil.transJsonIDArrayToLong(request, "roleIds");
-		ecUsersAssignmenDao.removeBatch(userIds,roleIds);
-		logger.info(CasUmsUtil.getUser(request)+"操作移除角色  userIdArr:【"+StringUtils.join(userIds,",")+"】"+"roleArr:【"+StringUtils.join(roleIds,",")+"】");
+		String userIds=request.getParameter("userIds");
+		String roleIds=request.getParameter("roleIds");
+		List<Long> userIdsList= JSON.parseArray(userIds, Long.class);
+		List<Long> roleIdsList= JSON.parseArray(roleIds, Long.class);
+		
+		Long[] userIdArr=userIdsList.toArray(new Long[userIdsList.size()]);
+		Long[] roleIdsArr=roleIdsList.toArray(new Long[roleIdsList.size()]);
+		
+		ecUsersAssignmenDao.removeBatch(userIdArr,roleIdsArr);
+		logger.info(CasUmsUtil.getUser(request)+"操作移除角色  userIdArr:"+userIds+"roleArr:"+roleIds);
 		logger.debug("用户移除角色end:");
 		String respStr=JSONUtil.toJSONString(msgTip);
 		return respStr;
@@ -113,11 +131,17 @@ public class UsersAssignmenController extends UmsBaseController {
 		// TODO Auto-generated method stub
 		MsgTip msgTip=new MsgTip();
 		logger.debug("用户移组start:");
-		Long userIds[]=ExtJsUtil.transJsonIDArrayToLong(request, "ids");
+
+		String userIds=request.getParameter("userIds");
+		String groupIds=request.getParameter("groupIds");
+		List<Long> userIdsList= JSON.parseArray(userIds, Long.class);
+		List<Long> groupIdsList= JSON.parseArray(groupIds, Long.class);
 		
-		Long groupIds[]=ExtJsUtil.transJsonIDArrayToLong(request, "objIds");
-		List<UserGroupTotalView> list= ecUsersAssignmenDao.findUserGroupCount(userIds);
-		List<UserGroupTotalView> list2= ecUsersAssignmenDao.findUserGroupCount(userIds,groupIds);
+		Long[] userIdArr=userIdsList.toArray(new Long[userIdsList.size()]);
+		Long[] groupIdsArr=groupIdsList.toArray(new Long[groupIdsList.size()]);
+		
+		List<UserGroupTotalView> list= ecUsersAssignmenDao.findUserGroupCount(userIdArr);
+		List<UserGroupTotalView> list2= ecUsersAssignmenDao.findUserGroupCount(userIdArr,groupIdsArr);
 		//判断用户移除后至少保留一个组
 		long tmpId1;
 		long tmpId2;
@@ -139,13 +163,15 @@ public class UsersAssignmenController extends UmsBaseController {
 		}
 		
 		if(!isPass){
-			rendText(response, "{msg:\"用户所在组移除失败，用户必须至少拥有一个所在组！！\",failure:true}");
-			return null;
+			msgTip.setMsg("用户所在组移除失败，用户必须至少拥有一个所在组");
+			msgTip.setCode(4002);
 		}
 		
-		ecUsersAssignmenDao.removeAssingGroup(userIds,groupIds);
-		logger.info(CasUmsUtil.getUser(request)+"操作用户移组  userIdArr:【"+StringUtils.join(userIds,",")+"】"+"groupArr:【"+StringUtils.join(groupIds,",")+"】");		
-		logger.debug("用户移组end:");
+		if(msgTip.getCode()==0) {
+			ecUsersAssignmenDao.removeAssingGroup(userIdArr,groupIdsArr);
+			logger.info(CasUmsUtil.getUser(request)+"操作用户移组  userIdArr:"+userIds+"groupArr:"+groupIds);		
+			logger.debug("用户移组end:");
+		}
 		String respStr=JSONUtil.toJSONString(msgTip);
 		return respStr;
 	}
@@ -300,13 +326,11 @@ public class UsersAssignmenController extends UmsBaseController {
 	public void setEcUserDao(EcUserDao ecUserDao) {
 		this.ecUserDao = ecUserDao;
 	}
-	public LoginAuthBean getLoginAuthBean() {
-		return loginAuthBean;
+	public ConfigBean getConfigBean() {
+		return configBean;
 	}
-	public void setLoginAuthBean(LoginAuthBean loginAuthBean) {
-		this.loginAuthBean = loginAuthBean;
+	public void setConfigBean(ConfigBean configBean) {
+		this.configBean = configBean;
 	}
 
-	
-	
 }

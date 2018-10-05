@@ -140,46 +140,61 @@ layui.define(mods, function(exports) {
           path: '/',
           component: 'views/app.html',
           name: '控制面板'
-        }, {
-          path: '/user/my',
-          component: 'views/user/profile.html',
-          name: '个人中心'
-        }, {
-            path: '/accssMode/index',
-            component: 'accssMode/index',
-            name: '操作管理',
+        },{
+	      path: '/home',
+	      component: 'home',
+	      name: '主页'
+        },{
+          path: '/user/profile',
+          component: 'user/profile',
+          name: '个人中心',
+          iframe:true
+        },{
+           path: '/user/password',
+           component: 'user/password',
+           name: '密码修改',
+           iframe:true
+        },{
+           path: '/accssMode/index',
+           component: 'accssMode/index',
+           name: '操作管理',
+           iframe:true
+        },{
+           path: '/objects/index',
+           component: 'objects/index',
+           name: '资源管理',
+           iframe:true
+        },{
+            path: '/group/index',
+            component: 'group/index',
+            name: '用户组管理',
             iframe:true
         },{
-            path: '/objects/index',
-            component: 'objects/index',
-            name: '资源管理',
+            path: '/user/index',
+            component: 'user/index',
+            name: '用户管理',
+            iframe:true
+        },{
+            path: '/role/index',
+            component: 'role/index',
+            name: '角色管理',
+            iframe:true
+        },{
+            path: '/userCakey/index',
+            component: 'userCakey/index',
+            name: 'Key资产管理',
             iframe:true
          },{
-             path: '/group/index',
-             component: 'group/index',
-             name: '用户组管理',
-             iframe:true
-          },{
-              path: '/user/index',
-              component: 'user/index',
-              name: '用户管理',
-              iframe:true
-           },{
-               path: '/role/index',
-               component: 'role/index',
-               name: '角色管理',
-               iframe:true
-            },{
-                path: '/userCakey/index',
-                component: 'userCakey/index',
-                name: 'CA-KEY管理',
-                iframe:true
-             },{
-                 path: '/cakeyOrder/index',
-                 component: 'cakeyOrder/index',
-                 name: 'CA-KEY操作工单',
-                 iframe:true
-              }]
+            path: '/cakeyOrder/index',
+            component: 'cakeyOrder/index',
+            name: 'Key资产工单',
+            iframe:true
+         },{
+            path: '/cakeyOrder/report',
+            component: 'cakeyOrder/report',
+            name: 'Key资产统计',
+            iframe:true
+         }]
       };
       
       if (config.loadType === 'TABS') {

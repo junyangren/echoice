@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>统一认证权限</title>
+    <title>[[#{ums.app.name}]]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="renderer" content="webkit"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -11,14 +11,13 @@
     <meta http-equiv="expires" content="0">   
     <link th:replace="fragments/css"></link>
     <link rel="stylesheet" th:href="@{/component/ztree/css/zTreeStyle/zTreeStyle.css}" /> 
-    
 </head>
 <body>
     <div class="layui-fluid" style="margin-top: 12px;">
       <div class="layui-row">
         <div class="layui-col-xs12">
           <div class="layui-card">
-            <div class="layui-card-header">资源业务管理-> CA-KEY操作工单
+            <div class="layui-card-header">Key资产业务-> Key资产工单
             </div>
             <div class="layui-card-body">
                 <table id="ecTable" lay-filter="ecTable"></table>
@@ -32,8 +31,9 @@
 <script type="text/javascript" th:src="@{/component/ztree/js/jquery.ztree.all.js}"></script>
 <script type="text/html" id="ecColTool">
     <a class="layui-btn layui-btn-xs" lay-event="detail">明细</a>
-    <a class="layui-btn layui-btn-xs" lay-event="uploadPdf">上传PDF</a>
-    <a class="layui-btn layui-btn-xs" lay-event="downPdf">下载PDF</a>
+    <a class="layui-btn layui-btn-xs" lay-event="downPdf">下载待签PDF</a>
+    <a class="layui-btn layui-btn-xs" lay-event="uploadPdf">上传已签PDF</a>
+    <a class="layui-btn layui-btn-xs" lay-event="downSignPdf">下载已签PDF</a>
 </script>
 
 <script type="text/html" id="ecToolbar">
@@ -86,7 +86,7 @@
             ,{field: 'opCount',title: 'Key数量',width: 100,sort: false}
             ,{field: 'createUser',title: '创建人',width: 120,align:'center'}
             ,{field: 'createTime',title: '创建时间',width: 120,align:'center'}
-            ,{fixed: 'right',width: 220,align: 'center',toolbar: '#ecColTool'}
+            ,{fixed: 'right',width: 360,align: 'center',toolbar: '#ecColTool'}
           ]
         ]
       });   
@@ -129,7 +129,7 @@
       if(obj.event === 'detail'){
           
           layer.open({
-              title:'工单明细查看',
+              title:'查看工单明细',
               type: 1,
               anim: 3,
               fixed:true,
@@ -187,9 +187,17 @@
     	  
       }else if(obj.event === 'downPdf'){
     	  $('#orderId').val(data.orderId);
+    	  document.forms['downPdfForm'].action='./downPdf';
     	  document.forms['downPdfForm'].submit();
+      }else if(obj.event === 'downSignPdf'){
+    	  if(!data.signPdf||data.signPdf===''){
+    		  layer.msg('签名PDF文件未上传无法下载');
+    	  }else{
+              document.forms['downPdfForm'].action='./downSignPdf';
+              $('#orderId').val(data.orderId);
+              document.forms['downPdfForm'].submit();
+    	  }
       }else if(obj.event === 'uploadPdf'){
-
           layer.open({
               title:'签名PDF文件上传',
               type: 1,
@@ -197,17 +205,26 @@
               fixed:true,
               maxmin:true,
               offset: 'c',
-              area: ['300px', '100%'],
+              area: ['400px', '250px'],
               content: $('#showFileImportFormTp'),
               success: function(layero, index){
-            	  
+            	  $('#uploadTipText').html('');
+                  form.val("ec-pdf-form",data); 
                   if(!ecApp.uploadInst){
                       ecApp.uploadInst = upload.render({
                           elem : '#userFile' //绑定元素
                           ,url : './uploadPdf' //上传接口
                           ,accept: 'file' //普通文件
                           ,exts : 'pdf'
-                          ,auto : true //选择文件后自动上传
+                          ,auto : false //选择文件后自动上传
+                          ,bindAction :'#subSignPdfFormBtn'
+                          ,field:'file'
+                          ,data :{
+                        	  orderId:function(){
+                        		  var selOrderId=$('input[name="orderId"]','#ec-pdf-form').val();
+                        		  return selOrderId;
+                        	  }
+                          }
                           ,before : function(obj) {
                                 //预读本地文件示例，不支持ie8
                                 obj.preview(function(index, file, result){
@@ -223,6 +240,7 @@
                           error : function() {
                               //请求异常回调
                               layer.closeAll('loading'); //关闭loading
+                              layer.alert("文件上传异常");
                           }
                       });                             
                   }            	  
@@ -258,6 +276,12 @@
         tableIns.reload({where:vWhere});                
         return false;
       });
+
+    form.on('submit(subSignPdfFormBtn)', function(data){
+        var vWhere=data.field;              
+        return false;
+      });    
+    
     
     ecApp.refreshTreeAndTable=function(){
         var vWhere={};
@@ -291,7 +315,7 @@
           <select name="opType">
             <option value=""></option>
             <option value="01">入库</option>
-            <option value="02">发放</option>
+            <option value="02">领取</option>
             <option value="03">标记丢失</option>
             <option value="04">离职归还</option>
           </select>
@@ -327,21 +351,25 @@
 
  <div id="showFileImportFormTp" style="display:none;">
     <div style="padding: 12px 12px;">
-    <form id="ec-import-form" class="layui-form" lay-filter="ec-import-form" action="">      
+    <form id="ec-pdf-form" class="layui-form" lay-filter="ec-pdf-form" action="">   
+      <div class="layui-form-item">
+        <label class="layui-form-label">工单号</label>
+        <div class="layui-input-block">
+          <input type="text" name="orderId" readonly="true" maxlength="64" placeholder="请输入工单号" autocomplete="off" class="layui-input">
+        </div>
+      </div>       
       <div class="layui-form-item">
         <label class="layui-form-label">PDF文件</label>
         <div class="layui-input-block">
             <button type="button" class="layui-btn layui-btn-normal" id="userFile" name="userFile" >
-                <i class="layui-icon">&#xe67c;</i>上传文件
+                <i class="layui-icon">&#xe67c;</i>选择文件
             </button>
             <p style="padding: 0 10px;color: #999" id="uploadTipText"></P>         
         </div>
       </div>
       <div class="layui-form-item" id="btnGroup">
         <div class="layui-input-block">
-          <button class="layui-btn" lay-submit lay-filter="fileImportBtn">导入</button>
-          <input type="hidden" id="filePath" name="filePath" value="" />
-          <input type="hidden" name="opType" value="impUserKey" />
+          <button id="subSignPdfFormBtn" class="layui-btn" lay-submit lay-filter="subSignPdfFormBtn">提交</button>
         </div>
       </div>
     </form>

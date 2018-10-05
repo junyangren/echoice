@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.echoice.ums.dao.UmsClientDao;
 import org.echoice.ums.domain.EcObjects;
+import org.echoice.ums.web.UmsHolder;
 import org.echoice.ums.web.view.LaykitMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -27,13 +28,13 @@ public class IndexController {
 	
 	@GetMapping("/")
 	public String index(HttpServletRequest request) {
-		//测试
-		//request.getSession().setAttribute(ConfigConstants.IS_SUPER_ADMIN, true);
-		//request.getSession().setAttribute(AuthenticationFilter.CONST_CAS_ASSERTION,"test");
-		//List<EcGroup> groupList=umsClientDao.findGroupsByUserAlias("test");
-		//CasUmsUtil.setUserGroup(request, groupList.get(0));
-		//end
+		request.setAttribute("userAlias", UmsHolder.getUserAlias());
 		return "index";
+	}
+	
+	@GetMapping("/home")
+	public String home(HttpServletRequest request) {
+		return "home";
 	}
 	
 	@RequestMapping(value="/userMenu",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)

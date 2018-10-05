@@ -5,7 +5,7 @@ import java.util.Map;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix="ecums")
-public class LoginAuthBean {
+public class ConfigBean {
 	private boolean auth;
 	private String authObject;
 	private String authAccessMode;

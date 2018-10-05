@@ -189,7 +189,7 @@
                         fixed:true,
                         maxmin:true,
                         offset: 'r',
-                        area: ['400px', '100%'],
+                        area: ['450px', '100%'],
                         content: $('#accssModeTableTp'),
                         success: function(layero, index){
                             //加载操作table
@@ -203,7 +203,7 @@
                                     limit: 500,
                                     even:true,
                                     elem: '#ecAccssModeTable',
-                                    height: 'full-120',
+                                    height: 'full-130',
                                     done: function () {
                                       //$('#ecgrid_hash').next().css('height','auto');
                                     },request: {
@@ -221,7 +221,7 @@
                                       [ //表头
                                         {type:'checkbox',fixed: 'left'}  
                                         ,{field: 'accssId',title: 'ID',width: 80,align:'center',sort: false}
-                                        ,{field: 'alias',title: '标识',width: 180}
+                                        ,{field: 'alias',title: '标识',width: 150}
                                         ,{field: 'name',title: '名称',width: 150,sort: false}
                                       ]
                                     ]

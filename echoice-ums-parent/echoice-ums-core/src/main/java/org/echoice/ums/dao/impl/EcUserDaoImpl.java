@@ -50,7 +50,7 @@ public class EcUserDaoImpl extends BaseCommonDao {
 			EcUser ecUser=(EcUser)list.get(0);
 			String groupIds="";
 			String groupNames="";
-			EcUserExtend ecUserExtend=(EcUserExtend)getEntityManager().find(EcUserExtend.class, ecUser.getUserId());
+			//EcUserExtend ecUserExtend=(EcUserExtend)getEntityManager().find(EcUserExtend.class, ecUser.getUserId());
 			EcUserInfoView ecUserInfoView=new EcUserInfoView();
 			List groupList=findGroupByUserId(ecUser.getUserId());
 			for (Object object : groupList) {
@@ -63,7 +63,7 @@ public class EcUserDaoImpl extends BaseCommonDao {
 				ecUserInfoView.setGroupNames(groupNames);
 			}
 			try {
-				BeanUtils.copyProperties(ecUserInfoView, ecUserExtend);
+				//BeanUtils.copyProperties(ecUserInfoView, ecUserExtend);
 				BeanUtils.copyProperties(ecUserInfoView, ecUser);
 			} catch (IllegalAccessException e) {
 				// TODO Auto-generated catch block

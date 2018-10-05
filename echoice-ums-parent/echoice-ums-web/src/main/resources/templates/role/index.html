@@ -272,6 +272,8 @@
                         },
                         cancel: function(index, layero){ 
                             $(this.content).hide();
+                            ecApp.objectTree.destroy();
+                            ecApp.objectTree=null;
                         },
                         btnAlign: 'l',
                         btn: ['分配', '移除'],
@@ -348,7 +350,8 @@
                 }else{
                     layer.msg('请选择要操作的一条记录');
                 }
-                
+            break;
+            
             case 'showPmAssignUser':
                 if(checkStatus.data&&checkStatus.data.length==1){
                     var vWhere={};
@@ -400,12 +403,13 @@
                         },
                         cancel: function(index, layero){ 
                             $(this.content).hide();
+                            
                         }
                     });                 
                 }else{
                     layer.msg('请选择要操作的一条记录');
                 }                
-                
+             break;
             
     	  };
     	});
@@ -722,5 +726,6 @@
     <div style="padding: 0 12px;">
         <table id="ecShowAssignUserTable" lay-filter="ecShowAssignUserTable"></table>
     </div>       
- </div>  
+ </div>
+   
 </html>

@@ -68,6 +68,12 @@ public class EcGroupDaoImpl extends BaseCommonDao {
 			paramValues.add("%"+ecGroup.getAlias().trim()+"%");
 		}
 		
+		if(StringUtils.isNotBlank(ecGroup.getGroupPath())){
+			hql+=" and (t.alias =? or t.alias like ?)";
+			paramValues.add(ecGroup.getGroupPath());
+			paramValues.add(ecGroup.getGroupPath()+"-%");
+		}
+		
 		if(ecGroup.getParentId()!=null){
 			hql+=" and t.parentId = ?";
 			paramValues.add(ecGroup.getParentId());

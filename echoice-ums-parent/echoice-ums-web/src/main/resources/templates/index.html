@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>统一认证权限</title>
+    <title>[[#{ums.app.name}]]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="renderer" content="webkit"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -23,7 +23,7 @@
                     <i class="layui-icon">&#xe65a;</i>
                 </div>
                 <div class="layui-logo-brand">
-                    <a href="#/">UMS 2.0</a>
+                    <a href="#/">[[#{ums.app.name}]]</a>
                 </div>
             </div>
             <div class="layui-layout-left">
@@ -49,14 +49,21 @@
                     <li class="kit-item">
                         <a href="javascript:;">
                             <span>
-                                <img src="./images/user1.png" class="layui-nav-img">管理员
+                                <img src="./images/user1.png" class="layui-nav-img">
+                                [[${userAlias}]]
                             </span>
                         </a>
                         <ul class="kit-nav-child kit-nav-right">
                             <li class="kit-item">
-                                <a href="#/user/my">
+                                <a href="#/user/profile">
                                     <i class="layui-icon">&#xe612;</i>
                                     <span>个人中心</span>
+                                </a>
+                            </li>
+                            <li class="kit-item">
+                                <a href="#/user/password">
+                                    <i class="layui-icon">&#xe612;</i>
+                                    <span>修改密码</span>
                                 </a>
                             </li>
                             <li class="kit-item" kit-target="setting">
@@ -92,7 +99,7 @@
         </div>
         <!-- footer -->
         <div class="layui-footer" kit-footer="true">
-            2018 © ums.airobothub.cn MIT license
+            <!-- 2018 © ums.airobothub.cn MIT license -->
         </div>
     </div>
     <!-- build:js -->

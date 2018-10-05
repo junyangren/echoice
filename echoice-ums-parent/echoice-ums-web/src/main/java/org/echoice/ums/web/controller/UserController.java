@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -25,9 +24,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.echoice.modules.encrypt.MD5;
 import org.echoice.modules.web.MsgTip;
 import org.echoice.modules.web.paper.PageBean;
-import org.echoice.ums.config.LoginAuthBean;
+import org.echoice.ums.config.ConfigBean;
 import org.echoice.ums.dao.EcGroupDao;
 import org.echoice.ums.dao.EcUserDao;
+import org.echoice.ums.dao.UmsClientDao;
 import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcUser;
 import org.echoice.ums.domain.EcUserExtend;
@@ -38,6 +38,7 @@ import org.echoice.ums.service.UmsCommonService;
 import org.echoice.ums.util.CasUmsUtil;
 import org.echoice.ums.util.FileUtil;
 import org.echoice.ums.util.JSONUtil;
+import org.echoice.ums.web.UmsHolder;
 import org.echoice.ums.web.view.EcUserInfoView;
 import org.echoice.ums.web.view.EcUserView;
 import org.echoice.ums.web.view.MsgTipExt;
@@ -59,7 +60,6 @@ public class UserController {
 	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	private static final String PAGE_SIZE="20";
 	private static final String[] EXCLUDE_FIELDS=new String[]{"ecUserGroups","ecUserExtends","ecUsersAssignmens"};
-	
 	@Autowired
 	private EcUserDao ecUserDao;
 	@Autowired
@@ -68,14 +68,28 @@ public class UserController {
 	private UmsCommonService umsCommonService;
 	@Autowired
 	private AppPluginService appPluginService;
+	@Autowired
+	private UmsClientDao umsClientDao;
 	
 	@Autowired
-	private LoginAuthBean loginAuthBean;
+	private ConfigBean configBean;
 	
 	@RequestMapping("index")
 	public String index() throws Exception {
 		// TODO Auto-generated method stub
 		return "user/index";
+	}
+	
+	@RequestMapping("profile")
+	public String profile() throws Exception {
+		// TODO Auto-generated method stub
+		return "user/profile";
+	}
+	
+	@RequestMapping("password")
+	public String password() throws Exception {
+		// TODO Auto-generated method stub
+		return "user/password";
 	}
 	
 	@RequestMapping(value="searchJSON",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -138,6 +152,34 @@ public class UserController {
 		}
 		
 		String respStr=JSONUtil.toJSONString(msgTip,EXCLUDE_FIELDS);
+		return respStr;
+	}
+	
+	@RequestMapping(value="modifyProfile",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public String modifyProfile(HttpServletRequest request,HttpServletResponse response,EcUser ecUser) throws Exception {
+		// TODO Auto-generated method stub
+		MsgTipExt msgTip=new MsgTipExt(); 
+		List<EcUser> list=ecUserDao.findByAlias(UmsHolder.getUserAlias());
+		if(list!=null&&list.size()>0){
+			EcUser dbUser=list.get(0);
+			dbUser.setName(ecUser.getName());
+			dbUser.setAddress(ecUser.getAddress());
+			dbUser.setMobile(ecUser.getMobile());
+			dbUser.setTel(ecUser.getTel());
+			dbUser.setDuty(ecUser.getDuty());
+			dbUser.setAddress(ecUser.getAddress());
+			dbUser.setJobNumber(ecUser.getJobNumber());
+			dbUser.setQq(ecUser.getQq());
+			dbUser.setWechat(ecUser.getWechat());
+			dbUser.setEmail(ecUser.getEmail());
+			dbUser.setIdcard(ecUser.getIdcard());
+			this.ecUserDao.save(dbUser);
+		}else {
+			msgTip.setMsg("对不起，用户不存在");
+		}
+		
+		String respStr=JSONUtil.toJSONString(msgTip);
 		return respStr;
 	}
 	
@@ -205,17 +247,16 @@ public class UserController {
 	public MsgTipExt fileUpload(MultipartFile file,HttpServletRequest request) {
 		MsgTipExt msgTip=new MsgTipExt();
 		int coloumNum = 0;
-		String fileName = file.getOriginalFilename();
-		String[] fNames = StringUtils.split(fileName, ".");
-		String filePath = getLoginAuthBean().getUploadPath() + DateFormatUtils.format(new Date(), "yyyyMMddhhmmss") +"."+fNames[1];
+		String originalFilename = file.getOriginalFilename();	
+		String fileSuffix=StringUtils.substringAfterLast(originalFilename, ".");
 		try {
-			FileUtil.saveFile(filePath, file.getInputStream());
+			String filePath=FileUtil.saveFile(originalFilename,getConfigBean().getUploadPath(), file.getInputStream());
 			// 计算出当前文件的列数
-			if(fNames[1].equals("xlsx")) {// 如果是EXCEL文件
+			if(fileSuffix.equals("xlsx")) {// 如果是EXCEL文件
 				XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
 				XSSFSheet sheet = wb.getSheetAt(0);
 				coloumNum=sheet.getRow(0).getPhysicalNumberOfCells();//获得总列数
-			}else if(fNames[1].equals("xls")) {
+			}else if(fileSuffix.equals("xls")) {
 				HSSFWorkbook wb = new HSSFWorkbook(file.getInputStream());
 				HSSFSheet sheet = wb.getSheetAt(0);
 				coloumNum=sheet.getRow(0).getPhysicalNumberOfCells();//获得总列数
@@ -224,16 +265,16 @@ public class UserController {
 				msgTip.setMsg("请上传xlsx、xls文件后缀的excel文件");
 			}
 			
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("filePath", filePath);
+			map.put("fileColoumNum", coloumNum);
+			msgTip.setData(map);
+			
 		} catch (IOException e) {
 			logger.error("文件上传失败：",e);
 			msgTip.setCode(4002);
 			msgTip.setMsg("文件上传失败："+e.getMessage());
 		}
-		
-		Map<String,Object> map=new HashMap<String,Object>();
-		map.put("filePath", filePath);
-		map.put("fileColoumNum", coloumNum);
-		msgTip.setData(map);	
 		return msgTip;
 	}
 	
@@ -244,7 +285,6 @@ public class UserController {
 		String filePath = request.getParameter("filePath");// 获取已上传的文件路径
 		String startNum = request.getParameter("startNum");// 从第几行开始导入
 		Integer count=Integer.valueOf(startNum)-1;
-		String opType=request.getParameter("opType");
 		
 		if(!"".equals(startNum) || null != startNum) {
 			count=Integer.valueOf(startNum);
@@ -258,7 +298,7 @@ public class UserController {
 		}
 		
 		if(msgTip.getCode()==0) {
-			//進行科室信息校驗
+			//进行用户部门信息校验
 			List<EcUserInfoView> list=(List<EcUserInfoView>)msgTip.getData();
 			Map<String, EcGroup> groupMap=new HashMap<String, EcGroup>();
 			EcGroup tmpGroup=new EcGroup();
@@ -272,7 +312,7 @@ public class UserController {
 				dbGroupList=ecGroupDao.findByName(oneGroupName);
 				if(dbGroupList==null||dbGroupList.size()<=0) {
 					msgTip.setCode(4002);
-					msgTip.setMsg(oneGroupName+" 科室不存在，請先添加");
+					msgTip.setMsg(oneGroupName+" 用户部门不存在，请先添加");
 					break;
 				}else {
 					groupMap.get(oneGroupName).setGroupId(dbGroupList.get(0).getGroupId());
@@ -283,12 +323,44 @@ public class UserController {
 			}
 		}
 		
-		
-		logger.info("{}",JSON.toJSONString(msgTip));
 		msgTip.setData(null);
 		String respStr=JSON.toJSONString(msgTip);
 		return respStr;
 	}
+	
+	/**
+	 * 修改密码
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "modifyPassword")
+	@ResponseBody
+	public MsgTip modifyPassword(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		MsgTip msgTip=new MsgTip();
+		int resulCode=4002;
+		Map<String, Object> map=new HashMap<String, Object>();
+		try {
+			String newPassword=request.getParameter("newPassword");
+			String confirmPassword=request.getParameter("confirmPassword");
+			String oldPassword=request.getParameter("oldPassword");
+			if(StringUtils.isNotBlank(oldPassword)&&StringUtils.isNotBlank(newPassword)&&StringUtils.isNotBlank(confirmPassword)){
+				if(StringUtils.equals(newPassword, confirmPassword)){
+					boolean isSucess=this.umsClientDao.updateUserPassword(UmsHolder.getUserAlias(), oldPassword, newPassword);
+					if(isSucess){
+						resulCode=0;
+					}
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			map.put("msg", e.getMessage());
+		}
+		msgTip.setCode(resulCode);
+		return msgTip;
+	}	
 	
 	public MsgTipExt excelXlsxImp(Integer count,String filePath,EcUserInfoView colInfo) {
 		MsgTipExt msgTip=new MsgTipExt();
@@ -360,7 +432,7 @@ public class UserController {
 					if(cell!=null&&StringUtils.isNotBlank(cell.toString())) {
 						tmp.setHardwareSn(cell.toString().trim());
 					}else {
-						msgTip.setMsg("第"+i+"硬件介质不能为空");
+						msgTip.setMsg("第"+i+"硬件介质SN不能为空");
 						break;
 					}
 				}
@@ -478,12 +550,14 @@ public class UserController {
 		this.appPluginService = appPluginService;
 	}
 
-	public LoginAuthBean getLoginAuthBean() {
-		return loginAuthBean;
+	public ConfigBean getConfigBean() {
+		return configBean;
 	}
 
-	public void setLoginAuthBean(LoginAuthBean loginAuthBean) {
-		this.loginAuthBean = loginAuthBean;
+	public void setConfigBean(ConfigBean configBean) {
+		this.configBean = configBean;
 	}
+
+
 	
 }

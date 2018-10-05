@@ -17,6 +17,7 @@ import org.echoice.ums.dao.UmsClientDao;
 import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcObjects;
 import org.echoice.ums.domain.EcUser;
+import org.echoice.ums.web.UmsHolder;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
@@ -185,7 +186,7 @@ public class UmsAppController extends SpringBaseController {
 			String oldPassword=request.getParameter("oldPassword");
 			if(StringUtils.isNotBlank(oldPassword)&&StringUtils.isNotBlank(newPassword)&&StringUtils.isNotBlank(confirmPassword)){
 				if(StringUtils.equals(newPassword, confirmPassword)){
-					boolean isSucess=getUmsClientDao().updateUserPassword(CasUtil.getUserName(), oldPassword, newPassword);
+					boolean isSucess=getUmsClientDao().updateUserPassword(UmsHolder.getUserAlias(), oldPassword, newPassword);
 					if(isSucess){
 						resulCode=0;
 					}
@@ -199,6 +200,7 @@ public class UmsAppController extends SpringBaseController {
 		rendJson(response, JSONUtil.toJSONString(map));
 		return null;
 	}
+	
 	public UmsClientDao getUmsClientDao() {
 		return umsClientDao;
 	}

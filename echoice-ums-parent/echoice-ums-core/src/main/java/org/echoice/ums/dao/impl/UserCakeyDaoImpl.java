@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.persistence.BaseCommonDao;
 import org.echoice.ums.domain.UserCakey;
+import org.echoice.ums.web.view.UserCakeyReportView;
 import org.springframework.data.domain.Page;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,12 @@ public class UserCakeyDaoImpl extends BaseCommonDao{
 	@Transactional
 	public void persist(UserCakey userCakey){
 		getEntityManager().persist(userCakey);
+	}
+	
+	public List<UserCakeyReportView> countByStatus(){
+		String sql="select t.status,count(1) total from ec_user_cakey t group by t.status order by t.status asc";
+		List<UserCakeyReportView> list=getJdbcTemplate().query(sql, new BeanPropertyRowMapper<UserCakeyReportView>(UserCakeyReportView.class));
+		return list;
 	}
 	
 	public List<UserCakey> findAdvancedList(UserCakey searchForm) {

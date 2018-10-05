@@ -1,6 +1,7 @@
 package org.echoice.ums.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.echoice.modules.encrypt.MD5;
+import org.echoice.ums.config.ConfigBean;
 import org.echoice.ums.config.ConfigConstants;
-import org.echoice.ums.config.LoginAuthBean;
 import org.echoice.ums.dao.EcGroupDao;
 import org.echoice.ums.dao.EcObjectsDao;
 import org.echoice.ums.dao.EcUserDao;
@@ -23,6 +24,7 @@ import org.echoice.ums.domain.EcUserExtend;
 import org.echoice.ums.domain.EcUserGroup;
 import org.echoice.ums.domain.UserCakey;
 import org.echoice.ums.service.UmsCommonService;
+import org.echoice.ums.service.UserCakeyService;
 import org.echoice.ums.web.UmsHolder;
 import org.echoice.ums.web.view.EcUserInfoView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,10 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 	private UserCakeyDao userCakeyDao;
 	
 	@Autowired
-	private LoginAuthBean loginAuthBean;
+	private UserCakeyService userCakeyService;
+	
+	@Autowired
+	private ConfigBean configBean;
 	public void saveUserData(EcUser ecUser, EcUserExtend ecUserExtend,Long groupId) {
 		// TODO Auto-generated method stub
 		ecUserDao.save(ecUser,ecUserExtend);
@@ -92,10 +97,12 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 		MD5 md5=null;
 		String password=null;
 		String md5Password=null;
+		//入库工单
+		List<UserCakey> storageList=new ArrayList<UserCakey>();
 		for (EcUserInfoView ecUserInfoView : list) {
 			//查看用戶是否存在
 			ecUsers=ecUserDao.findByAlias(ecUserInfoView.getAlias());
-			if(ecUsers==null||ecUsers.size()<=0) {//保存用戶組的關聯關系
+			if(ecUsers==null||ecUsers.size()<=0) {//保存用戶組的关联关系
 				ecUser=new EcUser();
 				try {
 					BeanUtils.copyProperties(ecUser, ecUserInfoView);
@@ -130,21 +137,25 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 				ecUser=ecUsers.get(0);
 			}
 			
-			if(StringUtils.isNotBlank(ecUserInfoView.getIdcard())) {
-				keyCount=userCakeyDao.countByIdcardAndHardwareSn(ecUserInfoView.getAlias(), ecUserInfoView.getHardwareSn());
+			if(StringUtils.isNotBlank(ecUserInfoView.getHardwareSn())&&StringUtils.isNotBlank(ecUserInfoView.getIdcard())) {
+				keyCount=userCakeyDao.countByHardwareSn(ecUserInfoView.getHardwareSn());
 				if(keyCount==0) {
 					userCakey=new UserCakey();
-					userCakey.setIdcard(ecUserInfoView.getAlias());
+					userCakey.setIdcard(ecUserInfoView.getIdcard());
 					userCakey.setHardwareSn(ecUserInfoView.getHardwareSn());
 					userCakey.setStatus("01");
 					userCakey.setCreateTime(now);
 					userCakey.setOpTime(now);
 					userCakey.setCreateUser(UmsHolder.getUserAlias());
 					userCakey.setOpUser(UmsHolder.getUserAlias());
+					userCakey.setUserName(ecUser.getName());
 					userCakeyDao.persist(userCakey);
+					storageList.add(userCakey);
 				}
 			}
 		}
+		//生成入库工单
+		userCakeyService.saveBatchStorage(storageList);
 	}
 	
 	public void removeUsers(Object[] idsArr) {
@@ -163,17 +174,17 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 		String alias=ecGroup.getAlias();
 		String groupPath=null;
 		String fullName=null;
-		if(loginAuthBean.getGroupAliasCreate()==1){
+		if(configBean.getGroupAliasCreate()==1){
 			if(StringUtils.isBlank(ecGroup.getAlias())){
 				alias="G-"+alias;//固定标识+ID
 			}
-		}else if(loginAuthBean.getGroupAliasCreate()==2){
+		}else if(configBean.getGroupAliasCreate()==2){
 			if(parentGroup!=null){
 				alias=parentGroup.getAlias()+"-"+ecGroup.getGroupId();//标识全称
 			}else{
 				alias=ecGroup.getGroupId().toString();
 			}
-		}else if(loginAuthBean.getGroupAliasCreate()==3){
+		}else if(configBean.getGroupAliasCreate()==3){
 			if(StringUtils.isBlank(ecGroup.getAlias())){
 				//alias=Pinying4jUtil.cn2FirstSpell(ecGroup.getName())+"-"+ecGroup.getGroupId();//拼音标识+ID
 			}
@@ -241,13 +252,14 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 	public void setEcGroupDao(EcGroupDao ecGroupDao) {
 		this.ecGroupDao = ecGroupDao;
 	}
+	
 	@Transactional(propagation=Propagation.NOT_SUPPORTED,readOnly=true)
-	public LoginAuthBean getLoginAuthBean() {
-		return loginAuthBean;
+	public ConfigBean getConfigBean() {
+		return configBean;
 	}
 
-	public void setLoginAuthBean(LoginAuthBean loginAuthBean) {
-		this.loginAuthBean = loginAuthBean;
+	public void setConfigBean(ConfigBean configBean) {
+		this.configBean = configBean;
 	}
 
 	public UserCakeyDao getUserCakeyDao() {

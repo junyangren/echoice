@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.echoice.modules.cas.CasUtil;
 import org.echoice.modules.encrypt.MD5;
 import org.echoice.modules.web.json.bean.ExtJsActionView;
-import org.echoice.ums.config.LoginAuthBean;
+import org.echoice.ums.config.ConfigBean;
 import org.echoice.ums.dao.EcGroupDao;
 import org.echoice.ums.dao.EcUserDao;
 import org.echoice.ums.domain.EcGroup;
@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/login.do")
 public class LoginController extends UmsBaseController{
 	@Autowired
-	private LoginAuthBean loginAuthBean;
+	private ConfigBean configBean;
 	@Autowired
 	private EcUserDao ecUserDao;
 	@Autowired
@@ -46,7 +46,7 @@ public class LoginController extends UmsBaseController{
 		actionView.setSuccess(true);
 		EcUser ecUser=new EcUser();
 		ecUser.setAlias(userAlias);
-		if(loginAuthBean.isAuth()){
+		if(configBean.isAuth()){
 			//判断用户提交的验证码是否正确
 			if(radomStrID.equalsIgnoreCase(authPassword)){
 				//获取登录用户的信息
@@ -91,12 +91,6 @@ public class LoginController extends UmsBaseController{
 		this.ecUserDao = ecUserDao;
 	}
 	
-	public LoginAuthBean getLoginAuthBean() {
-		return loginAuthBean;
-	}
-	public void setLoginAuthBean(LoginAuthBean loginAuthBean) {
-		this.loginAuthBean = loginAuthBean;
-	}
 	public ValidPermissionForUmsService getValidPermissionForUmsService() {
 		return validPermissionForUmsService;
 	}
@@ -112,4 +106,14 @@ public class LoginController extends UmsBaseController{
 	public void setEcGroupDao(EcGroupDao ecGroupDao) {
 		this.ecGroupDao = ecGroupDao;
 	}
+
+	public ConfigBean getConfigBean() {
+		return configBean;
+	}
+
+	public void setConfigBean(ConfigBean configBean) {
+		this.configBean = configBean;
+	}
+	
+	
 }

@@ -81,11 +81,11 @@ public class ConsolePermissionFilter implements Filter{
 			String contextPath=request.getContextPath();
 			logger.info("{},{}",contextPath,objUrl);
 			
-			String objAlias=this.validPermissionForUmsService.getLoginAuthBean().getUrlToObjMap().get(objUrl);
+			String objAlias=this.validPermissionForUmsService.getConfigBean().getUrlToObjMap().get(objUrl);
 			if(StringUtils.isNotBlank(objAlias)){
 				String action=request.getParameter("action");
 				if(StringUtils.isNotBlank(action)){
-					String accessAlias=this.validPermissionForUmsService.getLoginAuthBean().getObjAccessModeMap().get(action);
+					String accessAlias=this.validPermissionForUmsService.getConfigBean().getObjAccessModeMap().get(action);
 					if(StringUtils.isNotBlank(accessAlias)){
 						accessAlias="edit";
 						boolean isPm=this.validPermissionForUmsService.getUmsClientDao().checkHasPermission(loginUser, objAlias, accessAlias);

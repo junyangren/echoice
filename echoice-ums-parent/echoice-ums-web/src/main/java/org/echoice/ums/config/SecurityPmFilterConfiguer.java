@@ -18,10 +18,11 @@ public class SecurityPmFilterConfiguer {
 		FilterRegistrationBean securityUmsPmFillter = new FilterRegistrationBean();
 		securityUmsPmFillter.setFilter(new SecurityPmFilter());
 		Map<String, String> initParameters = new HashMap<String, String>();  
-        //initParameters.put("isSecurityFilter", configProps.getIsSecurityFilter());  
-        //initParameters.put("accessModeAlias", configProps.getAccessModeAlias());
-        //initParameters.put("urlTag", configProps.getUrlTag());
-        //initParameters.put("userSecurityObjectsSessionName", configProps.getUserSecurityObjectsSessionName());
+        initParameters.put("isSecurityFilter", configProps.getIsSecurityFilter());  
+        initParameters.put("accessModeAlias", configProps.getAccessModeAlias());
+        initParameters.put("urlTag", configProps.getUrlTag());
+        initParameters.put("userSecurityObjectsSessionName", configProps.getUserSecurityObjectsSessionName());
+        initParameters.put("filterActions", configProps.getFilterActions());
 		
 		securityUmsPmFillter.setInitParameters(initParameters);
 		securityUmsPmFillter.setOrder(configProps.getOrder());  

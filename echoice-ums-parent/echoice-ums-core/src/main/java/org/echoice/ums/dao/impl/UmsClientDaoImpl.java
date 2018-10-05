@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -132,12 +131,6 @@ public class UmsClientDaoImpl implements UmsClientDao{
 		return null;
 	}
 	
-	public void updateUser(EcUser ecUser){
-		//密码加密
-		String password=ecUser.getAlias()+ecUser.getPassword();
-		MD5 md5=new MD5();
-		String md5Password=md5.getMD5ofStr(password);
-	}
 	@Transactional
 	public boolean updateUserPassword(String alias,String oldPassword,String newPassword){
 		//

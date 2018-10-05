@@ -265,7 +265,7 @@
             break;    	    
 
             case 'showPm':
-            	if(checkStatus.data&&checkStatus.data.length>0){
+            	if(checkStatus.data&&checkStatus.data.length==1){
             		var vWhere={};
             		var vUserId=checkStatus.data[0].userId;
             		vWhere.userId=vUserId;
@@ -591,8 +591,8 @@
             var roleIdsStr=JSON.stringify(roleRowsIdArr);
 
             var sfJson={};
-            sfJson.userIds=objIdsStr;
-            sfJson.roleIds=accssIdsStr;
+            sfJson.userIds=userIdsStr;
+            sfJson.roleIds=roleIdsStr;
             var rnd=parseInt(Math.random()*1000000);
             sfJson.rnd=rnd;
             $.post('../usersAssignmen/'+opType,sfJson,function(resp){

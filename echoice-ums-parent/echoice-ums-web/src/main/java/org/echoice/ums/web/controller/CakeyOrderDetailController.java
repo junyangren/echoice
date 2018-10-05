@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +29,7 @@ public class CakeyOrderDetailController{
 	private CakeyOrderDetailService cakeyOrderDetailService;
 	
 
-    @RequestMapping(value = "searchJSON")
+    @RequestMapping(value = "searchJSON",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public String searchJSON(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
             @RequestParam(value = "rows", defaultValue = PAGE_SIZE) int pageSize,CakeyOrderDetail searchForm,ServletRequest request) {

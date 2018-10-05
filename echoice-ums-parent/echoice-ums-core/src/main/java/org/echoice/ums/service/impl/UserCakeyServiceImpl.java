@@ -107,6 +107,54 @@ public class UserCakeyServiceImpl implements UserCakeyService{
 		return msgTip;
 	}
 	
+	
+	public MsgTipExt saveBatchStorage(List<UserCakey> list) {
+		MsgTipExt msgTip=new MsgTipExt();
+		Date now=new Date();
+		String updateStatus="01";
+		if(list!=null&&list.size()>0) {
+			long count=list.size();
+			int seq=ID_SEQ.incrementAndGet()%10000;
+			String orderId=DateFormatUtils.format(now, "yyyyMMddHHmmss")+String.format("%05d", seq);
+			CakeyOrder cakeyOrder=new CakeyOrder();
+			cakeyOrder.setOrderId(orderId);
+			cakeyOrder.setOpType(updateStatus);
+			cakeyOrder.setOpCount(count);
+			cakeyOrder.setCreateUser(UmsHolder.getUserAlias());
+			cakeyOrder.setCreateTime(now);
+			cakeyOrder.setOpUser(UmsHolder.getUserAlias());
+			cakeyOrder.setOpTime(now);
+			
+			CakeyOrderDetail cakeyOrderDetail=null;
+			this.cakeyOrderDao.save(cakeyOrder);
+			
+			for (UserCakey dbUserCakey : list) {
+				dbUserCakey.setStatus(updateStatus);
+				dbUserCakey.setOpUser(UmsHolder.getUserAlias());
+				dbUserCakey.setOpTime(now);
+				this.userCakeyDao.save(dbUserCakey);
+				
+				cakeyOrderDetail=new CakeyOrderDetail();
+				cakeyOrderDetail.setOrderId(orderId);
+				cakeyOrderDetail.setOpType(updateStatus);
+				cakeyOrderDetail.setIdcard(dbUserCakey.getIdcard());
+				cakeyOrderDetail.setHardwareSn(dbUserCakey.getHardwareSn());
+				cakeyOrderDetail.setName(dbUserCakey.getUserName());
+				cakeyOrderDetail.setCreateUser(UmsHolder.getUserAlias());
+				cakeyOrderDetail.setCreateTime(now);
+				cakeyOrderDetail.setOpUser(UmsHolder.getUserAlias());
+				cakeyOrderDetail.setOpTime(now);
+				
+				this.cakeyOrderDetailDao.save(cakeyOrderDetail);
+			}
+			msgTip.setData(cakeyOrder);
+		}else {
+			msgTip.setCode(4002);
+			msgTip.setMsg("excel未找到可以入库的KEY记录");
+		}
+		return msgTip;
+	}
+	
 	public MsgTipExt saveIssueByDept(UserCakey userCakey) {
 		MsgTipExt msgTip=new MsgTipExt();
 		Date now=new Date();
@@ -149,8 +197,6 @@ public class UserCakeyServiceImpl implements UserCakeyService{
 				
 				this.cakeyOrderDetailDao.save(cakeyOrderDetail);
 			}
-			
-			//生成可下载的PDF文件
 			msgTip.setData(cakeyOrder);
 		}else {
 			msgTip.setCode(4002);

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.echoice.ums.domain.UserCakey;
@@ -11,10 +12,12 @@ import org.echoice.ums.service.UserCakeyService;
 import org.echoice.ums.util.JSONUtil;
 import org.echoice.ums.web.UmsHolder;
 import org.echoice.ums.web.view.MsgTipExt;
+import org.echoice.ums.web.view.UserCakeyReportView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,7 +43,7 @@ public class UserCakeyController{
 		return "/userCakey/index";
 	}
 
-    @RequestMapping(value = "searchJSON")
+    @RequestMapping(value = "searchJSON",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public String searchJSON(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
             @RequestParam(value = "rows", defaultValue = PAGE_SIZE) int pageSize,UserCakey searchForm,ServletRequest request) {
@@ -50,7 +53,7 @@ public class UserCakeyController{
         return respStr;
     }
     
-    @RequestMapping(value = "searchAdvancedJSON")
+    @RequestMapping(value = "searchAdvancedJSON",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public String searchAdvancedJSON(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
             @RequestParam(value = "rows", defaultValue = PAGE_SIZE) int pageSize,UserCakey searchForm,ServletRequest request) {
@@ -60,7 +63,7 @@ public class UserCakeyController{
         return respStr;
     }
 	
-	@RequestMapping(value = "save",method = RequestMethod.POST)
+	@RequestMapping(value = "save",method = RequestMethod.POST,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public String save(@Valid UserCakey userCakey,ServletRequest request) {
 		MsgTipExt msgTip=new MsgTipExt();
@@ -88,7 +91,7 @@ public class UserCakeyController{
 		return respStr;
 	}
 	
-	@RequestMapping(value = "update",method = RequestMethod.POST)
+	@RequestMapping(value = "update",method = RequestMethod.POST,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public String update(@Valid UserCakey userCakey,ServletRequest request) {
 		MsgTipExt msgTip=new MsgTipExt();
@@ -104,7 +107,7 @@ public class UserCakeyController{
 		return respStr;
 	}
 	
-	@RequestMapping(value = "issueByDept",method = RequestMethod.POST)
+	@RequestMapping(value = "issueByDept",method = RequestMethod.POST,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public String issueByDept(UserCakey userCakey,ServletRequest request) {
 		MsgTipExt msgTip=new MsgTipExt();
@@ -120,4 +123,15 @@ public class UserCakeyController{
 		String respStr=JSON.toJSONString(msgTip);
 		return respStr;
 	}
+	
+	@RequestMapping(value = "countByStatus",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public String countByStatus(HttpServletRequest request) {
+		MsgTipExt msgTip=new MsgTipExt();
+		List<UserCakeyReportView> dataList=userCakeyService.getUserCakeyDao().countByStatus();
+		msgTip.setData(dataList);
+		String respStr=JSON.toJSONString(msgTip);
+		return respStr;
+	}	
+	
 }

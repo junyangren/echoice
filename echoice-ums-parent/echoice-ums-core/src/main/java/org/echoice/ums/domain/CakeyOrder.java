@@ -107,6 +107,13 @@ public class CakeyOrder extends BaseEntity implements java.io.Serializable {
     */
     @Column(name = "op_user" ,length=64)
     private String opUser;
+
+    /**
+    *签名PDF
+    *VARCHAR
+    */
+    @Column(name = "sign_pdf" ,length=256)
+    private String signPdf;
     
     
 	public Long getId() {
@@ -172,5 +179,13 @@ public class CakeyOrder extends BaseEntity implements java.io.Serializable {
     public void setOpUser(String opUser) {
         this.opUser = opUser;
     }
+
+	public String getSignPdf() {
+		return signPdf;
+	}
+
+	public void setSignPdf(String signPdf) {
+		this.signPdf = signPdf;
+	}
     
 }

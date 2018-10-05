@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>统一认证权限</title>
+    <title>[[#{ums.app.name}]]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="renderer" content="webkit"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -18,7 +18,7 @@
       <div class="layui-row">
         <div class="layui-col-xs12">
           <div class="layui-card">
-            <div class="layui-card-header">资产业务管理->CA-KEY管理
+            <div class="layui-card-header">Key资产业务->Key资产管理
             </div>
             <div class="layui-card-body">
                 <div class="layui-row">
@@ -142,7 +142,7 @@
     	  switch(obj.event){
     	    case 'add':
     	    	if(checkStatus.data&&checkStatus.data.length==1){
-    	    		ecApp.openForm('添加CA-KEY',checkStatus.data[0]);
+    	    		ecApp.openForm('添加用户KEY',checkStatus.data[0]);
     	    	}else{
     	    		layer.msg('请选择一个用户');
     	    	}
@@ -249,7 +249,7 @@
                             	   _html=_html+'<p>2.待签名PDF下载请点<a style="color:red;font-weight:bold" href="../cakeyOrder/downPdf?orderId='+resp.data.orderId+'" target="_blank">【这里】</a></p>';
                             	   _html=_html+'<p>3.签名PDF上传，请到【CA-KEY操作工单】界面，根据工单号选择对应的记录上传</p>'
                                    layer.open({
-                                       title: sfJson.groupName+'-邻取单PDF下载'
+                                       title: sfJson.groupName+'-领取单PDF下载'
                                        ,content: _html
                                      }); 
                                }
@@ -286,7 +286,7 @@
     	  ecApp.openForm('编辑',true,data.userId); 
       } else if(obj.event === 'showKeys'){
           layer.open({
-              title:'用户Key信息查看',
+              title:'查看用户Key信息',
               type: 1,
               anim: 3,
               fixed:true,
@@ -406,7 +406,7 @@
                             _html=_html+'<p>2.待签名PDF下载请点<a style="color:red;font-weight:bold" href="../cakeyOrder/downPdf?orderId='+resp.data.orderId+'" target="_blank">【这里】</a></p>';
                             _html=_html+'<p>3.签名PDF上传，请到【CA-KEY操作工单】界面，根据工单号选择对应的记录上传</p>'
                             layer.open({
-                                title: sfJson.userName+'-邻取单PDF下载'
+                                title: sfJson.userName+'-领取单PDF下载'
                                 ,content: _html
                               });
                         }else{

@@ -3,7 +3,6 @@ package org.echoice.ums.config;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.PropertyPreFilter;;
 
-
 public class AppPropertyPreFilter implements PropertyPreFilter {
 	private String[] excudeField;
 	public AppPropertyPreFilter(String... excudeField){

@@ -10,8 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.web.MsgTip;
 import org.echoice.modules.web.paper.PageBean;
 import org.echoice.modules.web.ztree.ZTreeView;
+import org.echoice.ums.config.ConfigBean;
 import org.echoice.ums.config.ConfigConstants;
-import org.echoice.ums.config.LoginAuthBean;
 import org.echoice.ums.dao.EcGroupDao;
 import org.echoice.ums.dao.EcObjectsDao;
 import org.echoice.ums.dao.EcUserDao;
@@ -24,6 +24,7 @@ import org.echoice.ums.service.AppPluginService;
 import org.echoice.ums.service.UmsCommonService;
 import org.echoice.ums.util.CasUmsUtil;
 import org.echoice.ums.util.JSONUtil;
+import org.echoice.ums.web.UmsHolder;
 import org.echoice.ums.web.view.MsgTipExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -34,8 +35,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-
-//import net.sf.json.JSONArray;
 
 @Controller
 @RequestMapping("/group")
@@ -48,7 +47,7 @@ public class GroupController extends UmsBaseController {
 	@Autowired
 	private EcUserDao ecUserDao;
 	@Autowired
-	private LoginAuthBean loginAuthBean;
+	private ConfigBean configBean;
 	@Autowired
 	private AppPluginService appPluginService;
 	@Autowired
@@ -70,9 +69,7 @@ public class GroupController extends UmsBaseController {
 		// TODO Auto-generated method stub
 		boolean isAdmin=CasUmsUtil.isAdmin(request);
 		if(!isAdmin){
-			if(ecGroup.getParentId()==null){
-				ecGroup.setParentId(new Long(-999999999));
-			}
+			ecGroup.setGroupPath(UmsHolder.getUserGroup().getAlias());//通过层级限定
 		}
 		PageBean pageBean=ecGroupDao.findPageCondition(ecGroup, pageNumber, pageSize);
 		String respStr=JSONUtil.getGridFastJSON(pageBean.getTotalSize(), pageBean.getDataList(),null, EXCLUDE_FIELDS);
@@ -276,11 +273,11 @@ public class GroupController extends UmsBaseController {
 		List<EcGroup> childList=null;
 		if(isUserGoup){
 			//取得用户所在用户组列表
-			if(loginAuthBean.getGroupModeType()==1){
+			if(configBean.getGroupModeType()==1){
 				childList=new ArrayList<EcGroup>();
 				childList.add(CasUmsUtil.getUserGroup(request));
 			}else{
-				childList=ecUserDao.findGroupByUserAndParenRoleAlias(CasUmsUtil.getUser(request),loginAuthBean.getGroupRoleParentAlias());
+				childList=ecUserDao.findGroupByUserAndParenRoleAlias(CasUmsUtil.getUser(request),configBean.getGroupRoleParentAlias());
 			}
 			//
 		}else{
@@ -307,7 +304,7 @@ public class GroupController extends UmsBaseController {
 		}
 		if(msgTip.getCode()==0) {
 			umsCommonService.saveGroup(ecGroup);
-			if(loginAuthBean.getSyncGroupPath()){
+			if(configBean.getSyncGroupPath()){
 				QuartzTriggerRunner.runGroupSyncTask();
 			}
 			msgTip.setData(ecGroup);
@@ -383,7 +380,7 @@ public class GroupController extends UmsBaseController {
 		String dragId=request.getParameter("dragId");
 		String targetId=request.getParameter("targetId");
 		umsCommonService.saveDragGroup(Long.valueOf(dragId), Long.valueOf(targetId));
-		if(loginAuthBean.getSyncGroupPath()){
+		if(configBean.getSyncGroupPath()){
 			QuartzTriggerRunner.runGroupSyncTask();
 		}
 		String respStr=JSONUtil.toJSONString(msgTip,EXCLUDE_FIELDS);
@@ -405,12 +402,13 @@ public class GroupController extends UmsBaseController {
 		this.ecUserDao = ecUserDao;
 	}
 
-	public LoginAuthBean getLoginAuthBean() {
-		return loginAuthBean;
+
+	public ConfigBean getConfigBean() {
+		return configBean;
 	}
 
-	public void setLoginAuthBean(LoginAuthBean loginAuthBean) {
-		this.loginAuthBean = loginAuthBean;
+	public void setConfigBean(ConfigBean configBean) {
+		this.configBean = configBean;
 	}
 
 	public AppPluginService getAppPluginService() {

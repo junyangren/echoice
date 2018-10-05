@@ -5,7 +5,7 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd" default-autowire="byName">
 	
-	<bean id="loginAuthBean" class="org.echoice.ums.config.LoginAuthBean">
+	<bean id="configBean" class="org.echoice.ums.config.ConfigBean">
     	<property name="auth" value="${ecums.isAuth}"></property>
     	<property name="authObject" value="${ecums.authObject}"></property>
     	<property name="authAccessMode" value="${ecums.authAccessMode}"></property>

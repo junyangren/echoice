@@ -30,4 +30,12 @@ public interface UserCakeyService {
 	 * @return
 	 */
 	public MsgTipExt saveIssueByDept(UserCakey userCakey);
+	
+	/**
+	 * 
+	 * @param list
+	 * @param updateStatus
+	 * @return
+	 */
+	public MsgTipExt saveBatchStorage(List<UserCakey> list);
 }
