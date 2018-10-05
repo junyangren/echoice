@@ -49,19 +49,19 @@
                     <li class="kit-item">
                         <a href="javascript:;">
                             <span>
-                                <img src="./images/user1.png" class="layui-nav-img">
+                                <img src="../images/user1.png" class="layui-nav-img">
                                 [[${userAlias}]]
                             </span>
                         </a>
                         <ul class="kit-nav-child kit-nav-right">
                             <li class="kit-item">
-                                <a href="#/user/profile">
+                                <a href="#/console/user/profile">
                                     <i class="layui-icon">&#xe612;</i>
                                     <span>个人中心</span>
                                 </a>
                             </li>
                             <li class="kit-item">
-                                <a href="#/user/password">
+                                <a href="#/console/user/password">
                                     <i class="layui-icon">&#xe612;</i>
                                     <span>修改密码</span>
                                 </a>
@@ -112,7 +112,7 @@
         var ecApp=ecApp||{};
         ecApp.context='[[@{/}]]';   
         layui.config({
-            base: './js/'
+            base: ecApp.context+'/js/'
         }).use('index');
     </script>
     <!-- endbuild -->

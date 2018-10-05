@@ -28,19 +28,20 @@ public class IndexController {
 	
 	@GetMapping("/")
 	public String index(HttpServletRequest request) {
+		//request.setAttribute("userAlias", UmsHolder.getUserAlias());
+		return "redirect:/console/index";
+	}
+	
+	@GetMapping("/console/index")
+	public String console(HttpServletRequest request) {
 		request.setAttribute("userAlias", UmsHolder.getUserAlias());
 		return "index";
 	}
 	
-	@GetMapping("/home")
-	public String home(HttpServletRequest request) {
-		return "home";
-	}
-	
-	@RequestMapping(value="/userMenu",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value="/console/userMenu",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public List<LaykitMenu> userMenu(@RequestParam(defaultValue="console-menu") String rootMenuAlias,@RequestParam(defaultValue="view") String accessMode) {
-		String userName="admin";
+		String userName=UmsHolder.getUserAlias();
 		//取出根据节点菜单
 		EcObjects rootMenu= umsClientDao.getObjectsByAlias(rootMenuAlias);
 		LaykitMenu rootMenuNode=new LaykitMenu();

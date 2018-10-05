@@ -2,6 +2,7 @@ package org.echoice.ums.service.impl;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,9 +12,11 @@ import org.echoice.modules.persistence.DynamicSpecifications;
 import org.echoice.modules.persistence.SearchFilter;
 import org.echoice.ums.dao.CakeyOrderDao;
 import org.echoice.ums.dao.CakeyOrderDetailDao;
+import org.echoice.ums.dao.EcUserDao;
 import org.echoice.ums.dao.UserCakeyDao;
 import org.echoice.ums.domain.CakeyOrder;
 import org.echoice.ums.domain.CakeyOrderDetail;
+import org.echoice.ums.domain.EcUser;
 import org.echoice.ums.domain.UserCakey;
 import org.echoice.ums.service.UserCakeyService;
 import org.echoice.ums.web.UmsHolder;
@@ -34,6 +37,13 @@ import org.springframework.transaction.annotation.Transactional;
 */
 @Service
 public class UserCakeyServiceImpl implements UserCakeyService{
+	public final static Map<String,String> OPTS_MAP=new LinkedHashMap<String,String>(4);
+	static {
+		OPTS_MAP.put("01", "入库");
+		OPTS_MAP.put("02", "领取");
+		OPTS_MAP.put("03", "标记丢失");
+		OPTS_MAP.put("04", "离职归还");
+	}
 	private static final AtomicInteger ID_SEQ=new AtomicInteger(0);
 	@Autowired
 	private UserCakeyDao userCakeyDao;
@@ -43,6 +53,9 @@ public class UserCakeyServiceImpl implements UserCakeyService{
 	
 	@Autowired
 	private CakeyOrderDetailDao cakeyOrderDetailDao;
+	
+	@Autowired
+	private EcUserDao ecUserDao;
 	
 	
 	public Page<UserCakey> findPageList(Map<String, Object> searchParams,int pageNumber, int pageSize){
@@ -59,6 +72,55 @@ public class UserCakeyServiceImpl implements UserCakeyService{
 		for (Long code : idList) {
 			userCakeyDao.delete(code);
 		}
+	}
+	
+	public MsgTipExt saveForOptKeys(Long userId,List<UserCakey> list,String updateStatus) {
+		MsgTipExt msgTip=new MsgTipExt();
+		Date now=new Date();
+		UserCakey dbUserCakey=null;
+		
+		EcUser ecUser=ecUserDao.findOne(userId);
+		
+		//生成工单
+		long count=list.size();
+		int seq=ID_SEQ.incrementAndGet()%10000;
+		String orderId=DateFormatUtils.format(now, "yyyyMMddHHmmss")+String.format("%05d", seq);
+		CakeyOrder cakeyOrder=new CakeyOrder();
+		cakeyOrder.setOrderId(orderId);
+		cakeyOrder.setOpType(updateStatus);
+		cakeyOrder.setOpCount(count);
+		cakeyOrder.setCreateUser(UmsHolder.getUserAlias());
+		cakeyOrder.setCreateTime(now);
+		cakeyOrder.setOpUser(UmsHolder.getUserAlias());
+		cakeyOrder.setOpTime(now);
+		
+		this.cakeyOrderDao.save(cakeyOrder);
+		CakeyOrderDetail cakeyOrderDetail=null;
+		
+		for (UserCakey oneUserCakey : list) {
+			dbUserCakey=userCakeyDao.findOne(oneUserCakey.getId());
+			dbUserCakey.setStatus(updateStatus);
+			dbUserCakey.setOpUser(UmsHolder.getUserAlias());
+			dbUserCakey.setOpTime(now);
+			this.userCakeyDao.save(dbUserCakey);
+			
+			cakeyOrderDetail=new CakeyOrderDetail();
+			cakeyOrderDetail.setOrderId(orderId);
+			cakeyOrderDetail.setOpType(updateStatus);
+			cakeyOrderDetail.setIdcard(dbUserCakey.getIdcard());
+			cakeyOrderDetail.setHardwareSn(dbUserCakey.getHardwareSn());
+			cakeyOrderDetail.setName(ecUser.getName());
+			cakeyOrderDetail.setCreateUser(UmsHolder.getUserAlias());
+			cakeyOrderDetail.setCreateTime(now);
+			cakeyOrderDetail.setOpUser(UmsHolder.getUserAlias());
+			cakeyOrderDetail.setOpTime(now);
+			
+			this.cakeyOrderDetailDao.save(cakeyOrderDetail);
+		}
+		
+		msgTip.setMsg(String.format("操作成功 ，工单号：%s", cakeyOrder.getOrderId()));
+		msgTip.setData(cakeyOrder);
+		return msgTip;
 	}
 	
 	public MsgTipExt saveForOptKey(UserCakey userCakey) {

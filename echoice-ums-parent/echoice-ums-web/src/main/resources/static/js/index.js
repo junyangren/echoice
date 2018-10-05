@@ -138,60 +138,60 @@ layui.define(mods, function(exports) {
       var routeOpts = {
         routes: [{
           path: '/',
-          component: 'views/app.html',
+          component: '../views/app.html',
           name: '控制面板'
         },{
 	      path: '/home',
 	      component: 'home',
 	      name: '主页'
         },{
-          path: '/user/profile',
-          component: 'user/profile',
+          path: '/console/user/profile',
+          component: '../console/user/profile',
           name: '个人中心',
           iframe:true
         },{
-           path: '/user/password',
-           component: 'user/password',
+           path: '/console/user/password',
+           component: '../console/user/password',
            name: '密码修改',
            iframe:true
         },{
-           path: '/accssMode/index',
-           component: 'accssMode/index',
+           path: '/console/accssMode/index',
+           component: '../console/accssMode/index',
            name: '操作管理',
            iframe:true
         },{
-           path: '/objects/index',
-           component: 'objects/index',
+           path: '/console/objects/index',
+           component: '../console/objects/index',
            name: '资源管理',
            iframe:true
         },{
-            path: '/group/index',
-            component: 'group/index',
+            path: '/console/group/index',
+            component: '../console/group/index',
             name: '用户组管理',
             iframe:true
         },{
-            path: '/user/index',
-            component: 'user/index',
+            path: '/console/user/index',
+            component: '../console/user/index',
             name: '用户管理',
             iframe:true
         },{
-            path: '/role/index',
-            component: 'role/index',
+            path: '/console/role/index',
+            component: '../console/role/index',
             name: '角色管理',
             iframe:true
         },{
-            path: '/userCakey/index',
-            component: 'userCakey/index',
+            path: '/console/userCakey/index',
+            component: '../console/userCakey/index',
             name: 'Key资产管理',
             iframe:true
          },{
-            path: '/cakeyOrder/index',
-            component: 'cakeyOrder/index',
+            path: '/console/cakeyOrder/index',
+            component: '../console/cakeyOrder/index',
             name: 'Key资产工单',
             iframe:true
          },{
-            path: '/cakeyOrder/report',
-            component: 'cakeyOrder/report',
+            path: '/console/cakeyOrder/report',
+            component: '../console/cakeyOrder/report',
             name: 'Key资产统计',
             iframe:true
          }]

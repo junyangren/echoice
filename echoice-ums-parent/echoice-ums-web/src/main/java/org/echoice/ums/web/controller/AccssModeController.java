@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 @Controller
-@RequestMapping("/accssMode")
+@RequestMapping("/console/accssMode")
 public class AccssModeController extends UmsBaseController {
 	private static final String PAGE_SIZE="20";
 	private static final String[] EXCLUDE_FIELDS=new String[]{"ecOperators"};

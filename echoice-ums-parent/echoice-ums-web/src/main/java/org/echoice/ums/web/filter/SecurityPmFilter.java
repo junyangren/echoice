@@ -23,6 +23,7 @@ import org.echoice.ums.config.ConfigConstants;
 import org.echoice.ums.dao.UmsClientDao;
 import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcObjects;
+import org.echoice.ums.domain.EcUser;
 import org.echoice.ums.web.UmsAppBean;
 import org.echoice.ums.web.UmsHolder;
 import org.jasig.cas.client.authentication.AuthenticationFilter;
@@ -81,11 +82,18 @@ public class SecurityPmFilter implements Filter{
 		try {
 			HttpServletRequest httpReq=(HttpServletRequest)request;
 			HttpServletResponse httpResp=(HttpServletResponse)response;
-			String userName=getUserName(httpReq);
 			
 			//模拟数据
-			simulatedData(httpReq);
+			//simulatedData(httpReq);
 			//end
+			String userName=getUserName(httpReq);
+			
+			if(StringUtils.isBlank(userName)) {
+				//httpReq.getRequestDispatcher("/login").forward(request, response);
+				String contextPath=httpReq.getContextPath();
+				httpResp.sendRedirect(contextPath+"/login");
+				return;
+			}
 			
 			String initSecurityObjectMap=request.getParameter("_initSecurityObjectMap");
 			if("true".equalsIgnoreCase(initSecurityObjectMap)){

@@ -26,7 +26,7 @@ import com.alibaba.fastjson.JSON;
 
 
 @Controller
-@RequestMapping("/objects")
+@RequestMapping("/console/objects")
 public class ObjectsController{
 	private static final String PAGE_SIZE="20";
 	private static final String[] EXCLUDE_FIELDS=new String[]{"ecOperators"};

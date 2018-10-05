@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 * @date 2018/10/01
 */
 @Controller
-@RequestMapping(value = "/cakeyOrderDetail")
+@RequestMapping(value = "/console/cakeyOrderDetail")
 public class CakeyOrderDetailController{
 	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	private static final String PAGE_SIZE = "20";

@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 @Controller
-@RequestMapping("/usersAssignmen")
+@RequestMapping("/console/usersAssignmen")
 public class UsersAssignmenController extends UmsBaseController {
 	@Autowired
 	private EcRoleDao ecRoleDao; 

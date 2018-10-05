@@ -6,10 +6,8 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +21,7 @@ import org.echoice.ums.domain.CakeyOrder;
 import org.echoice.ums.domain.CakeyOrderDetail;
 import org.echoice.ums.service.CakeyOrderDetailService;
 import org.echoice.ums.service.CakeyOrderService;
+import org.echoice.ums.service.impl.UserCakeyServiceImpl;
 import org.echoice.ums.util.FileUtil;
 import org.echoice.ums.util.JSONUtil;
 import org.echoice.ums.web.UmsHolder;
@@ -40,7 +39,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
-import com.github.abel533.echarts.Grid;
 import com.github.abel533.echarts.Legend;
 import com.github.abel533.echarts.Option;
 import com.github.abel533.echarts.Title;
@@ -64,11 +62,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 * @date 2018/10/01
 */
 @Controller
-@RequestMapping(value = "/cakeyOrder")
+@RequestMapping(value = "/console/cakeyOrder")
 public class CakeyOrderController{
 	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	private static final String PAGE_SIZE = "20";
-	private static final AtomicInteger FILE_IDX=new AtomicInteger(0);
 	
 	@Autowired
 	private CakeyOrderService cakeyOrderService;
@@ -171,11 +168,7 @@ public class CakeyOrderController{
 		
     	List<UserCakeyReportView> dataList=cakeyOrderDetailService.getCakeyOrderDetailDao().findReportList(searchForm, groupFields);
     	
-    	Map<String,String> optsMap=new LinkedHashMap<String,String>(4);
-    	optsMap.put("01", "入库");
-    	optsMap.put("02", "领取");
-    	optsMap.put("03", "标记丢失");
-    	optsMap.put("04", "离职归还");
+    	Map<String,String> optsMap=UserCakeyServiceImpl.OPTS_MAP;
     	
     	Option option=new Option();
     	
@@ -287,17 +280,18 @@ public class CakeyOrderController{
         Font keyfont = new Font(bfChinese, 8, Font.BOLD);
         Font textfont = new Font(bfChinese, 8, Font.NORMAL);
         
-        PdfPTable table = new PdfPTable(4);
+        PdfPTable table = new PdfPTable(5);
         table.setTotalWidth(520); 
         table.setLockedWidth(true); 
         table.setHorizontalAlignment(Element.ALIGN_CENTER);      
         table.getDefaultCell().setBorder(1);
         
-        table.addCell(createCell("工单号："+orderId, keyfont,Element.ALIGN_LEFT,4,false)); 
+        table.addCell(createCell("工单号："+orderId, keyfont,Element.ALIGN_LEFT,5,false)); 
         
         table.addCell(createCell("姓名", keyfont, Element.ALIGN_CENTER)); 
         table.addCell(createCell("身份证号", keyfont, Element.ALIGN_CENTER)); 
-        table.addCell(createCell("硬件介质SN", keyfont, Element.ALIGN_CENTER)); 
+        table.addCell(createCell("硬件介质SN", keyfont, Element.ALIGN_CENTER));
+        table.addCell(createCell("办理类型", keyfont, Element.ALIGN_CENTER));
         table.addCell(createCell("办理时间", keyfont, Element.ALIGN_CENTER));
 		String dft="yyyy-MM-dd";
 
@@ -305,6 +299,7 @@ public class CakeyOrderController{
             table.addCell(createCell(cakeyOrderDetail.getName(), textfont)); 
             table.addCell(createCell(cakeyOrderDetail.getIdcard(), textfont)); 
             table.addCell(createCell(cakeyOrderDetail.getHardwareSn(), textfont)); 
+            table.addCell(createCell(UserCakeyServiceImpl.OPTS_MAP.get(cakeyOrderDetail.getOpType()), textfont));
             table.addCell(createCell(DateFormatUtils.format(cakeyOrderDetail.getCreateTime(), dft), textfont));
 		}
 

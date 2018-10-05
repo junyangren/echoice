@@ -7,6 +7,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.ums.domain.UserCakey;
 import org.echoice.ums.service.UserCakeyService;
 import org.echoice.ums.util.JSONUtil;
@@ -31,7 +32,7 @@ import com.alibaba.fastjson.JSON;
 * @date 2018/10/01
 */
 @Controller
-@RequestMapping(value = "/userCakey")
+@RequestMapping(value = "/console/userCakey")
 public class UserCakeyController{
 	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	private static final String PAGE_SIZE = "20";
@@ -47,6 +48,9 @@ public class UserCakeyController{
     @ResponseBody
     public String searchJSON(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
             @RequestParam(value = "rows", defaultValue = PAGE_SIZE) int pageSize,UserCakey searchForm,ServletRequest request) {
+    	if(StringUtils.isBlank(searchForm.getIdcard())) {
+    		searchForm.setIdcard("-1");
+    	}
         Page<UserCakey> page=userCakeyService.getUserCakeyDao().findPageList(searchForm, pageNumber, pageSize);
         String respStr=JSONUtil.getGridFastJSON(page.getTotalElements(), page.getContent(), null, null);
         logger.debug("respStr:{}",respStr);
@@ -57,7 +61,7 @@ public class UserCakeyController{
     @ResponseBody
     public String searchAdvancedJSON(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
             @RequestParam(value = "rows", defaultValue = PAGE_SIZE) int pageSize,UserCakey searchForm,ServletRequest request) {
-        Page<UserCakey> page=userCakeyService.getUserCakeyDao().findPageList(searchForm, pageNumber, pageSize);
+        Page<UserCakey> page=userCakeyService.getUserCakeyDao().findAdvancedPageList(searchForm, pageNumber, pageSize);
         String respStr=JSONUtil.getGridFastJSON(page.getTotalElements(), page.getContent(), null, null);
         logger.debug("respStr:{}",respStr);
         return respStr;
@@ -93,10 +97,14 @@ public class UserCakeyController{
 	
 	@RequestMapping(value = "update",method = RequestMethod.POST,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
-	public String update(@Valid UserCakey userCakey,ServletRequest request) {
+	public String update(ServletRequest request) {
 		MsgTipExt msgTip=new MsgTipExt();
+		String updateStatus=request.getParameter("updateStatus");
+		String userId=request.getParameter("userId");
+		String userCaKeys=request.getParameter("userCaKeys");
+		List<UserCakey> list=JSON.parseArray(userCaKeys, UserCakey.class);
 		try{
-			msgTip=userCakeyService.saveForOptKey(userCakey);
+			msgTip=userCakeyService.saveForOptKeys(Long.valueOf(userId),list,updateStatus);
 		}catch (Exception e) {
 			// TODO: handle exception
 			logger.error("异常：",e);

@@ -55,7 +55,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/console/user")
 public class UserController {
 	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	private static final String PAGE_SIZE="20";

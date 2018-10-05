@@ -30,7 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 
 @Controller
-@RequestMapping("/operator")
+@RequestMapping("/console/operator")
 public class OperatorController extends UmsBaseController {
 	private static final String[] EXCLUDE_FIELDS=new String[]{"ecOperators"};
 	@Autowired

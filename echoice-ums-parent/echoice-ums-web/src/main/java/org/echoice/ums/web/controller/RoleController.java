@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 @Controller
-@RequestMapping("/role")
+@RequestMapping("/console/role")
 public class RoleController extends UmsBaseController{
 	private static final String PAGE_SIZE="20";
 	private static final String[] EXCLUDE_FIELDS=new String[]{"ecPermissions","ecGroupAssignments","ecUsersAssignmens"};

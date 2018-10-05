@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.echoice.modules.cas.CasUtil;
 import org.echoice.modules.encrypt.MD5;
+import org.echoice.modules.web.MsgTip;
 import org.echoice.modules.web.json.bean.ExtJsActionView;
 import org.echoice.ums.config.ConfigBean;
 import org.echoice.ums.dao.EcGroupDao;
@@ -15,14 +16,20 @@ import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcUser;
 import org.echoice.ums.service.ValidPermissionForUmsService;
 import org.echoice.ums.util.CasUmsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/login.do")
-public class LoginController extends UmsBaseController{
+@RequestMapping("/login")
+public class LoginController{
+	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private ConfigBean configBean;
 	@Autowired
@@ -32,49 +39,37 @@ public class LoginController extends UmsBaseController{
 	@Autowired
 	private ValidPermissionForUmsService validPermissionForUmsService; 
 	
-	@Override
-	@RequestMapping(params={"action=index"})
-	public ModelAndView index(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		String userAlias=request.getParameter("alias");
+	@RequestMapping(value="",method=RequestMethod.GET)
+	public String index(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		return "login";
+	}
+
+	@RequestMapping(value="",method=RequestMethod.POST,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public MsgTip login(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		MsgTip msgTip=new MsgTip();
+		String userAlias=request.getParameter("loginName");
 		String password=request.getParameter("password");
-		String authPassword=request.getParameter("authPassword");
-		//获取随机验证码
-		String radomStrID=(String)request.getSession().getAttribute(CasUtil.VALIDATECODE_SESSION_NAME);
-		String msg="";
-		ExtJsActionView actionView=new ExtJsActionView(); 
-		actionView.setSuccess(true);
-		EcUser ecUser=new EcUser();
-		ecUser.setAlias(userAlias);
-		if(configBean.isAuth()){
-			//判断用户提交的验证码是否正确
-			if(radomStrID.equalsIgnoreCase(authPassword)){
-				//获取登录用户的信息
-				List<EcUser> list=ecUserDao.findByAlias(userAlias);
-				if(list!=null&&list.size()>0){
-					ecUser=list.get(0);
-					String passWordDb=ecUser.getPassword();
-					MD5 md5=new MD5();
-					String userPassWord=md5.getMD5ofStr(userAlias+password);
-					//用户密码校验
-					if(passWordDb.equals(userPassWord)){
-						request.getSession().setAttribute(CasUtil.CONST_CAS_ASSERTION, ecUser.getAlias());
-						getValidPermissionForUmsService().setUserPermission(request);
-					}else{
-						logger.info(userAlias+"：用户密码错误");
-						msg="对不起，用户密码错误";
-					}
-				}else{
-					logger.info(userAlias+"：用户名错误");
-					msg="对不起，用户名错误";
-				}			
+		List<EcUser> list=ecUserDao.findByAlias(userAlias);
+		if(list!=null&&list.size()>0){
+			EcUser ecUser=list.get(0);
+			String passWordDb=ecUser.getPassword();
+			MD5 md5=new MD5();
+			String userPassWord=md5.getMD5ofStr(userAlias+password);
+			//用户密码校验
+			if(passWordDb.equals(userPassWord)){
+				request.getSession().setAttribute(CasUtil.CONST_CAS_ASSERTION, ecUser.getAlias());
 			}else{
-				msg="对不起，验证码错误";
+				logger.info(userAlias+"：用户密码错误");
+				msgTip.setCode(302);
+				msgTip.setMsg("对不起，用户密码错误");
 			}
-		}
-		actionView.addErrorCodeMsg("msg", msg);
-		renderExtjsActionView(response, actionView);
-		return null;
+		}else{
+			logger.info(userAlias+"：用户名错误");
+			msgTip.setCode(301);
+			msgTip.setMsg("对不起，用户名错误");
+		}	
+		return msgTip;
 	}
 	
 	@RequestMapping(params={"action=selGroup"})
@@ -84,6 +79,7 @@ public class LoginController extends UmsBaseController{
 		CasUmsUtil.setUserGroup(request, group);
 		return new ModelAndView("redirect:/index.jsp");
 	}
+	
 	public EcUserDao getEcUserDao() {
 		return ecUserDao;
 	}

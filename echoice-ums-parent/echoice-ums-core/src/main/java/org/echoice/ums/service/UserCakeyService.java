@@ -25,6 +25,15 @@ public interface UserCakeyService {
 	public MsgTipExt saveForOptKey(UserCakey userCakey);
 	
 	/**
+	 * 单个用户多个key
+	 * @param userId
+	 * @param list
+	 * @param updateStatus
+	 * @return
+	 */
+	public MsgTipExt saveForOptKeys(Long userId,List<UserCakey> list,String updateStatus);
+	
+	/**
 	 * 按部门领取
 	 * @param userCakey
 	 * @return

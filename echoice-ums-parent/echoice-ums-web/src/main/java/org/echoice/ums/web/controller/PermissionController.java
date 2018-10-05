@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 @Controller
-@RequestMapping("/permission")
+@RequestMapping("/console/permission")
 public class PermissionController extends UmsBaseController {
 	
 	private static final String PAGE_SIZE="20";

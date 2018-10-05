@@ -37,7 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 
 @Controller
-@RequestMapping("/group")
+@RequestMapping("/console/group")
 public class GroupController extends UmsBaseController {
 	private static final String PAGE_SIZE="20";
 	private static final String[] EXCLUDE_FIELDS=new String[]{"ecUserGroups","ecGroupAssignments"};
@@ -115,7 +115,7 @@ public class GroupController extends UmsBaseController {
 		// TODO Auto-generated method stub
 		String id=request.getParameter("id");
 		List<ZTreeView> zTreelist = new ArrayList<ZTreeView>();
-		boolean isAdmin=CasUmsUtil.isAdmin(request);
+		boolean isAdmin=UmsHolder.isAdmin();
 		List<EcGroup> childList=null;
 		if(StringUtils.isBlank(id)) {
 			childList=new ArrayList<EcGroup>();

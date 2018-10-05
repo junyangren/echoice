@@ -321,7 +321,7 @@
                           page: true, //开启分页
                           cols: [
                             [ //表头
-                              {type:'radio',fixed: 'left'}  
+                              {type:'checkbox',fixed: 'left'}  
                               ,{field: 'id',title: 'ID',width: 80}
                               ,{field: 'hardwareSn',title: '硬件介质SN',width:200}
                               ,{field: 'status',title: '状态',width: 120,templet:function(d){
@@ -358,42 +358,50 @@
     //监听顶部工具条
     table.on('toolbar(ecShowCaKeyTable)', function(obj){
           var checkStatus = table.checkStatus(obj.config.id);
-          if(checkStatus.data&&checkStatus.data.length==1){
+          if(checkStatus.data&&checkStatus.data.length>=0){
         	  var oneData=checkStatus.data[0];
         	  var updateStatus='';
+        	  var selArr=[];
+        	  var oneData;
               switch(obj.event){
               case 'issueKey':
-            	  if(oneData.status==='01'){
-            		  updateStatus='02';
-            	  }else{
-            		  layer.msg('只有未领取状态的Key才能执行领取操作');
-            		  return;
+            	  for(var i=0;i<checkStatus.data.length;i++){
+            		  oneData=checkStatus.data[i];
+            		  if(!(oneData.status==='01')){
+            			  layer.msg('只有未领取状态的Key才能执行领取操作');
+                          return;
+                      }
             	  }
+            	  updateStatus='02';
               break;
               case 'lostKey':
-            	  if(oneData.status==='03'){
-            		  layer.msg('该Key已标记为丢失状态，无需重复执行操作');
-            		  return;
+                  for(var i=0;i<checkStatus.data.length;i++){
+                      oneData=checkStatus.data[i];
+                      if(oneData.status==='03'){
+                    	  layer.msg('只有非丢失状态的Key才能执行标记丢失操作');
+                          return;
+                      }
                   }
             	  updateStatus='03';
               break;
               
               case 'recyclingKey':
-            	  if(oneData.status==='02'){
-            		  updateStatus='04';
-            	  }else{
-            		  layer.msg('只有已领取状态的Key才能执行归还操作');
-            		  return;
-            	  }
+            	  for(var i=0;i<checkStatus.data.length;i++){
+                      oneData=checkStatus.data[i];
+                      if(!(oneData.status==='02')){
+                    	  layer.msg('只有已领取状态的Key才能执行归还操作');
+                          return;
+                      }
+                  }
+            	  updateStatus='04';
             	 
               break;
             };
             
             var sfJson={};
-            sfJson.status=updateStatus;
-            sfJson.idcard=oneData.idcard;
-            sfJson.userName=ecApp.curSelUser.name;
-            sfJson.hardwareSn=oneData.hardwareSn;
+            sfJson.updateStatus=updateStatus;
+            sfJson.userId=ecApp.curSelUser.userId;
+            sfJson.userCaKeys=JSON.stringify(checkStatus.data);
             $.post("./update",sfJson,function(resp){
                 if(resp){
                     if(resp.code===0){
@@ -423,7 +431,7 @@
             
 
           }else{
-        	  layer.msg('请选择一条KEY记录');
+        	  layer.msg('请选择要操作的KEY记录');
           }
 
         });    

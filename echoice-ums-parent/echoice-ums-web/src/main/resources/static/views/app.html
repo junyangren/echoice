@@ -38,7 +38,7 @@
           <div class="layui-row layui-col-space15">
             <div class="layui-col-md12">
               <div class="layui-card">
-                <div class="layui-card-header">Key资产操作统计图</div>
+                <div class="layui-card-header">Key资产办理统计图</div>
                 <div class="layui-card-body">
                   <div id="echartsMain1" style="height:350px;"></div>
                 </div>
@@ -118,7 +118,7 @@
     var $ = layui.jquery,
       layer = layui.layer,
       table = layui.table;
-     $.post("../userCakey/countByStatus",function(resp){
+     $.post("./userCakey/countByStatus",function(resp){
     	 if(resp.code==0){
     		 $.each(resp.data,function(index,oneRec){
     			 var caKeyStatusId='caKeyStatus-'+oneRec.status;
@@ -128,7 +128,7 @@
      });
      
      var myChart1 = echarts.init(document.getElementById("echartsMain1"));
-     $.post("../cakeyOrder/indexReportJSON",function(resp){
+     $.post("./cakeyOrder/indexReportJSON",function(resp){
     	 var defaultOption = {
 	   	      tooltip: {
 	   	        trigger: 'axis',

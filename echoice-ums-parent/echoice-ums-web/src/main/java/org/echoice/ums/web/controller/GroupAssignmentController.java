@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 
 @Controller
-@RequestMapping("/groupAssignmen")
+@RequestMapping("/console/groupAssignmen")
 public class GroupAssignmentController extends UmsBaseController {
 	@Autowired
 	private EcGroupAssignmentDao ecGroupAssignmentDao;
