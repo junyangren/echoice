@@ -154,7 +154,6 @@ public class PermissionController extends UmsBaseController {
             @RequestParam(value = "rows", defaultValue = PAGE_SIZE) int pageSize,UserPermissionView permissionView
             ,HttpServletRequest request,HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		bindObject(request, permissionView);
 		PageBean pageBean=ecPermissionDao.findUserPermissionPage(permissionView, pageNumber, pageSize);
 		String respStr=JSONUtil.getGridFastJSON(pageBean.getTotalSize(), pageBean.getDataList(),null, EXCLUDE_FIELDS);
 		return respStr;

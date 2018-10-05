@@ -5,10 +5,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.cas.CasUtil;
 import org.echoice.modules.encrypt.MD5;
 import org.echoice.modules.web.MsgTip;
-import org.echoice.modules.web.json.bean.ExtJsActionView;
 import org.echoice.ums.config.ConfigBean;
 import org.echoice.ums.dao.EcGroupDao;
 import org.echoice.ums.dao.EcUserDao;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/login")
 public class LoginController{
 	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	@Autowired
@@ -39,40 +38,56 @@ public class LoginController{
 	@Autowired
 	private ValidPermissionForUmsService validPermissionForUmsService; 
 	
-	@RequestMapping(value="",method=RequestMethod.GET)
+	@RequestMapping(value="/login",method=RequestMethod.GET)
 	public String index(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		return "login";
 	}
 
-	@RequestMapping(value="",method=RequestMethod.POST,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value="/login",method=RequestMethod.POST,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public MsgTip login(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		MsgTip msgTip=new MsgTip();
 		String userAlias=request.getParameter("loginName");
 		String password=request.getParameter("password");
+		String authCode=request.getParameter("authCode");
+		String authCodeSession=(String)request.getSession().getAttribute(CaptchaImageCreateController.KEY_CAPTCHA);
+		
+		if(!(StringUtils.equalsIgnoreCase(authCode, authCodeSession))) {
+			msgTip.setCode(303);
+			msgTip.setMsg("对不起，验证码错误");
+			return msgTip;
+		}
+		
 		List<EcUser> list=ecUserDao.findByAlias(userAlias);
-		if(list!=null&&list.size()>0){
-			EcUser ecUser=list.get(0);
-			String passWordDb=ecUser.getPassword();
-			MD5 md5=new MD5();
-			String userPassWord=md5.getMD5ofStr(userAlias+password);
-			//用户密码校验
-			if(passWordDb.equals(userPassWord)){
-				request.getSession().setAttribute(CasUtil.CONST_CAS_ASSERTION, ecUser.getAlias());
-			}else{
-				logger.info(userAlias+"：用户密码错误");
-				msgTip.setCode(302);
-				msgTip.setMsg("对不起，用户密码错误");
-			}
-		}else{
-			logger.info(userAlias+"：用户名错误");
+		if(list==null||list.size()<=0){
 			msgTip.setCode(301);
 			msgTip.setMsg("对不起，用户名错误");
-		}	
+			return msgTip;
+		}
+		
+		EcUser ecUser=list.get(0);
+		String passWordDb=ecUser.getPassword();
+		MD5 md5=new MD5();
+		String userPassWord=md5.getMD5ofStr(userAlias+password);
+		//用户密码校验
+		if(!(StringUtils.equalsIgnoreCase(passWordDb, userPassWord))){
+			msgTip.setCode(302);
+			msgTip.setMsg("对不起，用户密码错误");
+			return msgTip;	
+		}
+		
+		request.getSession().removeAttribute(CaptchaImageCreateController.KEY_CAPTCHA);
+		request.getSession().setAttribute(CasUtil.CONST_CAS_ASSERTION, ecUser.getAlias());
 		return msgTip;
 	}
 	
-	@RequestMapping(params={"action=selGroup"})
+	@RequestMapping(value="/logout",method=RequestMethod.GET)
+	public String logout(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		request.getSession().invalidate();
+		return "redirect:/login";
+	}
+	
+	@RequestMapping(value="/selGroup",params={"action=selGroup"})
 	public ModelAndView selGroup(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String groupId=request.getParameter("groupId");
 		EcGroup group=ecGroupDao.findOne(Long.valueOf(groupId));

@@ -147,7 +147,6 @@ public class OperatorController extends UmsBaseController {
 		}
 		//JSONArray jsonarr=JSONArray.fromObject(listTree);
 		String data=JSON.toJSONString(listTree);
-		rendTextExtjs(response, data);
 		return null;
 	}
 	

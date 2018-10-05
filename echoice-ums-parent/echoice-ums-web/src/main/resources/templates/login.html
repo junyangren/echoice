@@ -32,15 +32,22 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
-                    <input type="text" class="layui-input" name="loginName" autocomplete="false" lay-verify="required" placeholder="请输入用户名" />
+                    <input type="text" class="layui-input" name="loginName" required autocomplete="off" lay-verType="tips" lay-verify="required" placeholder="请输入用户名" />
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">密码</label>
                 <div class="layui-input-block">
-                    <input type="password" class="layui-input" name="password" lay-verify="required" placeholder="请输入密码" />
+                    <input type="password" class="layui-input" name="password" required lay-verType="tips" lay-verify="required" placeholder="请输入密码" />
                 </div>
             </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">验证码</label>
+                <div class="layui-input-block">
+                    <div style="float: left"><input type="text" name="authCode" maxlength="4" required lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入验证码" style="width:120px" /></div>
+                    <div><img id="captchaImgId" alt="authCode" src="captcha.jpg" style="vertical-align: middle;cursor: pointer;" /></div>
+                </div>
+            </div>            
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button class="layui-btn kit-login-btn" lay-submit="submit" lay-filter="login_hash">登录</button>
@@ -65,6 +72,13 @@
     table = layui.table,
     form = layui.form,
     laytpl=layui.laytpl;
+     
+    $('#captchaImgId').click(function(){
+    	 var imgSrc=document.getElementById('captchaImgId');
+    	 var rnd = Math.random();
+         url ="captcha.jpg?rnd=" + rnd;
+         imgSrc.setAttribute("src",url);
+    });    
     
     //监听提交表单
     form.on('submit(login_hash)', function(data){
@@ -77,6 +91,8 @@
     		  top.window.location.href='./console/index';
     	  }else{
     		  $('#msgTip').html(resp.msg);
+    		  $('#captchaImgId').click();
+    		  $('input[name="authCode"]').val('');
     	  }
       },"json");
               

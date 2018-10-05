@@ -76,8 +76,9 @@ public class GroupController extends UmsBaseController {
 		return respStr;
 	}
 	
-	@RequestMapping(params={"action=updateGroupFullName"})
-	public ModelAndView updateGroupFullName(HttpServletRequest request, HttpServletResponse response)throws Exception {
+	@RequestMapping(value="updateGroupFullName",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public String updateGroupFullName(HttpServletRequest request, HttpServletResponse response)throws Exception {
 		String groupId=request.getParameter("groupId");
 		String msg="用户组Path操作成功！！";
 		try{
@@ -97,7 +98,6 @@ public class GroupController extends UmsBaseController {
 			// TODO: handle exception
 			msg="操作失败，原因："+e.getMessage();
 		}
-		rendText(response, msg);
 		return null;
 	}
 	
