@@ -15,6 +15,7 @@
     	<property name="levelRoleShow" value="${ecums.levelRoleShow}"></property>
     	<property name="groupAliasCreate" value="${ecums.groupAliasCreate}"></property>
     	<property name="syncGroupPath" value="${ecums.syncGroupPath}"></property>
+		<property name="uploadPath" value="${ecums.uploadPath}"></property>
     	<property name="urlToObjMap">
     		<map>
     			<entry key="opAccssMode.do" value="${ecums.console.menu.accssMode}"></entry>

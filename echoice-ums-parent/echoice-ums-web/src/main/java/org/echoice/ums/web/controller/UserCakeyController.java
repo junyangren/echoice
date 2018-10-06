@@ -41,7 +41,7 @@ public class UserCakeyController{
 	
 	@RequestMapping(value = "index")
 	public String index(){
-		return "/userCakey/index";
+		return "userCakey/index";
 	}
 
     @RequestMapping(value = "searchJSON",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
