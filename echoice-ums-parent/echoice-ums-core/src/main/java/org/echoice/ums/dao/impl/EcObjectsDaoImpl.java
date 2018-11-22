@@ -85,6 +85,7 @@ public class EcObjectsDaoImpl extends BaseCommonDao{
 		},pageNo, pageSize,listParam.toArray());
 		return pageBean;
 	}
+	
 	@Transactional
 	public int updateDrag(Long dragId,Long targetId){
 		String hql="update EcObjects t set t.parentId=? where t.objId=?";

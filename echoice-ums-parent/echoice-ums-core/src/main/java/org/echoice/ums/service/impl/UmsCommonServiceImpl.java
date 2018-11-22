@@ -1,7 +1,6 @@
 package org.echoice.ums.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,16 +15,12 @@ import org.echoice.ums.config.ConfigConstants;
 import org.echoice.ums.dao.EcGroupDao;
 import org.echoice.ums.dao.EcObjectsDao;
 import org.echoice.ums.dao.EcUserDao;
-import org.echoice.ums.dao.UserCakeyDao;
 import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcObjects;
 import org.echoice.ums.domain.EcUser;
 import org.echoice.ums.domain.EcUserExtend;
 import org.echoice.ums.domain.EcUserGroup;
-import org.echoice.ums.domain.UserCakey;
 import org.echoice.ums.service.UmsCommonService;
-import org.echoice.ums.service.UserCakeyService;
-import org.echoice.ums.web.UmsHolder;
 import org.echoice.ums.web.view.EcUserInfoView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,12 +36,6 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 	private EcGroupDao ecGroupDao;
 	@Autowired
 	private EcObjectsDao ecObjectsDao;
-	
-	@Autowired
-	private UserCakeyDao userCakeyDao;
-	
-	@Autowired
-	private UserCakeyService userCakeyService;
 	
 	@Autowired
 	private ConfigBean configBean;
@@ -92,13 +81,10 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 		EcUserGroup ecUserGroup=null;
 		EcUser ecUser=null;
 		long keyCount=0;
-		UserCakey userCakey=null;
 		Date now=new Date();
 		MD5 md5=null;
 		String password=null;
 		String md5Password=null;
-		//入库工单
-		List<UserCakey> storageList=new ArrayList<UserCakey>();
 		for (EcUserInfoView ecUserInfoView : list) {
 			//查看用戶是否存在
 			ecUsers=ecUserDao.findByAlias(ecUserInfoView.getAlias());
@@ -136,26 +122,7 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 			}else {
 				ecUser=ecUsers.get(0);
 			}
-			
-			if(StringUtils.isNotBlank(ecUserInfoView.getHardwareSn())&&StringUtils.isNotBlank(ecUserInfoView.getIdcard())) {
-				keyCount=userCakeyDao.countByHardwareSn(ecUserInfoView.getHardwareSn());
-				if(keyCount==0) {
-					userCakey=new UserCakey();
-					userCakey.setIdcard(ecUserInfoView.getIdcard());
-					userCakey.setHardwareSn(ecUserInfoView.getHardwareSn());
-					userCakey.setStatus("01");
-					userCakey.setCreateTime(now);
-					userCakey.setOpTime(now);
-					userCakey.setCreateUser(UmsHolder.getUserAlias());
-					userCakey.setOpUser(UmsHolder.getUserAlias());
-					userCakey.setUserName(ecUser.getName());
-					userCakeyDao.persist(userCakey);
-					storageList.add(userCakey);
-				}
-			}
 		}
-		//生成入库工单
-		userCakeyService.saveBatchStorage(storageList);
 	}
 	
 	public void removeUsers(Object[] idsArr) {
@@ -261,14 +228,4 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 	public void setConfigBean(ConfigBean configBean) {
 		this.configBean = configBean;
 	}
-
-	public UserCakeyDao getUserCakeyDao() {
-		return userCakeyDao;
-	}
-
-	public void setUserCakeyDao(UserCakeyDao userCakeyDao) {
-		this.userCakeyDao = userCakeyDao;
-	}
-	
-
 }

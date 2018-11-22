@@ -74,15 +74,18 @@ public class IndexController {
 				if(StringUtils.isBlank(oneMenu.getNote())) {
 					path="javascript:;";
 				}else {
-					JSONObject jsonObj=JSON.parseObject(oneMenu.getNote());
-					path="#"+jsonObj.getString("url");
-					icon=jsonObj.getString("icon");
-					open=jsonObj.getBoolean("open");
-					if(StringUtils.isNotBlank(icon)) {
-						tmpMenuNode.setIcon(icon);
+					try {
+						JSONObject jsonObj=JSON.parseObject(oneMenu.getNote());
+						path="#"+jsonObj.getString("url");
+						icon=jsonObj.getString("icon");
+						open=jsonObj.getBoolean("open");
+						if(StringUtils.isNotBlank(icon)) {
+							tmpMenuNode.setIcon(icon);
+						}
+						tmpMenuNode.setOpen(open);
+					}catch (Exception e) {
+						// TODO: handle exception
 					}
-					tmpMenuNode.setOpen(open);
-					
 				}
 				tmpMenuNode.setPath(path);
 

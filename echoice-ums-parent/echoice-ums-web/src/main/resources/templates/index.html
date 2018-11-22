@@ -23,14 +23,14 @@
                     <i class="layui-icon">&#xe65a;</i>
                 </div>
                 <div class="layui-logo-brand">
-                    <a href="#/">[[#{ums.app.name}]]</a>
+                    <a href="#/" id="logo-home">[[#{ums.app.name}]]</a>
                 </div>
             </div>
             <div class="layui-layout-left">
             </div>
             <div class="layui-layout-right">
                 <ul class="kit-nav" lay-filter="header_right">
-                    <li class="kit-item">
+                    <li class="kit-item" kit-target="help">
                         <a href="javascript:;">
                             <i class="layui-icon">&#xe607;</i>
                             <span>帮助</span>
@@ -54,15 +54,15 @@
                             </span>
                         </a>
                         <ul class="kit-nav-child kit-nav-right">
-                            <li class="kit-item">
+                            <li class="kit-item" kit-target="tabs">
                                 <a href="#/console/user/profile">
                                     <i class="layui-icon">&#xe612;</i>
                                     <span>个人中心</span>
                                 </a>
                             </li>
-                            <li class="kit-item">
+                            <li class="kit-item" kit-target="tabs">
                                 <a href="#/console/user/password">
-                                    <i class="layui-icon">&#xe612;</i>
+                                    <i class="layui-icon layui-icon-note"></i>
                                     <span>修改密码</span>
                                 </a>
                             </li>

@@ -16,10 +16,12 @@ import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcObjects;
 import org.echoice.ums.domain.EcUser;
 import org.echoice.ums.domain.EcUserExtend;
+import org.echoice.ums.util.PasswordEncoderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -134,15 +136,13 @@ public class UmsClientDaoImpl implements UmsClientDao{
 	@Transactional
 	public boolean updateUserPassword(String alias,String oldPassword,String newPassword){
 		//
-		MD5 md5=new MD5();
-		String oldPasswordStr=alias+oldPassword;
-		oldPasswordStr=md5.getMD5ofStr(oldPasswordStr);
+		PasswordEncoder passwordEncoder= PasswordEncoderUtil.get();
+		String oldPasswordStr= passwordEncoder.encode(oldPassword);
 		
 		String sql="select count(*) from ec_user t2 where t2.alias=? and t2.password=?";
 		int count=getJdbcTemplate().queryForObject(sql, new Object[]{alias,oldPasswordStr},Integer.class);
 		if(count>0){
-			String newPasswordStr=alias+newPassword;
-			newPasswordStr=md5.getMD5ofStr(newPasswordStr);
+			String newPasswordStr=passwordEncoder.encode(newPassword);
 			String sql2="update ec_user set password=? where alias=?";
 			getJdbcTemplate().update(sql2, new Object[]{newPasswordStr,alias});
 			return true;

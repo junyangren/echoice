@@ -21,7 +21,6 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.echoice.modules.encrypt.MD5;
 import org.echoice.modules.web.MsgTip;
 import org.echoice.modules.web.paper.PageBean;
 import org.echoice.ums.config.ConfigBean;
@@ -38,6 +37,7 @@ import org.echoice.ums.service.UmsCommonService;
 import org.echoice.ums.util.CasUmsUtil;
 import org.echoice.ums.util.FileUtil;
 import org.echoice.ums.util.JSONUtil;
+import org.echoice.ums.util.PasswordEncoderUtil;
 import org.echoice.ums.web.UmsHolder;
 import org.echoice.ums.web.view.EcUserInfoView;
 import org.echoice.ums.web.view.EcUserView;
@@ -46,6 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -131,18 +132,17 @@ public class UserController {
 		
 		if(msgTip.getCode()==0) {
 			//密码加密
-			String password=ecUser.getAlias()+ecUser.getPassword();
-			MD5 md5=new MD5();
-			String md5Password=md5.getMD5ofStr(password);
+			PasswordEncoder passwordEncoder= PasswordEncoderUtil.get();
+			String enPassword= passwordEncoder.encode(ecUser.getPassword());
 			
 			if(ecUser.getUserId()==null){
-				ecUser.setPassword(md5Password);
+				ecUser.setPassword(enPassword);
 				logger.info(CasUmsUtil.getUser(request)+" 新增用户："+ecUser.getAlias()+"，"+ecUser.getName());
 			}else{
-				EcUser ecUser2=ecUserDao.findOne(ecUser.getUserId());
+				EcUser ecUserDb=ecUserDao.findOne(ecUser.getUserId());
 				//密码加密
-				if(!(ecUser2.getPassword().equals(ecUser.getPassword()))){
-					ecUser.setPassword(md5Password);
+				if(!(ecUserDb.getPassword().equals(ecUser.getPassword()))){
+					ecUser.setPassword(enPassword);
 				}
 				logger.info(CasUmsUtil.getUser(request)+" 修改用户："+ecUser.getAlias()+"，"+ecUser.getName());
 			}
@@ -244,8 +244,10 @@ public class UserController {
 	 */
 	@RequestMapping(value = "fileUpload",method = RequestMethod.POST)
 	@ResponseBody
-	public MsgTipExt fileUpload(MultipartFile file,HttpServletRequest request) {
+	public String fileUpload(MultipartFile file,HttpServletRequest request,HttpServletResponse resp) {
+		String accept=request.getHeader("Accept");
 		MsgTipExt msgTip=new MsgTipExt();
+		msgTip.setMsg("文件上传成功");
 		int coloumNum = 0;
 		String originalFilename = file.getOriginalFilename();	
 		String fileSuffix=StringUtils.substringAfterLast(originalFilename, ".");
@@ -275,10 +277,23 @@ public class UserController {
 			msgTip.setCode(4002);
 			msgTip.setMsg("文件上传失败："+e.getMessage());
 		}
-		return msgTip;
+		
+		if(StringUtils.contains(accept, "application/json")) {
+			resp.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+		}else {
+			resp.setContentType("text/html;charset=UTF-8");
+		}
+		
+		try {
+			resp.getWriter().write(JSON.toJSONString(msgTip));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	@RequestMapping(value = "impFileData",method = RequestMethod.POST)
+	@RequestMapping(value = "impFileData",method = RequestMethod.POST,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public String impFileData(EcUserInfoView ecUser,HttpServletRequest request) {
 		MsgTipExt msgTip=new MsgTipExt();
@@ -318,7 +333,7 @@ public class UserController {
 					groupMap.get(oneGroupName).setGroupId(dbGroupList.get(0).getGroupId());
 				}
 			}
-			if(msgTip.getCode()==0) {//判斷用戶
+			if(msgTip.getCode()==0) {
 				umsCommonService.saveBatchUserData(list, groupMap);
 			}
 		}
@@ -335,7 +350,7 @@ public class UserController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "modifyPassword")
+	@RequestMapping(value = "modifyPassword",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public MsgTip modifyPassword(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
@@ -498,7 +513,7 @@ public class UserController {
 					if(cell!=null&&StringUtils.isNotBlank(cell.toString())) {
 						tmp.setGroupName(cell.toString().trim());
 					}else {
-						msgTip.setMsg("第"+i+"行科室名称不能为空");
+						msgTip.setMsg("第"+i+"组织机构名称不能为空");
 						break;
 					}
 				}
@@ -557,7 +572,4 @@ public class UserController {
 	public void setConfigBean(ConfigBean configBean) {
 		this.configBean = configBean;
 	}
-
-
-	
 }

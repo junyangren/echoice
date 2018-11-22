@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.echoice.modules.cas.CasUtil;
-import org.echoice.modules.encrypt.MD5;
 import org.echoice.modules.web.MsgTip;
 import org.echoice.ums.config.ConfigBean;
 import org.echoice.ums.dao.EcGroupDao;
@@ -16,10 +15,12 @@ import org.echoice.ums.domain.EcGroup;
 import org.echoice.ums.domain.EcUser;
 import org.echoice.ums.service.ValidPermissionForUmsService;
 import org.echoice.ums.util.CasUmsUtil;
+import org.echoice.ums.util.PasswordEncoderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,10 +68,13 @@ public class LoginController{
 		
 		EcUser ecUser=list.get(0);
 		String passWordDb=ecUser.getPassword();
-		MD5 md5=new MD5();
-		String userPassWord=md5.getMD5ofStr(userAlias+password);
+		
+		PasswordEncoder passwordEncoder=PasswordEncoderUtil.get();
+		//boolean match=true;
+		boolean match=passwordEncoder.matches(password, passWordDb);
+		//match=true;
 		//用户密码校验
-		if(!(StringUtils.equalsIgnoreCase(passWordDb, userPassWord))){
+		if(!match){
 			msgTip.setCode(302);
 			msgTip.setMsg("对不起，用户密码错误");
 			return msgTip;	

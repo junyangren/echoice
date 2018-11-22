@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,10 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * EcUser entity.
@@ -36,6 +41,10 @@ public class EcUser implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Long userId;
 	private String name;
 	private String alias;
@@ -60,6 +69,9 @@ public class EcUser implements java.io.Serializable {
 	private Set<EcUsersAssignmen> ecUsersAssignmens = new HashSet<EcUsersAssignmen>(
 			0);
 	private String jobNumber;//工号
+	
+	private Date pwdExpireTime;
+	
 	// Constructors
 
 	/** default constructor */
@@ -274,7 +286,17 @@ public class EcUser implements java.io.Serializable {
 	public void setIdcard(String idcard) {
 		this.idcard = idcard;
 	}
-	
-	
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "pwd_expire_time")
+	@JSONField(format = "yyyy-MM-dd")
+	@DateTimeFormat(pattern="yyyy-MM-dd")	
+	public Date getPwdExpireTime() {
+		return pwdExpireTime;
+	}
+
+	public void setPwdExpireTime(Date pwdExpireTime) {
+		this.pwdExpireTime = pwdExpireTime;
+	}
 
 }

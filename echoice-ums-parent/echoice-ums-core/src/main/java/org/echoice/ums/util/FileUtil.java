@@ -18,13 +18,8 @@ public class FileUtil {
 	private static final AtomicInteger FILE_IDX=new AtomicInteger(0);
 	public static String saveFile(String originalFilename,String saveBasePath, InputStream in) throws IOException {
 		String fileSuffix=StringUtils.substringAfterLast(originalFilename, ".");
-		int fileIdx=FILE_IDX.incrementAndGet()%1000;
-		String fileIdxStr=String.format("%04d", fileIdx);
-		Date now=new Date();
-		String foldPattern="yyyy"+File.separator+"MM"+File.separator+"dd";
-		String fold=DateFormatUtils.format(now, foldPattern);
-		String fileName=DateFormatUtils.format(new Date(), "yyyyMMddhhmmss")+"-"+fileIdxStr +"."+fileSuffix;
-		
+		String fold=genFold();
+		String fileName=genFileName(fileSuffix);
 		String filePath = saveBasePath+File.separator +fold+File.separator+fileName ;
 		
 		File file=new File(filePath);
@@ -35,4 +30,28 @@ public class FileUtil {
 		out.close();
 		return filePath;
 	}
+	
+	public static File genFilePath(String saveBasePath,String fileSuffix) throws IOException{
+		String fold=genFold();
+		String fileName=genFileName(fileSuffix);
+		String filePath = saveBasePath+File.separator +fold+File.separator+fileName ;
+		File file=new File(filePath);
+		FileUtils.forceMkdirParent(file);
+		return file;
+	}
+	
+	private static String genFileName(String fileSuffix) {
+		int fileIdx=FILE_IDX.incrementAndGet()%1000;
+		String fileIdxStr=String.format("%04d", fileIdx);
+		String fileName=DateFormatUtils.format(new Date(), "yyyyMMddhhmmss")+"-"+fileIdxStr +"."+fileSuffix;
+		return fileName;
+	}
+	
+	private static String genFold() {
+		Date now=new Date();
+		String foldPattern="yyyy"+File.separator+"MM"+File.separator+"dd";
+		String fold=DateFormatUtils.format(now, foldPattern);
+		return fold;
+	}
+	
 }

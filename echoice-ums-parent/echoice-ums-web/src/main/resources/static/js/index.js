@@ -92,12 +92,31 @@ layui.define(mods, function(exports) {
           // shadeClose:false,
           // direction: 'left'
           dynamicRender: true,
-          url: 'views/setting.html',
+          url: '../views/setting.html',
           // width: '50%', //可以设置百分比和px
         });
-      }
-      if (target === 'help') {
+      }else if (target === 'help') {
         layer.alert('文档完善中');
+      }else if (target === 'tabs') {
+    	  var hrefV=$('a', _that.elem).attr('href');
+          if (!tabs.existsByPath(hrefV)) {
+              // 新增一个选项卡
+        	  _private.addTab(hrefV, new Date().getTime());
+          } else {
+              // 切换到已存在的选项卡
+              tabs.switchByPath(hrefV);
+          }
+      }
+    });
+    
+    $('#logo-home').click(function(){
+  	  var hrefV=$(this).attr('href');
+      if (!tabs.existsByPath(hrefV)) {
+          // 新增一个选项卡
+    	  _private.addTab(hrefV, new Date().getTime());
+      } else {
+          // 切换到已存在的选项卡
+          tabs.switchByPath(hrefV);
       }
     });
 
@@ -178,6 +197,11 @@ layui.define(mods, function(exports) {
             path: '/console/role/index',
             component: '../console/role/index',
             name: '角色管理',
+            iframe:true
+        },{
+            path: '/console/auditTrail/index',
+            component: '../console/auditTrail/index',
+            name: '审计日志',
             iframe:true
         },{
             path: '/console/userCakey/index',
