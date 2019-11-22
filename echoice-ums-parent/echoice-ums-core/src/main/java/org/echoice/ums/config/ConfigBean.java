@@ -21,6 +21,8 @@ public class ConfigBean {
 	
 	private String uploadPath="c:\\";
 	
+	private int passwordEncodType=1;
+	
 	public boolean isAuth() {
 		return auth;
 	}
@@ -92,5 +94,11 @@ public class ConfigBean {
 	}
 	public void setUploadPath(String uploadPath) {
 		this.uploadPath = uploadPath;
+	}
+	public int getPasswordEncodType() {
+		return passwordEncodType;
+	}
+	public void setPasswordEncodType(int passwordEncodType) {
+		this.passwordEncodType = passwordEncodType;
 	}
 }

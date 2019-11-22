@@ -176,7 +176,7 @@ public interface UmsClientDao {
 	 * @param newPassword
 	 * @return
 	 */
-	public boolean updateUserPassword(String alias,String oldPassword,String newPassword);
+	public boolean updateUserPassword(String alias,String oldPassword,String newPassword,int passwordEncodeType);
 	/**
 	 * 根据用户组ID，查询组中的用户记录
 	 * @param groupId

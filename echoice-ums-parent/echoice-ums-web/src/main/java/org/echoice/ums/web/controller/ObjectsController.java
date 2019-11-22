@@ -3,6 +3,7 @@ package org.echoice.ums.web.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,9 +57,15 @@ public class ObjectsController{
 	public String edit(HttpServletRequest request,HttpServletResponse response,EcObjects ecObjects) throws Exception {
 		// TODO Auto-generated method stub
 		MsgTipExt msgTip=new MsgTipExt();
-		EcObjects dbObjects=getEcObjectsDao().findOne(ecObjects.getObjId());
+		//EcObjects dbObjects=getEcObjectsDao().findOne(ecObjects.getObjId());
+		Optional<EcObjects> optObj=getEcObjectsDao().findById(ecObjects.getObjId());
+		EcObjects dbObjects=optObj.isPresent()?optObj.get():null;
+		
 		if(dbObjects.getParentId()!=null){
-			EcObjects ecObjectsParent=getEcObjectsDao().findOne(dbObjects.getParentId());
+			//EcObjects ecObjectsParent=getEcObjectsDao().findOne(dbObjects.getParentId());
+			Optional<EcObjects> optObjParent=getEcObjectsDao().findById(dbObjects.getParentId());
+			EcObjects ecObjectsParent=optObjParent.isPresent()?optObjParent.get():null;
+			
 			if(ecObjectsParent!=null){
 				dbObjects.setParentName(ecObjectsParent.getName());
 			}else{
@@ -82,7 +89,7 @@ public class ObjectsController{
 			for (Long id : idsArr) {
 				list=getEcObjectsDao().findChildObjects(id);
 				if(list==null||list.size()==0){
-					getEcObjectsDao().delete(id);
+					getEcObjectsDao().deleteById(id);
 				}else {
 					noDelList.add(id);
 				}

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,7 +47,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -127,22 +127,27 @@ public class UserController {
 			EcUser dbUser=list.get(0);
 			if(ecUser.getUserId()==null||(ecUser.getUserId().compareTo(dbUser.getUserId())!=0)){
 				msgTip.setMsg("对不起，用户登入名"+ecUser.getAlias()+"已经存在，请换一个");
+				msgTip.setCode(4002);
 			}
 		}
 		
 		if(msgTip.getCode()==0) {
 			//密码加密
-			PasswordEncoder passwordEncoder= PasswordEncoderUtil.get();
-			String enPassword= passwordEncoder.encode(ecUser.getPassword());
+			String enPassword= PasswordEncoderUtil.encode(ecUser.getPassword(),ecUser.getAlias(),configBean.getPasswordEncodType());
 			
 			if(ecUser.getUserId()==null){
 				ecUser.setPassword(enPassword);
 				logger.info(CasUmsUtil.getUser(request)+" 新增用户："+ecUser.getAlias()+"，"+ecUser.getName());
 			}else{
-				EcUser ecUserDb=ecUserDao.findOne(ecUser.getUserId());
-				//密码加密
-				if(!(ecUserDb.getPassword().equals(ecUser.getPassword()))){
+				//EcUser ecUserDb=ecUserDao.findOne(ecUser.getUserId());
+				
+				Optional<EcUser> optObj=ecUserDao.findById(ecUser.getUserId());
+				EcUser ecUserDb=optObj.isPresent()?optObj.get():null;
+				
+				if(StringUtils.isNotBlank(ecUser.getPassword())) {
 					ecUser.setPassword(enPassword);
+				}else {
+					ecUser.setPassword(ecUserDb.getPassword());
 				}
 				logger.info(CasUmsUtil.getUser(request)+" 修改用户："+ecUser.getAlias()+"，"+ecUser.getName());
 			}
@@ -363,7 +368,7 @@ public class UserController {
 			String oldPassword=request.getParameter("oldPassword");
 			if(StringUtils.isNotBlank(oldPassword)&&StringUtils.isNotBlank(newPassword)&&StringUtils.isNotBlank(confirmPassword)){
 				if(StringUtils.equals(newPassword, confirmPassword)){
-					boolean isSucess=this.umsClientDao.updateUserPassword(UmsHolder.getUserAlias(), oldPassword, newPassword);
+					boolean isSucess=this.umsClientDao.updateUserPassword(UmsHolder.getUserAlias(), oldPassword, newPassword,configBean.getPasswordEncodType());
 					if(isSucess){
 						resulCode=0;
 					}

@@ -98,9 +98,10 @@
     		  return '两次输入密码不一致';
     	  }
       }
-      ,password: [/(.+){8}$/, '密码不能小于8位']
+      ,password: [/(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{8,16}/, '8-16位数字、大小字母、特殊字符组成']
     });    
-    
+    //(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{8,30}
+    //(.+){8}$
     var tableIns=table.render({
         method: 'post',
         limit: 20,
@@ -137,6 +138,19 @@
           ]
         ]
       });
+    
+    $('#password').change(function(){
+    	var passwordObj=$('#password');
+    	var confirmPasswordObj=$('#confirmPassword');
+    	
+    	if($('input[name="userId"]').val()===''||$(this).val()!==''){
+    		passwordObj.attr('lay-verify','required|password');
+        	confirmPasswordObj.attr('lay-verify','required|confirmPassword');
+    	}else{
+    		passwordObj.attr('lay-verify','');
+            confirmPasswordObj.attr('lay-verify','');
+    	}
+    });
 
     ecApp.openForm=function(vtitle,vBtn,selId){
         layer.open({
@@ -157,10 +171,19 @@
                 
                 if(selId){//detail、edit
                     $.get('./edit?userId='+selId,function(respData){
-                        form.val("ec-edit-form",respData.data);                 
+                        form.val("ec-edit-form",respData.data);
+                        var passwordObj=$('#password');
+                        passwordObj.val('');
+                        passwordObj.attr('lay-verify','');
+                        
+                        var confirmPasswordObj=$('#confirmPassword');
+                        confirmPasswordObj.val('');
+                        confirmPasswordObj.attr('lay-verify','');
+                        
                     });
                 }else{//add
-                	ecApp.resetForm();                  
+                	ecApp.resetForm();
+                	
                 }
                 
                 laydate.render({
@@ -419,6 +442,7 @@
       }
     });
     
+    
     //监听提交表单
     form.on('submit(subFormBtn)', function(data){
       var sfJson=data.field;
@@ -660,13 +684,13 @@
       <div class="layui-form-item">
         <label class="layui-form-label">密码</label>
         <div class="layui-input-block">
-          <input id="password" type="password" name="password" maxlength="64" required lay-verify="required|password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+          <input id="password" type="password" name="password" maxlength="256" lay-verify="required|password" placeholder="请输入密码" autocomplete="off" class="layui-input">
         </div>
       </div>
       <div class="layui-form-item">
         <label class="layui-form-label">确认密码</label>
         <div class="layui-input-block">
-          <input type="password" name="confirmPassword" maxlength="64" required lay-verify="required|confirmPassword" data-compareTo="password" placeholder="请输入确认密码" autocomplete="off" class="layui-input">
+          <input id="confirmPassword" type="password" name="confirmPassword" maxlength="256" lay-verify="required|confirmPassword" data-compareTo="password" placeholder="请输入确认密码" autocomplete="off" class="layui-input">
         </div>
       </div>
       <div class="layui-form-item">

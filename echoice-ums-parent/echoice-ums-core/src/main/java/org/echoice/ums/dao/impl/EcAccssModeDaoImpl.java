@@ -17,13 +17,14 @@ public class EcAccssModeDaoImpl extends BaseCommonDao{
 		// TODO Auto-generated method stub
 		String hql="select t from EcAccssMode t where 1=1";
 		List<Object> paramValues=Lists.newArrayList();
+		int sqlPost=0;
 		if(StringUtils.isNotBlank(ecAccssMode.getName())){
-			hql+=" and t.name like ?";
+			hql+=" and t.name like ?"+(++sqlPost);
 			paramValues.add("%"+ecAccssMode.getName().trim()+"%");
 		}
 		
 		if(StringUtils.isNotBlank(ecAccssMode.getAlias())){
-			hql+=" and t.alias like ?";
+			hql+=" and t.alias like ?"+(++sqlPost);
 			paramValues.add("%"+ecAccssMode.getAlias().trim()+"%");
 		}
 		return super.findPageHQL(hql, pageNo, pageSize, paramValues.toArray());

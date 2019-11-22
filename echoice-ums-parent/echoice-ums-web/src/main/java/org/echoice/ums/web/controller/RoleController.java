@@ -3,6 +3,7 @@ package org.echoice.ums.web.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -139,9 +140,15 @@ public class RoleController extends UmsBaseController{
 	public String edit(HttpServletRequest request,HttpServletResponse response,EcRole ecRole) throws Exception {
 		// TODO Auto-generated method stub
 		MsgTipExt msgTip=new MsgTipExt();
-		EcRole dbRole=ecRoleDao.findOne(ecRole.getRoleId());
+		//EcRole dbRole=ecRoleDao.findOne(ecRole.getRoleId());
+		Optional<EcRole> optObj=ecRoleDao.findById(ecRole.getRoleId());
+		EcRole dbRole=optObj.isPresent()?optObj.get():null;
+		
 		if(dbRole.getParentId()!=null){
-			EcRole ecRoleParent=ecRoleDao.findOne(dbRole.getParentId());
+			//EcRole ecRoleParent=ecRoleDao.findOne(dbRole.getParentId());
+			Optional<EcRole> optObjParent=ecRoleDao.findById(dbRole.getParentId());
+			EcRole ecRoleParent=optObjParent.isPresent()?optObjParent.get():null;
+			
 			if(ecRoleParent!=null){
 				dbRole.setParentName(dbRole.getName());
 			}else{
@@ -164,7 +171,7 @@ public class RoleController extends UmsBaseController{
 			for (Long id : idsArr) {
 				list=getEcRoleDao().findRoleTreeChild(id);
 				if(list==null||list.size()==0){
-					getEcRoleDao().delete(id);
+					getEcRoleDao().deleteById(id);
 				}else {
 					noDelList.add(id);
 				}

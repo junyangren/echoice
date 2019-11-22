@@ -1,6 +1,7 @@
 package org.echoice.ums.web.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -69,9 +69,7 @@ public class LoginController{
 		EcUser ecUser=list.get(0);
 		String passWordDb=ecUser.getPassword();
 		
-		PasswordEncoder passwordEncoder=PasswordEncoderUtil.get();
-		//boolean match=true;
-		boolean match=passwordEncoder.matches(password, passWordDb);
+		boolean match=PasswordEncoderUtil.matches(password, userAlias, passWordDb, configBean.getPasswordEncodType());
 		//match=true;
 		//用户密码校验
 		if(!match){
@@ -94,7 +92,8 @@ public class LoginController{
 	@RequestMapping(value="/selGroup",params={"action=selGroup"})
 	public ModelAndView selGroup(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String groupId=request.getParameter("groupId");
-		EcGroup group=ecGroupDao.findOne(Long.valueOf(groupId));
+		Optional<EcGroup> optObj=ecGroupDao.findById(Long.valueOf(groupId));
+		EcGroup group=optObj.isPresent()?optObj.get():null;
 		CasUmsUtil.setUserGroup(request, group);
 		return new ModelAndView("redirect:/index.jsp");
 	}

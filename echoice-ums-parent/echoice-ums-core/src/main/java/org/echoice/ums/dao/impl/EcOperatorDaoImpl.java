@@ -50,13 +50,13 @@ public class EcOperatorDaoImpl extends BaseCommonDao {
 	
 	@Transactional
 	public void remove(Long accessId,Long objId){
-		String hql="delete from EcOperator t where t.ecAccssMode.accssId=? and t.ecObjects.objId=?";
+		String hql="delete from EcOperator t where t.ecAccssMode.accssId=?1 and t.ecObjects.objId=?1";
 		Query query=createQuery(hql, new Object[]{accessId,objId});
 		query.executeUpdate();
 	}
 	
 	public boolean checkIsAssign(Long accessId,Long objId){
-		String hql="select count(*) from EcOperator t where t.ecAccssMode.accssId=? and t.ecObjects.objId=?";
+		String hql="select count(*) from EcOperator t where t.ecAccssMode.accssId=?1 and t.ecObjects.objId=?2";
 		Query query=createQuery(hql, new Object[]{accessId,objId});
 		List<Number> list=query.getResultList();
 		Number tmp=list.get(0);
@@ -68,19 +68,19 @@ public class EcOperatorDaoImpl extends BaseCommonDao {
 	}
 	
 	public List findObjectListByAccessId(Long accessId){
-		String hql="select t3 from EcOperator t inner join t.ecAccssMode t2 inner join t.ecObjects t3 where t2.accssId=?";
+		String hql="select t3 from EcOperator t inner join t.ecAccssMode t2 inner join t.ecObjects t3 where t2.accssId=?1";
 		List list=createQuery(hql,new Object[]{accessId}).getResultList();
 		return list;
 	}
 	
 	public List findAccessListByObjId(Long objId){
-		String hql="select t2 from EcOperator t inner join t.ecAccssMode t2 inner join t.ecObjects t3 where t3.objId=?";
+		String hql="select t2 from EcOperator t inner join t.ecAccssMode t2 inner join t.ecObjects t3 where t3.objId=?1";
 		List list=createQuery(hql,new Object[]{objId}).getResultList();
 		return list;
 	}
 	
 	public EcOperator getEcOperator(Long accessId,Long objId){
-		String hql="select t from EcOperator t where t.ecAccssMode.accssId=? and t.ecObjects.objId=?";
+		String hql="select t from EcOperator t where t.ecAccssMode.accssId=? and t.ecObjects.objId=?1";
 		Query query=createQuery(hql, new Object[]{accessId,objId});
 		List<EcOperator> list=query.getResultList();
 		if(list!=null&&list.size()>0){

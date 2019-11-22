@@ -2,6 +2,7 @@ package org.echoice.ums.web.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +12,7 @@ import org.echoice.modules.web.MsgTip;
 import org.echoice.modules.web.paper.PageBean;
 import org.echoice.ums.dao.EcAccssModeDao;
 import org.echoice.ums.domain.EcAccssMode;
+import org.echoice.ums.domain.EcObjects;
 import org.echoice.ums.util.CasUmsUtil;
 import org.echoice.ums.util.JSONUtil;
 import org.echoice.ums.web.view.MsgTipExt;
@@ -52,7 +54,10 @@ public class AccssModeController extends UmsBaseController {
 	public String edit(HttpServletRequest request,HttpServletResponse response,EcAccssMode ecAccssMode) throws Exception {
 		// TODO Auto-generated method stub
 		MsgTipExt msgTip=new MsgTipExt();
-		EcAccssMode dbAccssMode=getEcAccssModeDao().findOne(ecAccssMode.getAccssId());
+		//EcAccssMode dbAccssMode=getEcAccssModeDao().findById(ecAccssMode.getAccssId()).get();
+		Optional<EcAccssMode> optObj=getEcAccssModeDao().findById(ecAccssMode.getAccssId());
+		EcAccssMode dbAccssMode=optObj.isPresent()?optObj.get():null;
+		
 		msgTip.setData(dbAccssMode);
 		String respStr=JSONUtil.toJSONString(msgTip, EXCLUDE_FIELDS);
 		return respStr;
@@ -98,7 +103,7 @@ public class AccssModeController extends UmsBaseController {
 		MsgTip msgTip=new MsgTip();
 		List<Long> idsArr=JSON.parseArray(selIds, Long.class);
 		for (Long id : idsArr) { 
-			getEcAccssModeDao().delete(id);
+			getEcAccssModeDao().deleteById(id);
 		}
 		String respStr=JSONUtil.toJSONString(msgTip);
 		return respStr;

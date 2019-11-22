@@ -20,7 +20,7 @@ public class EcGroupDaoImpl extends BaseCommonDao {
 
 	public List<EcGroup> findGroupTreeChild(Long parentId) {
 		// TODO Auto-generated method stub
-		String hql="select t from EcGroup t where t.parentId=? order by t.taxis asc,t.groupId desc";
+		String hql="select t from EcGroup t where t.parentId=?1 order by t.taxis asc,t.groupId desc";
 		List<EcGroup> list=createQuery(hql,parentId).getResultList();
 		return list;
 	}
@@ -58,24 +58,25 @@ public class EcGroupDaoImpl extends BaseCommonDao {
 		// TODO Auto-generated method stub
 		String hql="select t from EcGroup t where 1=1";
 		List<Object> paramValues=Lists.newArrayList();
+		int sqlPost=0;
 		if(StringUtils.isNotBlank(ecGroup.getName())){
-			hql+=" and t.name like ?";
+			hql+=" and t.name like ?"+(++sqlPost);
 			paramValues.add("%"+ecGroup.getName().trim()+"%");
 		}
 		
 		if(StringUtils.isNotBlank(ecGroup.getAlias())){
-			hql+=" and t.alias like ?";
+			hql+=" and t.alias like ?"+(++sqlPost);
 			paramValues.add("%"+ecGroup.getAlias().trim()+"%");
 		}
 		
 		if(StringUtils.isNotBlank(ecGroup.getGroupPath())){
-			hql+=" and (t.alias =? or t.alias like ?)";
+			hql+=" and (t.alias =?"+(++sqlPost)+" or t.alias like ?"+(++sqlPost)+")";
 			paramValues.add(ecGroup.getGroupPath());
 			paramValues.add(ecGroup.getGroupPath()+"-%");
 		}
 		
 		if(ecGroup.getParentId()!=null){
-			hql+=" and t.parentId = ?";
+			hql+=" and t.parentId = ?"+(++sqlPost);
 			paramValues.add(ecGroup.getParentId());
 		}
 		hql+=" order by t.taxis asc,t.groupId desc";

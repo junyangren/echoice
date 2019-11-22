@@ -22,7 +22,7 @@ public class EcUsersAssignmenDaoImpl extends BaseCommonDao {
 
 	public boolean checkIsAssign(Long userId, Long roleId) {
 		// TODO Auto-generated method stub
-		String hql="select count(1) from EcUsersAssignmen t where t.ecUser.userId=? and t.ecRole.roleId=?";
+		String hql="select count(1) from EcUsersAssignmen t where t.ecUser.userId=?1 and t.ecRole.roleId=?2";
 		Query query=createQuery(hql, new Object[]{userId,roleId});
 		List<Number> list=query.getResultList();
 		Number tmp=list.get(0);
@@ -49,8 +49,8 @@ public class EcUsersAssignmenDaoImpl extends BaseCommonDao {
 	public boolean checkIsAssignUserGroup(Long userId,Long groupId) {
 		// TODO Auto-generated method stub
 		String hql="select count(*) from EcUserGroup t inner join t.ecUser t2 inner join t.ecGroup t3";
-		hql+=" where t3.groupId=?";
-		hql+=" and t2.userId=?";
+		hql+=" where t3.groupId=?1";
+		hql+=" and t2.userId=?2";
 		Query query=createQuery(hql, new Object[]{groupId,userId});
 		List<Number> list=query.getResultList();
 		Number tmp=list.get(0);
@@ -63,7 +63,7 @@ public class EcUsersAssignmenDaoImpl extends BaseCommonDao {
 	@Transactional
 	public void remove(Long userId, Long roleId) {
 		// TODO Auto-generated method stub
-		String hql="delete from EcUsersAssignmen t where t.ecUser.userId=? and t.ecRole.roleId=?";
+		String hql="delete from EcUsersAssignmen t where t.ecUser.userId=?1 and t.ecRole.roleId=?2";
 		Query query=createQuery(hql, new Object[]{userId,roleId});
 		query.executeUpdate();
 	}
@@ -123,28 +123,28 @@ public class EcUsersAssignmenDaoImpl extends BaseCommonDao {
 	@Transactional
 	public void removeGroup(Long userId, Long groupId) {
 		// TODO Auto-generated method stub
-		String hql="delete from EcUserGroup t where t.ecUser.userId=? and t.ecGroup.groupId=?";
+		String hql="delete from EcUserGroup t where t.ecUser.userId=?1 and t.ecGroup.groupId=?2";
 		Query query=createQuery(hql, new Object[]{userId,groupId});
 		query.executeUpdate();
 	}
 	
 	public List findAssignRoleList(Long userId){
 		String hql="select t3 from EcUsersAssignmen t inner join t.ecUser t2 inner join t.ecRole t3" +
-				" where t2.userId=?";
+				" where t2.userId=?1";
 		List list=createQuery(hql,new Object[]{userId}).getResultList();
 		return list;
 	}
 
 	public List findAssignRoleList(String userAlias){
 		String hql="select t3 from EcUsersAssignmen t inner join t.ecUser t2 inner join t.ecRole t3" +
-				" where t2.alias=?";
+				" where t2.alias=?1";
 		List list=createQuery(hql,new Object[]{userAlias}).getResultList();
 		return list;
 	}
 	
 	public List<EcRole> findAssignRoleList(Long userId,Long parnetRoleId){
 		String hql="select t3 from EcUsersAssignmen t inner join t.ecUser t2 inner join t.ecRole t3" +
-				" where t2.userId=? and t3.parentId=?";
+				" where t2.userId=?1 and t3.parentId=?2";
 		List<EcRole> list=createQuery(hql,new Object[]{userId,parnetRoleId}).getResultList();
 		return list;
 	}

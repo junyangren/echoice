@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -129,7 +130,7 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < idsArr.length; i++) {
 			Long id=new Long((Integer)idsArr[i]);
-			ecUserDao.delete(id);
+			ecUserDao.deleteById(id);
 		}
 	}
 	
@@ -137,7 +138,11 @@ public class UmsCommonServiceImpl implements UmsCommonService {
 		ecGroup.setOpTime(new Date());
 		ecGroupDao.save(ecGroup);
 		//更新标识，取父节点
-		EcGroup parentGroup= ecGroupDao.findOne(ecGroup.getParentId());
+		//EcGroup parentGroup= ecGroupDao.findOne(ecGroup.getParentId());
+		
+		Optional<EcGroup> optObj=getEcGroupDao().findById(ecGroup.getParentId());
+		EcGroup parentGroup=optObj.isPresent()?optObj.get():null;
+		
 		String alias=ecGroup.getAlias();
 		String groupPath=null;
 		String fullName=null;

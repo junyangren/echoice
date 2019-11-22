@@ -134,15 +134,16 @@ public class UmsClientDaoImpl implements UmsClientDao{
 	}
 	
 	@Transactional
-	public boolean updateUserPassword(String alias,String oldPassword,String newPassword){
-		//
-		PasswordEncoder passwordEncoder= PasswordEncoderUtil.get();
-		String oldPasswordStr= passwordEncoder.encode(oldPassword);
-		
-		String sql="select count(*) from ec_user t2 where t2.alias=? and t2.password=?";
-		int count=getJdbcTemplate().queryForObject(sql, new Object[]{alias,oldPasswordStr},Integer.class);
-		if(count>0){
-			String newPasswordStr=passwordEncoder.encode(newPassword);
+	public boolean updateUserPassword(String alias,String oldPassword,String newPassword,int passwordEncodeType){
+		String sql="select t.password from ec_user t where t.alias=?";
+		String passwordDb=getJdbcTemplate().queryForObject(sql, new Object[]{alias},String.class);
+		if(StringUtils.isBlank(passwordDb)) {
+			return false;
+		}
+		boolean match=PasswordEncoderUtil.matches(oldPassword,alias,passwordDb,passwordEncodeType);
+		//match=true;
+		if(match) {
+			String newPasswordStr=PasswordEncoderUtil.encode(oldPassword,alias,passwordEncodeType);
 			String sql2="update ec_user set password=? where alias=?";
 			getJdbcTemplate().update(sql2, new Object[]{newPasswordStr,alias});
 			return true;

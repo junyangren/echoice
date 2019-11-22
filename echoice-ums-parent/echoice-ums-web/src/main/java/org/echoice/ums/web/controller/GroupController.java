@@ -2,6 +2,7 @@ package org.echoice.ums.web.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -320,9 +321,11 @@ public class GroupController extends UmsBaseController {
 	public String edit(HttpServletRequest request,HttpServletResponse response,EcGroup searcForm) throws Exception {
 		// TODO Auto-generated method stub
 		MsgTipExt msgTip=new MsgTipExt();
-		EcGroup one=getEcGroupDao().findOne(searcForm.getGroupId());
+		Optional<EcGroup> optObj=getEcGroupDao().findById(searcForm.getGroupId());
+		EcGroup one=optObj.isPresent()?optObj.get():null;
 		if(one.getParentId()!=null){
-			EcGroup parent=getEcGroupDao().findOne(one.getParentId());
+			Optional<EcGroup> optObjParent=getEcGroupDao().findById(searcForm.getGroupId());
+			EcGroup parent=optObjParent.isPresent()?optObjParent.get():null;
 			if(parent!=null){
 				one.setParentName(parent.getName());
 			}else{

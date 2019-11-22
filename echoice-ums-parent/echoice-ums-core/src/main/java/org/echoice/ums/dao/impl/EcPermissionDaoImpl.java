@@ -103,13 +103,13 @@ public class EcPermissionDaoImpl extends BaseCommonDao {
 	@Transactional
 	public void remove(Long roleId,Long operId) {
 		// TODO Auto-generated method stub
-		String hql="delete from EcPermission t where t.ecRole.roleId=? and t.ecOperator.operId=?";
+		String hql="delete from EcPermission t where t.ecRole.roleId=?1 and t.ecOperator.operId=?2";
 		Query query=createQuery(hql, new Object[]{roleId,operId});
 		query.executeUpdate();
 	}
 	
 	public boolean checkIsAssign(Long roleId,Long operId){
-		String hql="select count(*) from EcPermission t where t.ecRole.roleId=? and t.ecOperator.operId=?";
+		String hql="select count(*) from EcPermission t where t.ecRole.roleId=?1 and t.ecOperator.operId=?2";
 		Query query=createQuery(hql, new Object[]{roleId,operId});
 		List<Number> list=query.getResultList();
 		Number tmp=list.get(0);

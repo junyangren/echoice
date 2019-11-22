@@ -16,14 +16,14 @@ public class EcGroupAssignmentDaoImpl extends BaseCommonDao{
 	
 	public List findAssignRoleList(Long groupId){
 		String hql="select t3 from EcGroupAssignment t inner join t.ecGroup t2 inner join t.ecRole t3" +
-				" where t2.groupId=?";
+				" where t2.groupId=?1";
 		List list=createQuery(hql,new Object[]{groupId}).getResultList();
 		return list;
 	}
 	
 	public boolean checkIsAssign(Long groupId, Long roleId) {
 		// TODO Auto-generated method stub
-		String hql="select count(*) from EcGroupAssignment t where t.ecGroup.groupId=? and t.ecRole.roleId=?";
+		String hql="select count(*) from EcGroupAssignment t where t.ecGroup.groupId=?1 and t.ecRole.roleId=?2";
 		Query query=createQuery(hql, new Object[]{groupId,roleId});
 		List<Number> list=query.getResultList();
 		Number tmp=list.get(0);
@@ -62,7 +62,7 @@ public class EcGroupAssignmentDaoImpl extends BaseCommonDao{
 	@Transactional
 	public void remove(Long groupId, Long roleId) {
 		// TODO Auto-generated method stub
-		String hql="delete from EcGroupAssignment t where t.ecGroup.groupId=? and t.ecRole.roleId=?";
+		String hql="delete from EcGroupAssignment t where t.ecGroup.groupId=?1 and t.ecRole.roleId=?2";
 		Query query=createQuery(hql, new Object[]{groupId,roleId});
 		query.executeUpdate();
 	}

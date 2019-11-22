@@ -44,7 +44,7 @@ public class EcUserDaoImpl extends BaseCommonDao {
 	
 	public EcUserInfoView getByAlias(String alias){
 		//List list=findBy("alias", alias);
-		String hql="select t from EcUser t where t.alias=?";
+		String hql="select t from EcUser t where t.alias=?1";
 		List list=createQuery(hql,alias).getResultList();
 		if(list!=null&&list.size()>0){
 			EcUser ecUser=(EcUser)list.get(0);
@@ -79,13 +79,13 @@ public class EcUserDaoImpl extends BaseCommonDao {
 	
 	public List findGroupByUserId(Long userId){
 		String hql="select t3 from EcUserGroup t inner join t.ecUser t2 inner join t.ecGroup t3";
-		hql+=" where t2.userId=?";
+		hql+=" where t2.userId=?1";
 		return createQuery(hql,userId).getResultList();
 	}
 	
 	public List findGroupByUserAlias(String userAlias){
 		String hql="select t3 from EcUserGroup t inner join t.ecUser t2 inner join t.ecGroup t3";
-		hql+=" where t2.alias=?";
+		hql+=" where t2.alias=?1";
 		return createQuery(hql,userAlias).getResultList();
 		//return find(hql, userAlias);
 	}
@@ -153,28 +153,28 @@ public class EcUserDaoImpl extends BaseCommonDao {
 		// TODO Auto-generated method stub
 		String hql2="select t2 from EcUserGroup t inner join t.ecUser t2 inner join t.ecGroup t3";
 		hql2+=" where 1=1";
-		
+		int sqlPost=0;
 		List list=new ArrayList();
 		if(StringUtils.isNotBlank(ecUser.getName())){
 			String strLike="%"+ecUser.getName().trim()+"%";
-			hql2+=" and t2.name like ?";
+			hql2+=" and t2.name like ?"+(++sqlPost);
 			list.add(strLike);
 		}
 		
 		if(StringUtils.isNotBlank(ecUser.getAlias())){
 			String strLike="%"+ecUser.getAlias().trim()+"%";
-			hql2+=" and t2.alias like ? ";
+			hql2+=" and t2.alias like ?"+(++sqlPost);
 			list.add(strLike);
 		}
 		
 		if(ecUser.getGroupId()!=null){
-			hql2+=" and t3.groupId=? ";
+			hql2+=" and t3.groupId=?"+(++sqlPost);
 			list.add(ecUser.getGroupId());
 		}
 		
 		if(StringUtils.isNotBlank(ecUser.getParentGroupAlias())){
 			
-			hql2+=" and (t3.alias = ? or t3.alias like ?) ";
+			hql2+=" and (t3.alias = ?"+(++sqlPost)+" or t3.alias like ?"+(++sqlPost)+") ";
 			list.add(ecUser.getParentGroupAlias());
 			list.add(ecUser.getParentGroupAlias().trim()+"-%");
 		}
@@ -188,15 +188,16 @@ public class EcUserDaoImpl extends BaseCommonDao {
 		// TODO Auto-generated method stub
 		List list=new ArrayList();
 		String hql2="select t from EcUser t where 1=1";
+		int sqlPost=0;
 		if(StringUtils.isNotBlank(ecUser.getName())){
 			String strLike="%"+ecUser.getName().trim()+"%";
-			hql2+=" and t.name like ?";
+			hql2+=" and t.name like ?"+(++sqlPost);
 			list.add(strLike);
 		}
 		
 		if(StringUtils.isNotBlank(ecUser.getAlias())){
 			String strLike="%"+ecUser.getAlias().trim()+"%";
-			hql2+=" and t.alias like ? ";
+			hql2+=" and t.alias like ?"+(++sqlPost);
 			list.add(strLike);
 		}
 		hql2+=" order by t.userId desc";
@@ -207,16 +208,17 @@ public class EcUserDaoImpl extends BaseCommonDao {
 	public PageBean searchPageConditionV1(EcUserView ecUser, int pageNo, int pageSize) {
 		// TODO Auto-generated method stub
 		List list=new ArrayList();
+		int sqlPost=0;
 		String hql2="select t from EcUser t where 1=1";
 		if(StringUtils.isNotBlank(ecUser.getName())){
 			String strLike="%"+ecUser.getName().trim()+"%";
-			hql2+=" and t.name like ?";
+			hql2+=" and t.name like ?"+(++sqlPost);
 			list.add(strLike);
 		}
 		
 		if(StringUtils.isNotBlank(ecUser.getAlias())){
 			String strLike="%"+ecUser.getAlias().trim()+"%";
-			hql2+=" and t.alias like ? ";
+			hql2+=" and t.alias like ?"+(++sqlPost);
 			list.add(strLike);
 		}
 		hql2+=" order by t.userId desc";
@@ -270,8 +272,8 @@ public class EcUserDaoImpl extends BaseCommonDao {
 	public EcUserGroup getUserGroup(Long groupId, Long userId) {
 		// TODO Auto-generated method stub
 		String hql="select t from EcUserGroup t inner join t.ecUser t2 inner join t.ecGroup t3";
-		hql+=" where t3.groupId=?";
-		hql+=" and t2.userId=?";
+		hql+=" where t3.groupId=?1";
+		hql+=" and t2.userId=?2";
 		List<EcUserGroup> list=createQuery(hql, new Object[]{groupId,userId}).getResultList();
 		if(list!=null&&list.size()>0){
 			return list.get(0);

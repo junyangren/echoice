@@ -88,7 +88,7 @@ public class EcObjectsDaoImpl extends BaseCommonDao{
 	
 	@Transactional
 	public int updateDrag(Long dragId,Long targetId){
-		String hql="update EcObjects t set t.parentId=? where t.objId=?";
+		String hql="update EcObjects t set t.parentId=?1 where t.objId=?2";
 		Query query = createQuery(hql, new Object[]{targetId,dragId});
 		return query.executeUpdate();
 	}

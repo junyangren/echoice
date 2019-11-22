@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class EcRoleDaoImpl extends BaseCommonDao {
 	public List<EcRole> findRoleTreeChild(Long parentId) {
 		// TODO Auto-generated method stub
-		String hql="select t from EcRole t where t.parentId=? order by t.taxis asc,t.roleId asc";
+		String hql="select t from EcRole t where t.parentId=?1 order by t.taxis asc,t.roleId asc";
 		List<EcRole> list=createQuery(hql,parentId).getResultList();
 		return list;
 	}
@@ -85,7 +85,7 @@ public class EcRoleDaoImpl extends BaseCommonDao {
 	}
 	@Transactional
 	public int updateDrag(Long dragId,Long targetId){
-		String hql="update EcRole t set t.parentId=? where t.roleId=?";
+		String hql="update EcRole t set t.parentId=?1 where t.roleId=?2";
 		Query query = createQuery(hql, new Object[]{targetId,dragId});
 		return query.executeUpdate();
 	}

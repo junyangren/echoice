@@ -17,18 +17,19 @@ public class AuditTrailDaoImpl extends BaseCommonDao{
 		// TODO Auto-generated method stub
 		String hql="select t from AuditTrailEntity t where 1=1";
 		List<Object> paramValues=Lists.newArrayList();
+		int sqlPost=0;
 		if(StringUtils.isNotBlank(searchForm.getClientIp())){
-			hql+=" and t.clientIp like ?";
+			hql+=" and t.clientIp like ?"+(++sqlPost);
 			paramValues.add("%"+searchForm.getClientIp().trim()+"%");
 		}
 		
 		if(StringUtils.isNotBlank(searchForm.getApplicationCode())){
-			hql+=" and t.applicationCode like ?";
+			hql+=" and t.applicationCode like ?"+(++sqlPost);
 			paramValues.add("%"+searchForm.getApplicationCode().trim()+"%");
 		}
 		
 		if(searchForm.getRecordDate()!=null){
-			hql+=" and t.recordDate >= ?";
+			hql+=" and t.recordDate >= ?"+(++sqlPost);
 			paramValues.add(searchForm.getRecordDate());
 		}
 		

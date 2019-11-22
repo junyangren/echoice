@@ -27,10 +27,10 @@ import com.alibaba.fastjson.JSONObject;
  * @author wujy
  *
  */
-public class UmsAppController extends SpringBaseController {
+public class UmsAppController extends UmsBaseController {
 	private UmsClientDao umsClientDao;
 	private String appAccessAlias="view";
-	@Override
+
 	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		return null;
 	}
@@ -92,7 +92,7 @@ public class UmsAppController extends SpringBaseController {
 			zTreelist.add(treeView);
 		}
 		//logger.info(JSONUtil.toJSONString(zTreelist));
-		rendJson(response, JSONUtil.toJSONString(zTreelist));
+		//rendJson(response, JSONUtil.toJSONString(zTreelist));
 		//rendText(response, JSONUtil.toJSONString(zTreelist));
 		return null;
 		
@@ -133,7 +133,7 @@ public class UmsAppController extends SpringBaseController {
 			treeView.setAlias(ecGroup.getAlias());
 			zTreelist.add(treeView);
 		}
-		rendJson(response, JSONUtil.toJSONString(zTreelist));
+		//rendJson(response, JSONUtil.toJSONString(zTreelist));
 		return null;
 	}
 	
@@ -153,7 +153,7 @@ public class UmsAppController extends SpringBaseController {
 		List<EcUser> list=getUmsClientDao().findUserByGroupId(Long.valueOf(id));
 		String content="{\"total\":"+list.size()+",";
 		content+="\"rows\":"+JSONUtil.toJSONString(list)+"}";
-		rendJson(response, content);
+		//rendJson(response, content);
 		return null;
 	}
 
@@ -164,7 +164,7 @@ public class UmsAppController extends SpringBaseController {
 		List<EcUser> list=getUmsClientDao().findPermissionUser(objAlias, accessModeAlias);
 		String content="{\"total\":"+list.size()+",";
 		content+="\"rows\":"+JSONUtil.toJSONString(list)+"}";
-		rendJson(response, content);
+		//rendJson(response, content);
 		return null;
 	}
 	
@@ -186,7 +186,7 @@ public class UmsAppController extends SpringBaseController {
 			String oldPassword=request.getParameter("oldPassword");
 			if(StringUtils.isNotBlank(oldPassword)&&StringUtils.isNotBlank(newPassword)&&StringUtils.isNotBlank(confirmPassword)){
 				if(StringUtils.equals(newPassword, confirmPassword)){
-					boolean isSucess=getUmsClientDao().updateUserPassword(UmsHolder.getUserAlias(), oldPassword, newPassword);
+					boolean isSucess=getUmsClientDao().updateUserPassword(UmsHolder.getUserAlias(), oldPassword, newPassword, 1);
 					if(isSucess){
 						resulCode=0;
 					}
@@ -197,7 +197,7 @@ public class UmsAppController extends SpringBaseController {
 			map.put("msg", e.getMessage());
 		}
 		map.put("code", resulCode);
-		rendJson(response, JSONUtil.toJSONString(map));
+		//rendJson(response, JSONUtil.toJSONString(map));
 		return null;
 	}
 	
